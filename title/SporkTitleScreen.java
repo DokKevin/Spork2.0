@@ -11,6 +11,8 @@
 
 package title;
 
+import character.Character; // This will need changed once character class is removed from character ui
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -48,7 +50,7 @@ public class SporkTitleScreen extends Application {
         primaryStage.show();
 
         newGame.setOnAction(e -> {
-            //This will initiate Creating the Character
+            Character.setSceneCharacter(primaryStage);
         });
 
         loadGame.setOnAction(e -> {
