@@ -26,7 +26,7 @@ public class SporkTitleScreen extends Application {
    }
 
     GridPane root = new GridPane();
-    Scene scene = new Scene(root, 1500, 680);
+    Scene scene = new Scene(root, 1440, 810);
     Label sporkTitle = new Label("SPORK");
     Button newGame = new Button("New Game");
     Button loadGame = new Button("Load Game");
