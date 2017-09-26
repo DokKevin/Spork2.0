@@ -7,6 +7,9 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 17Sept17   Glenn          First draft completed and ready to be verified
+ * 21Sept17   Kevin          Premilinary check for username meeting spec
+ *                           Don't allow users to enter a space as the first
+ *                           letter of username.
 */
 
 package character;
@@ -24,6 +27,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.event.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
 
 public class Character {
     //Instantiates Singleton
@@ -45,7 +51,7 @@ public class Character {
     private static int attack;
     private static int exp;
     private static String username;
-    private static String class;
+    private static String job; //These are classes
 
     //constructor for the Singleton. The stats will vary, so begins with nothing
     private Character(){
@@ -54,7 +60,7 @@ public class Character {
         attack = 0;
         exp = 0;
         username = "";
-        class = "Warrior" // TODO: To be changed when we add more class
+        job = "Warrior"; // TODO: To be changed when we add more class
     }
 
     //singleton function to get instance
@@ -68,83 +74,48 @@ public class Character {
         stage.setScene(scene);
         createChar.add(lUsername, 0, 0);
         createChar.add(tfUsername, 1, 0, 4, 1);
-        createChar.add(lGender, 0, 1);
-        createChar.add(rbMale, 1, 1);
-        createChar.add(rbFemale, 2, 1, 2, 1);
         createChar.add(lClass, 0, 2);
         createChar.add(rbWarrior, 1, 2);
-        createChar.add(rbMage, 2, 2);
-        createChar.add(rbRogue, 3, 2);
-        createChar.add(rbArcher, 4, 2);
         createChar.add(taStats, 1, 3, 4, 1);
         createChar.add(btCreate, 0, 4, 2, 1);
 
+        // Check to make sure the username's first char is not a space
+        tfUsername.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(tfUsername.getText().length() < 1){ // Not sure if this is the correct length I should be checking.
+                    if (event.getCode().equals(KeyCode.SPACE)) {
+                        tfUsername.setText(""); // This should set the field to blank.
+                        errorMessage(); // TO Be Changed to its own error
+                    }
+                }
+            }
+        });
 
         //This makes radio buttons interactable when clicked, though arrow keys still need to be programmed.
         //  It's a start for the place holders
-
         rbWarrior.setOnAction(e -> {
             taStats.setText("Warrior \nStrong and hardy, but lacking in specialty skills \n\nHealth: 10 \nStamina: 10 \n"
                 + "Attack Power: 5 \nMagic Power: 1");
         });
 
-        rbMage.setOnAction(e ->{
-            taStats.setText("Mage \nIntelligent and powerful, bending the elements within their hands \n\nHealth: 6 \n"
-                    + "Stamina: 8 \nAttackPower: 2 \nMagic Power: 8");
-        });
-
-        rbRogue.setOnAction(e -> {
-            taStats.setText("Rogue \nSwift and nimble, able to dodge attacks and sneak by enemies \n\nHealth: 8\n"
-                    + "Stamina: 12 \nAttack Power: 3 \nMagic Power: 2");
-        });
-
-        rbArcher.setOnAction(e -> {
-            taStats.setText("Archer \nAgile, using ranged to their advantage, though not in the magical sense like the mage \n\n"
-                    + "Health: 8 \nStamina: 10 \nAttack Power: 4 \nMagic Power: 3");
-        });
-
         //sets all the character values when button is clicked, but only if a name is entered
         //" " works as a name, so may need to find how to solve that
-
         btCreate.setOnAction(e -> {
-            if(tfUsername.getText().length() < 1){
+            if(!usernameIsGood()){
                 errorMessage();
             }
             else{
                 setUsername(tfUsername.getText());
                 setDefense(1);
 
-                if(rbMale.isSelected()){
-                    setGender("Male");
-                }
-                else{
-                    setGender("Female");
-                }
-
                 if(rbWarrior.isSelected()){
                     setHp(10);
-                    setStamina(10);
                     setAttack(5);
-                    setMagicAttack(1);
-                }
-                else if(rbMage.isSelected()){
-                    setHp(6);
-                    setStamina(8);
-                    setAttack(2);
-                    setMagicAttack(8);
-                }
-                else if(rbRogue.isSelected())
-                {
-                    setHp(8);
-                    setStamina(12);
-                    setAttack(3);
-                    setMagicAttack(2);
                 }
                 else{
                     setHp(8);
-                    setStamina(10);
                     setAttack(4);
-                    setMagicAttack(3);
                 }
             }
         });
@@ -153,7 +124,6 @@ public class Character {
     //I am just about positive there is the ability to apply CSS stylesheets to elements as you would html,
     //  though I have never been succesful in getting it figured out. As such, this could be done so much better
     //  once it is figured out.
-
     public static void setStyles(){
         createChar.setPadding(new Insets(40, 40, 100, 100));      //Page Margins (top, bottom, right, left)
         createChar.setVgap(50);
@@ -161,13 +131,7 @@ public class Character {
         lUsername.setFont(font("Imprint MT Shadow", 20));
         tfUsername.setFont(font("Imprint MT Shadow", 16));
         lClass.setFont(font("Imprint MT Shadow", 20));
-        lGender.setFont(font("Imprint MT Shadow", 20));
-        rbMale.setFont(font("Imprint MT Shadow", 16));
-        rbFemale.setFont(font("Imprint MT Shadow", 16));
         rbWarrior.setFont(font("Imprint MT Shadow", 16));
-        rbMage.setFont(font("Imprint MT Shadow", 16));
-        rbRogue.setFont(font("Imprint MT Shadow", 16));
-        rbArcher.setFont(font("Imprint MT Shadow", 16));
         btCreate.setFont(font("Imprint MT Shadow", 16));
         taStats.setEditable(false);                             //This will display info, so it shouldn't be editable
         taStats.setPrefHeight(300);
@@ -179,15 +143,7 @@ public class Character {
 
         ToggleGroup classGroup = new ToggleGroup();             //So only one class/gender can be selected
         rbWarrior.setToggleGroup(classGroup);
-        rbMage.setToggleGroup(classGroup);
-        rbRogue.setToggleGroup(classGroup);
-        rbArcher.setToggleGroup(classGroup);
         rbWarrior.setSelected(true);                            //Default selected
-
-        ToggleGroup genderGroup = new ToggleGroup();
-        rbMale.setToggleGroup(genderGroup);
-        rbFemale.setToggleGroup(genderGroup);
-        rbMale.setSelected(true);
     }
 
     //sets up a new stage that displays a message to enter username
@@ -217,13 +173,21 @@ public class Character {
         });
     }
 
+    // This might be good to put in the username error once we get that
+    // encapsulated
+    public static boolean usernameIsGood(){
+        if(tfUsername.getText().length() < 1){
+            return false;
+        } else if(tfUsername.getText().length() > 10){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     //all getters and setters
     static int getHp(){
         return hp;
-    }
-
-    static int getStamina(){
-        return stamina;
     }
 
     static int getDefense(){
@@ -234,24 +198,12 @@ public class Character {
         return attack;
     }
 
-    static int getMagicAttack(){
-        return magicAttack;
-    }
-
     static String getName(){
         return username;
     }
 
-    static String getGender(){
-        return gender;
-    }
-
     static void setHp(int number){
         hp = number;
-    }
-
-    static void setStamina(int number){
-        stamina = number;
     }
 
     static void setDefense(int number){
@@ -262,15 +214,7 @@ public class Character {
         attack = number;
     }
 
-    static void setMagicAttack(int number){
-        magicAttack = number;
-    }
-
     static void setUsername(String name){
         username = name;
-    }
-
-    static void setGender(String _gender){
-        gender = _gender;
     }
 }
