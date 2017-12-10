@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package animation_demo;
 
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -26,39 +25,39 @@ import javafx.util.Duration;
  */
 public class Animation_Demo extends Application {
     boolean pressed = false;
-    @Override 
-   public void start(Stage stage) {  
-      //Drawing a Circle 
-      Circle circle = new Circle(); 
+    @Override
+   public void start(Stage stage) {
+      //Drawing a Circle
+      Circle circle = new Circle();
       Rectangle rect = new Rectangle();
-      
-      //Setting the position of the circle 
-      circle.setCenterX(150.0f); 
-      circle.setCenterY(135.0f); 
-      
-      //Setting the radius of the circle 
-      circle.setRadius(20.0f); 
-      
-      //Setting the color of the circle 
-      circle.setFill(Color.BROWN); 
-      
-      //Setting the stroke width of the circle 
-      circle.setStrokeWidth(20); 
-      
-      
-      
-      //Creating a Group object  
-      Group root = new Group(circle); 
-         
-      //Creating a scene object 
-      Scene scene = new Scene(root, 600, 300);  
-      
-      //Setting title to the Stage 
-      stage.setTitle("Translate transition example"); 
-         
-      //Adding scene to the stage 
-      stage.setScene(scene); 
-         
+
+      //Setting the position of the circle
+      circle.setCenterX(150.0f);
+      circle.setCenterY(135.0f);
+
+      //Setting the radius of the circle
+      circle.setRadius(20.0f);
+
+      //Setting the color of the circle
+      circle.setFill(Color.BROWN);
+
+      //Setting the stroke width of the circle
+      circle.setStrokeWidth(20);
+
+
+
+      //Creating a Group object
+      Group root = new Group(circle);
+
+      //Creating a scene object
+      Scene scene = new Scene(root, 600, 300);
+
+      //Setting title to the Stage
+      stage.setTitle("Translate transition example");
+
+      //Adding scene to the stage
+      stage.setScene(scene);
+
       scene.setOnKeyPressed(e -> {
           if (e.getCode() == KeyCode.LEFT)
           {
@@ -90,13 +89,13 @@ public class Animation_Demo extends Application {
           }
           else if(e.getCode() == KeyCode.SPACE)
           {
-              
+
           }
       });
-      //Displaying the contents of the stage 
-      stage.show(); 
-   }      
-   public static void main(String args[]){ 
-      launch(args); 
-   } 
+      //Displaying the contents of the stage
+      stage.show();
+   }
+   public static void main(String args[]){
+      launch(args);
+   }
 }
