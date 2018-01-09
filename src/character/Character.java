@@ -98,7 +98,7 @@ public class Character {
             taStats.setText("Warrior \nStrong and hardy, but lacking in specialty skills \n\nHealth: 10 \nStamina: 10 \n"
                 + "Attack Power: 5 \nMagic Power: 1");
         });
-
+        
         //sets all the character values when button is clicked, but only if a name is entered
         //" " works as a name, so may need to find how to solve that
         btCreate.setOnAction(e -> {
@@ -118,6 +118,7 @@ public class Character {
                     setAttack(4);
                 }
             }
+            Animation_Demo.start(stage);
         });
     }
 

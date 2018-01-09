@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package character;
 
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -23,10 +19,10 @@ import javafx.util.Duration;
  *
  * @author Glenn
  */
-public class Animation_Demo extends Application {
+public class Animation_Demo {
     boolean pressed = false;
-    @Override
-   public void start(Stage stage) {
+    
+   public static void start(Stage stage) {
       //Drawing a Circle
       Circle circle = new Circle();
       Rectangle rect = new Rectangle();
@@ -61,30 +57,30 @@ public class Animation_Demo extends Application {
       scene.setOnKeyPressed(e -> {
           if (e.getCode() == KeyCode.LEFT)
           {
-            if(circle.getCenterX() - circle.getRadius() != 0)
+            if(circle.getCenterX() - circle.getRadius() > 10)
             {
-                circle.setCenterX(circle.getCenterX() - 1.0);
+                circle.setCenterX(circle.getCenterX() - 4.0);
             }
           }
           else if (e.getCode() == KeyCode.RIGHT)
           {
-            if(circle.getCenterX() + circle.getRadius() != 600)
+            if(circle.getCenterX() + circle.getRadius() < 590)
             {
-                circle.setCenterX(circle.getCenterX() + 1.0);
+                circle.setCenterX(circle.getCenterX() + 4.0);
             }
           }
           else if (e.getCode() == KeyCode.UP)
           {
-              if(circle.getCenterY() - circle.getRadius() != 0)
+              if(circle.getCenterY() - circle.getRadius() > 10)
               {
-                circle.setCenterY(circle.getCenterY() - 1);
+                circle.setCenterY(circle.getCenterY() - 4.0);
               }
           }
           else if (e.getCode() == KeyCode.DOWN)
           {
-              if(circle.getCenterY() + circle.getRadius() != 300)
+              if(circle.getCenterY() + circle.getRadius() < 290)
               {
-                circle.setCenterY(circle.getCenterY() + 1);
+                circle.setCenterY(circle.getCenterY() + 4.0);
               }
           }
           else if(e.getCode() == KeyCode.SPACE)
@@ -94,8 +90,5 @@ public class Animation_Demo extends Application {
       });
       //Displaying the contents of the stage
       stage.show();
-   }
-   public static void main(String args[]){
-      launch(args);
    }
 }
