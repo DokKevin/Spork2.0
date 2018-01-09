@@ -50,7 +50,7 @@ public class SporkTitleScreen extends Application {
         primaryStage.show();
 
         newGame.setOnAction(e -> {
-            CreateCharacterGUI.setSceneCharacter(primaryStage); //This will run the GUI-layer method
+            Character.setSceneCharacter(primaryStage); //This will run the GUI-layer method
         });
 
         loadGame.setOnAction(e -> {
