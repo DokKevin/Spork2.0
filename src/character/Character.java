@@ -13,7 +13,7 @@ package character;
 
 public class Character {
     //Instantiates Singleton
-    private Character player = new Character();
+    private static Character player = new Character();
     
     //Player's actual stats. Seperated from the interface items
     private int hp;
@@ -34,7 +34,7 @@ public class Character {
     }
     
     //singleton function to get instance
-    public Character getInstance(){
+    public static Character getInstance(){
         return player;
     }
     

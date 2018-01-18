@@ -84,7 +84,7 @@ public class CharacterGUI {
             else{
                 Character initChar = Character.getInstance();
                 
-                setUsername(tfUsername.getText());
+                initChar.setUsername(tfUsername.getText());
                 initChar.setDefense(1);
 
                 if(rbWarrior.isSelected()){
