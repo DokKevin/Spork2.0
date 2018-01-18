@@ -1,17 +1,17 @@
 /*
  * SE Project: SPORK
  * Authors: Kevin Kauffman, Glenn Sweithelm
- * Character - Creates a singleton character and handles the stats for the
- * player's character created
+ * Character - Handles GUI for Title Screen and Handles Main Class
  * Change Log
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 17Sept17   Glenn          First draft completed and ready to be verified
+ * 18Jan18    Kevin          Updated Header
 */
 
 package title;
 
-import character.Character; // This will need changed once character class is removed from character ui
+import character.CharacterGUI;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -50,7 +50,7 @@ public class SporkTitleScreen extends Application {
         primaryStage.show();
 
         newGame.setOnAction(e -> {
-            Character.setSceneCharacter(primaryStage); //This will run the GUI-layer method
+            CharacterGUI.setSceneCharacter(primaryStage); //This will run the GUI-layer method
         });
 
         loadGame.setOnAction(e -> {
