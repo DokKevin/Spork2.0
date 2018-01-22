@@ -39,6 +39,7 @@ public class Character {
     }
     
     //all getters and setters
+    // TO DO: Determine Parameters for these and check for them in setters.
     public int getHp(){
         return hp;
     }
@@ -51,7 +52,7 @@ public class Character {
         return attack;
     }
 
-    public String getName(){
+    public String getUsername(){
         return username;
     }
 
