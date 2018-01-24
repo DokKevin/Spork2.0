@@ -1,0 +1,13 @@
+/*
+ * SE Project: SPORK
+ * Authors: Kevin Kauffman, Glenn Sweithelm
+ * ArenaOne.css - Handled the CSS for ArenaOne
+ * Change Log
+ * ////////////////////////////////////////////////////////////////////////////
+ * Date       Contributer    Change
+ * 24jan18    Kevin          First draft completed and ready to be verified
+*/
+
+.arena{
+    -fx-background-image: url("Dessert.png");
+}
