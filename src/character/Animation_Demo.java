@@ -1,5 +1,6 @@
 package character;
 
+import java.awt.Toolkit;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -57,28 +58,28 @@ public class Animation_Demo {
       scene.setOnKeyPressed(e -> {
           if (e.getCode() == KeyCode.LEFT)
           {
-            if(circle.getCenterX() - circle.getRadius() > 10)
+            if(circle.getCenterX() - circle.getRadius() > 40)
             {
                 circle.setCenterX(circle.getCenterX() - 4.0);
             }
           }
           else if (e.getCode() == KeyCode.RIGHT)
           {
-            if(circle.getCenterX() + circle.getRadius() < 590)
+            if(circle.getCenterX() + circle.getRadius() < Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 40)
             {
                 circle.setCenterX(circle.getCenterX() + 4.0);
             }
           }
           else if (e.getCode() == KeyCode.UP)
           {
-              if(circle.getCenterY() - circle.getRadius() > 10)
+              if(circle.getCenterY() - circle.getRadius() > 40)
               {
                 circle.setCenterY(circle.getCenterY() - 4.0);
               }
           }
           else if (e.getCode() == KeyCode.DOWN)
           {
-              if(circle.getCenterY() + circle.getRadius() < 290)
+              if(circle.getCenterY() + circle.getRadius() < Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 100)
               {
                 circle.setCenterY(circle.getCenterY() + 4.0);
               }
