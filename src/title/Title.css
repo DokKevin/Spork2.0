@@ -1,0 +1,50 @@
+/*
+ * SE Project: SPORK
+ * Authors: Kevin Kauffman, Glenn Sweithelm
+ * Character - Handled the CSS for the TitleScreen Class
+ * Change Log
+ * ////////////////////////////////////////////////////////////////////////////
+ * Date       Contributer    Change
+ * 23jan18   Glenn          First draft completed and ready to be verified
+*/
+
+@font-face {
+   -fx-font-family: 'VT323';
+   src: url('fonts/VT323-Regular.ttf');
+}
+
+.label{
+    -fx-font-family: 'VT323';
+    -fx-font-size: 170;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000;
+}
+
+.button{
+    -fx-font-family: 'VT323';
+    -fx-font-size: 35;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000;
+    -fx-padding: 35 0 35 0;
+    -fx-border-insets: 0,9 9 8 9,9,10,11;
+    -fx-background-insets: 10;
+    -fx-min-width: 330;
+    /*Says there's an error here, but it works correctly and I can't find anything wrong*/
+    -fx-background-color: linear-gradient(#f0ff00, #b2ff08),
+        radial-gradient(center 50% -40%, radius 240%, #38ee00 45%, #32d600 50%);
+    -fx-background-radius: 50;
+}
+
+.button:hover{
+    -fx-background-color: linear-gradient(#00ff51, #00ff78),
+        radial-gradient(center 50% -40%, radius 190%, #00e348 45%, #00ff9f 50%);
+    -fx-cursor: hand;
+    -fx-text-fill: #111;
+}
+
+.root{
+    -fx-background-size: 100% 100%;
+    -fx-vgap: 10;
+    -fx-alignment: center;
+    -fx-background-image: url("Area.png");
+}

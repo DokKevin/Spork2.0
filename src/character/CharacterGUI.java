@@ -16,7 +16,6 @@
 package character;
 
 import static javafx.scene.text.Font.font;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,7 +37,7 @@ public class CharacterGUI {
     static GridPane createChar = new GridPane();
     static Label lUsername = new Label("USERNAME");
     static Label lClass = new Label("CLASS");
-    static Scene scene = new Scene(createChar, 1500, 680);
+    static Scene scene = new Scene(createChar, 1, 1);
     static TextField tfUsername = new TextField();
     static TextArea taStats = new TextArea();
     static RadioButton rbWarrior = new RadioButton("Chef");
@@ -48,6 +47,8 @@ public class CharacterGUI {
     public static void setSceneCharacter(Stage stage){
         setStyles();
         stage.setScene(scene);
+        scene.getStylesheets().add(CharacterGUI.class.getResource("CharacterGUI.css").toExternalForm());
+        createChar.getStyleClass().add("createChar");
         createChar.add(lUsername, 0, 0);
         createChar.add(tfUsername, 1, 0, 4, 1);
         createChar.add(lClass, 0, 2);
@@ -105,17 +106,7 @@ public class CharacterGUI {
     //  though I have never been succesful in getting it figured out. As such, this could be done so much better
     //  once it is figured out.
     public static void setStyles(){
-        createChar.setPadding(new Insets(40, 40, 100, 100));      //Page Margins (top, bottom, right, left)
-        createChar.setVgap(50);
-        createChar.setHgap(10);
-        lUsername.setFont(font("Imprint MT Shadow", 20));
-        tfUsername.setFont(font("Imprint MT Shadow", 16));
-        lClass.setFont(font("Imprint MT Shadow", 20));
-        rbWarrior.setFont(font("Imprint MT Shadow", 16));
-        btCreate.setFont(font("Imprint MT Shadow", 16));
         taStats.setEditable(false);                             //This will display info, so it shouldn't be editable
-        taStats.setPrefHeight(300);
-        taStats.setFont(font("Imprint MT Shadow", 20));
         taStats.setWrapText(true);
         taStats.setText("Chef \nStrong and hardy, but lacking in specialty skills \n\nHealth: 10 \nStamina: 10 \n"
                 + "Attack Power: 5 \nMagic Power: 1");          //These are place holders until we talk about fighting
@@ -133,7 +124,7 @@ public class CharacterGUI {
         Scene ErrorScene = new Scene(errorPane, 300, 100);
         Text tError = new Text("Please Enter a Username");
         Button ok = new Button("Okay");
-
+        
         error.setResizable(false);
         ok.setPrefSize(100, 30);
         errorPane.setVgap(10);
