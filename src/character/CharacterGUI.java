@@ -15,6 +15,7 @@
 
 package character;
 
+import arena.ArenaOne;
 import static javafx.scene.text.Font.font;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -97,7 +98,7 @@ public class CharacterGUI {
                     initChar.setAttack(4);
                 }
                 
-                Animation_Demo.start(stage);
+                ArenaOne.start(stage);
             }
         });
     }
