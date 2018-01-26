@@ -61,11 +61,17 @@ public class CharacterGUI {
         tfUsername.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if(tfUsername.getText().length() < 1){ // Not sure if this is the correct length I should be checking.
+                if(tfUsername.getText().length() < 1){
                     if (event.getCode().equals(KeyCode.SPACE)) {
-                        tfUsername.setText(""); // This should set the field to blank.
-                        errorMessage(); // TO Be Changed to its own error
+                        tfUsername.setText("Set Username"); 
+                        errorMessage(); // TODO: change to its own error
                     }
+                } else if (tfUsername.getText().length() >= 10){
+                    String tempOne = tfUsername.getText();
+                    char[] tempTwo = new char[tempOne.length()];
+                    tempTwo = tempOne.toCharArray();
+                    String tempThree = new String(tempTwo, 0, 10);
+                    tfUsername.setText(tempThree); // Works, but is not very user friendly. Added to backlog to fix.
                 }
             }
         });
@@ -78,7 +84,6 @@ public class CharacterGUI {
         });
         
         //sets all the character values when button is clicked, but only if a name is entered
-        //" " works as a name, so may need to find how to solve that
         btCreate.setOnAction(e -> {
             if(!usernameIsGood()){
                 errorMessage();
@@ -141,6 +146,7 @@ public class CharacterGUI {
         error.show();
 
         ok.setOnAction(e -> {
+            tfUsername.setText("");
             error.close();
         });
     }
@@ -148,9 +154,7 @@ public class CharacterGUI {
     // This might be good to put in the username error once we get that
     // encapsulated
     public static boolean usernameIsGood(){
-        if(tfUsername.getText().length() < 1){
-            return false;
-        } else if(tfUsername.getText().length() > 10){
+        if(tfUsername.getText().length() < 1 || tfUsername.getText().length() > 10){
             return false;
         } else {
             return true;
