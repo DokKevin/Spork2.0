@@ -10,7 +10,7 @@
 
 @font-face {
    -fx-font-family: 'VT323';
-   src: url('fonts/VT323-Regular.ttf');
+   src: url('Fonts/VT323-Regular.ttf');
 }
 
 .label{
