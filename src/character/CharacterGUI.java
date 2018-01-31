@@ -11,6 +11,7 @@
  *                           Don't allow users to enter a space as the first
  *                           letter of username.
  * 16Jan18    Kevin          Updated Labels
+ * 28Jan18    Kevin          Fixed Username Checking Flaw
 */
 
 package character;
