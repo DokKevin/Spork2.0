@@ -11,6 +11,7 @@
  *                           Don't allow users to enter a space as the first
  *                           letter of username.
  * 16Jan18    Kevin          Updated Labels
+ * 30Jan18    Kevin          Made Stage FullScreen
 */
 
 package character;
@@ -48,6 +49,7 @@ public class CharacterGUI {
     public static void setSceneCharacter(Stage stage){
         setStyles();
         stage.setScene(scene);
+        stage.setFullScreen(true);
         scene.getStylesheets().add(CharacterGUI.class.getResource("CharacterGUI.css").toExternalForm());
         createChar.getStyleClass().add("createChar");
         createChar.add(lUsername, 0, 0);

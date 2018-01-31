@@ -8,20 +8,18 @@
  * 17Sept17   Glenn          First draft completed and ready to be verified
  * 18Jan18    Kevin          Updated Header
  * 23Jan18    Glenn          Created a design theme for the whole game
+ * 30Jan18    Kevin          Made Stage FullScreen
 */
 
 package title;
 
 import character.CharacterGUI;
-import java.awt.Toolkit;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import static javafx.scene.text.Font.font;
 import javafx.stage.Stage;
 
 public class SporkTitleScreen extends Application {
@@ -43,10 +41,9 @@ public class SporkTitleScreen extends Application {
         root.add(loadGame, 1, 2);
         root.add(options, 1, 3);
         
-        primaryStage.setWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
-        primaryStage.setHeight(Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 30);
         primaryStage.setTitle("Spork");
         primaryStage.setScene(scene);
+        primaryStage.setFullScreen(true);
         scene.getStylesheets().add(SporkTitleScreen.class.getResource("Title.css").toExternalForm());
         primaryStage.show();
 

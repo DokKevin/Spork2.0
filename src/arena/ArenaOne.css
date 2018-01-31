@@ -9,5 +9,6 @@
 */
 
 .arena{
+    -fx-background-size: 100% 100%;
     -fx-background-image: url("Dessert.png");
 }

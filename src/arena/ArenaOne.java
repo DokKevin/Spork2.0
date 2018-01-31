@@ -8,6 +8,7 @@
  * Date       Contributer    Change
  * 24jan18    Kevin          Changed from Animation_Demo to ArenaOne and created
  *                           background and adjusted boundaries.
+ * 30Jan18    Kevin          Made Stage FullScreen & Fixed Boundaries
 */
 
 package arena;
@@ -50,41 +51,44 @@ public class ArenaOne {
 
       //Setting title to the Stage
       stage.setTitle("Spork");
+      
 
       //Adding scene to the stage
       stage.setScene(scene);
       
       scene.getStylesheets().add(ArenaOne.class.getResource("ArenaOne.css").toExternalForm());
       root.getStyleClass().add("arena");
+      
+      stage.setFullScreen(true);
 
       scene.setOnKeyPressed(e -> {
           //TODO look into replacing if statement with SWITCH statement
           if (e.getCode() == KeyCode.LEFT)
           {
-            if(circle.getCenterX() - circle.getRadius() > 285)
+            if(circle.getCenterX() - circle.getRadius() > (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.145))
             {
-                circle.setCenterX(circle.getCenterX() - 4.0);
+                circle.setCenterX(circle.getCenterX() - 14.0);
             }
           }
           else if (e.getCode() == KeyCode.RIGHT)
           {
-            if(circle.getCenterX() + circle.getRadius() < Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 285)
+            if(circle.getCenterX() + circle.getRadius() < Toolkit.getDefaultToolkit().getScreenSize().getWidth() - (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.145))
             {
-                circle.setCenterX(circle.getCenterX() + 4.0);
+                circle.setCenterX(circle.getCenterX() + 14.0);
             }
           }
           else if (e.getCode() == KeyCode.UP)
           {
-              if(circle.getCenterY() - circle.getRadius() > 170)
+              if(circle.getCenterY() - circle.getRadius() > (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.16))
               {
-                circle.setCenterY(circle.getCenterY() - 4.0);
+                circle.setCenterY(circle.getCenterY() - 14.0);
               }
           }
           else if (e.getCode() == KeyCode.DOWN)
           {
-              if(circle.getCenterY() + circle.getRadius() < Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 175)
+              if(circle.getCenterY() + circle.getRadius() < Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.16))
               {
-                circle.setCenterY(circle.getCenterY() + 4.0);
+                circle.setCenterY(circle.getCenterY() + 14.0);
               }
           }
           else if(e.getCode() == KeyCode.SPACE)
