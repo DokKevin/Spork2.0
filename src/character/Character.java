@@ -122,7 +122,4 @@ public class Character {
         // Only to be called when usernameIsGood method is used.
         username = name;
     }
-    
-    //TODO: include decrement / increment functions so that combat doesn't have
-    //      to rely simply on getters.
 }
