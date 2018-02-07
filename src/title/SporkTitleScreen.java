@@ -9,16 +9,19 @@
  * 18Jan18    Kevin          Updated Header
  * 23Jan18    Glenn          Created a design theme for the whole game
  * 30Jan18    Kevin          Made Stage FullScreen
+*  06Feb18    Glenn          Made Fields dynamic to resolution
 */
 
 package title;
 
 import character.CharacterGUI;
-
+import java.awt.Toolkit;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -29,18 +32,26 @@ public class SporkTitleScreen extends Application {
 
     GridPane root = new GridPane();
     Scene scene = new Scene(root, 1440, 700);
-    Label sporkTitle = new Label("SPORK");
     Button newGame = new Button("New Game");
     Button loadGame = new Button("Load Game");
     Button options = new Button("Options");
+    Image SporkTitleImage = new Image("file:src/title/SporkLogo-01.png");
+    ImageView TitleImageView = new ImageView(SporkTitleImage);
 
     @Override
     public void start(Stage primaryStage) {
-        root.add(sporkTitle, 0, 0, 3, 1);
-        root.add(newGame, 1, 1);  
+        TitleImageView.setFitWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.4);
+        TitleImageView.setFitHeight(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.25);
+        newGame.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.25);
+        newGame.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
+        loadGame.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.25);
+        loadGame.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
+        options.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.25);
+        options.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
+        root.add(TitleImageView, 0, 0, 3, 1);
+        root.add(newGame, 1, 1);
         root.add(loadGame, 1, 2);
         root.add(options, 1, 3);
-        
         primaryStage.setTitle("Spork");
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);

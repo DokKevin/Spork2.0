@@ -13,11 +13,13 @@
  * 16Jan18    Kevin          Updated Labels
  * 28Jan18    Kevin          Fixed Username Checking Flaw
  * 30Jan18    Kevin          Made Stage FullScreen
+ * 06Feb18    Glenn          Made Dynamic Fields for resolution
 */
 
 package character;
 
 import arena.ArenaOne;
+import java.awt.Toolkit;
 import static javafx.scene.text.Font.font;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -59,7 +61,9 @@ public class CharacterGUI {
         createChar.add(rbWarrior, 1, 2);
         createChar.add(taStats, 1, 3, 4, 1);
         createChar.add(btCreate, 0, 4, 2, 1);
-
+        
+        btCreate.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.20);
+        tfUsername.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.6);
         // Check to make sure the username's first char is not a space
         tfUsername.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
