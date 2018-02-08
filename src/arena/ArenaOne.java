@@ -13,6 +13,7 @@
  *                           Added fixed, generic obstacle - to be dynamic later
  * 07Feb18    Kevin          Added get extremes function for circles - may need
  *                              updated later - and get bounds function for arena
+ * 08Feb18    Kevin          Changed nested if to switch
 */
 
 package arena;
@@ -20,7 +21,6 @@ package arena;
 import java.awt.Toolkit;
 import javafx.scene.layout.Pane;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -67,40 +67,34 @@ public class ArenaOne {
       root.getChildren().addAll(obs);
       
       scene.setOnKeyPressed(e -> {
-          //TODO look into replacing if statement with SWITCH statement
+          if (null != e.getCode())
           //TODO Make Obstacle Checking dynamic (and add function(s) for checking pos / obstacles)
-          //TODO Nested ifs are still ugly
-          if (e.getCode() == KeyCode.LEFT)
-          {
-            if((getExtreme(chara, Dir.LEFT) > getBound(Dir.LEFT)) && ((getExtreme(chara, Dir.LEFT) > (getExtreme(obs, Dir.RIGHT) + 1.0)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
-            {
-                chara.setCenterX(chara.getCenterX() - 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-            }
-          }
-          else if (e.getCode() == KeyCode.RIGHT)
-          {
-            if((getExtreme(chara, Dir.RIGHT) < getBound(Dir.RIGHT)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < (getExtreme(obs, Dir.LEFT) - 1.0))))
-            {
-                chara.setCenterX(chara.getCenterX() + 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-            }
-          }
-          else if (e.getCode() == KeyCode.UP)
-          {
-              if((getExtreme(chara, Dir.TOP) > getBound(Dir.TOP)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > (getExtreme(obs, Dir.BOTTOM) + 1.0)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
-              {
-                chara.setCenterY(chara.getCenterY() - 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-              }
-          }
-          else if (e.getCode() == KeyCode.DOWN)
-          {
-              if((getExtreme(chara, Dir.BOTTOM) < getBound(Dir.BOTTOM)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < (getExtreme(obs, Dir.TOP) - 1.0)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
-              {
-                chara.setCenterY(chara.getCenterY() + 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-              }
-          }
-          else if(e.getCode() == KeyCode.SPACE)
-          {
-
+          //TODO Nested ifs are still ugly - we may change how this is done anyway.
+          switch (e.getCode()) {
+              case LEFT:
+                  if((getExtreme(chara, Dir.LEFT) > getBound(Dir.LEFT)) && ((getExtreme(chara, Dir.LEFT) > (getExtreme(obs, Dir.RIGHT) + 1.0)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
+                  {
+                      chara.setCenterX(chara.getCenterX() - 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
+                  }     break;
+              case RIGHT:
+                  if((getExtreme(chara, Dir.RIGHT) < getBound(Dir.RIGHT)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < (getExtreme(obs, Dir.LEFT) - 1.0))))
+                  {
+                      chara.setCenterX(chara.getCenterX() + 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
+                  }     break;
+              case UP:
+                  if((getExtreme(chara, Dir.TOP) > getBound(Dir.TOP)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > (getExtreme(obs, Dir.BOTTOM) + 1.0)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
+                  {
+                      chara.setCenterY(chara.getCenterY() - 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
+                  }   break;
+              case DOWN:
+                  if((getExtreme(chara, Dir.BOTTOM) < getBound(Dir.BOTTOM)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < (getExtreme(obs, Dir.TOP) - 1.0)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
+                  {
+                      chara.setCenterY(chara.getCenterY() + 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
+                  }   break;
+              case SPACE:
+                  break;
+              default:
+                  break;
           }
       });
       //Displaying the contents of the stage
