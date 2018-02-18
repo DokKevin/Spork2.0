@@ -14,6 +14,7 @@
  * 07Feb18    Kevin          Added get extremes function for circles - may need
  *                              updated later - and get bounds function for arena
  * 08Feb18    Kevin          Changed nested if to switch
+ * 18Feb18    Kevin          Added sprite to game & updated movement
 */
 
 package arena;
@@ -21,9 +22,14 @@ package arena;
 import java.awt.Toolkit;
 import javafx.scene.layout.Pane;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+
+import actors.*;
+import input.Input;
+import javafx.animation.AnimationTimer;
 
 public class ArenaOne {
     
@@ -31,15 +37,11 @@ public class ArenaOne {
         TOP, BOTTOM, LEFT, RIGHT
     }
     
+    private boolean collision = false;
+    private static Player player;
+    
    public static void start(Stage stage) {
-      //Drawing a Circle (representing the playable character)
-      Circle chara = new Circle();
-      chara.setCenterX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5);
-      chara.setCenterY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
-      chara.setRadius(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.025);
-      chara.setFill(Color.BROWN);
-      chara.setStrokeWidth(0.0);
-      
+       
       //Drawing a Circle (representing an obstacle)
       Circle obs = new Circle();
       obs.setCenterX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.40);
@@ -49,7 +51,7 @@ public class ArenaOne {
       obs.setStrokeWidth(0.0);
 
       //Creating a Pane object
-      Pane root = new Pane(chara);
+      Pane root = new Pane();
 
       //Creating a scene object
       Scene scene = new Scene(root, 600, 300);
@@ -63,58 +65,54 @@ public class ArenaOne {
       root.getStyleClass().add("arena");
       stage.setFullScreen(true);
       
+    // This can be added to its own function when arena gets a superclass
+    //Add player to layer
+    player = Player.getInstance();
+    player.setLayer(root); // This adds player to the layer
+    player.setMoveBounds(getBound(Dir.LEFT), getBound(Dir.RIGHT), getBound(Dir.TOP), getBound(Dir.BOTTOM));
+    
+    // Create input so player can move
+    Input input = new Input(scene);
+    input.addListeners(); //TODO: Remove listeners on game over.
+    player.setInput(input);
+    
+    //Position player at center of screen
+    player.setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5);
+    player.setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
+    // End arena superclass function
+    
       // Add obstacle to pane
       root.getChildren().addAll(obs);
       
-      scene.setOnKeyPressed(e -> {
-          if (null != e.getCode())
-          //TODO Make Obstacle Checking dynamic (and add function(s) for checking pos / obstacles)
-          //TODO Nested ifs are still ugly - we may change how this is done anyway.
-          switch (e.getCode()) {
-              case LEFT:
-                  if((getExtreme(chara, Dir.LEFT) > getBound(Dir.LEFT)) && ((getExtreme(chara, Dir.LEFT) > (getExtreme(obs, Dir.RIGHT) + 1.0)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
-                  {
-                      chara.setCenterX(chara.getCenterX() - 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-                  }     break;
-              case RIGHT:
-                  if((getExtreme(chara, Dir.RIGHT) < getBound(Dir.RIGHT)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < (getExtreme(obs, Dir.LEFT) - 1.0))))
-                  {
-                      chara.setCenterX(chara.getCenterX() + 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-                  }     break;
-              case UP:
-                  if((getExtreme(chara, Dir.TOP) > getBound(Dir.TOP)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > (getExtreme(obs, Dir.BOTTOM) + 1.0)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
-                  {
-                      chara.setCenterY(chara.getCenterY() - 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-                  }   break;
-              case DOWN:
-                  if((getExtreme(chara, Dir.BOTTOM) < getBound(Dir.BOTTOM)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < (getExtreme(obs, Dir.TOP) - 1.0)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
-                  {
-                      chara.setCenterY(chara.getCenterY() + 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-                  }   break;
-              case SPACE:
-                  break;
-              default:
-                  break;
-          }
-      });
       //Displaying the contents of the stage
       stage.show();
-   }
-   
-   // Get Extremesd of Character / Obstacles
-   private static double getExtreme(Circle nCirc, Dir nDir){ // May have to change param type later
-       switch (nDir){
-           case TOP:
-                return (nCirc.getCenterY() - nCirc.getRadius());
-           case BOTTOM:
-                return (nCirc.getCenterY() + nCirc.getRadius());
-           case LEFT:
-                return (nCirc.getCenterX() - nCirc.getRadius());
-           case RIGHT:
-                return (nCirc.getCenterX() + nCirc.getRadius());
-           default: // returns top, should return error message. Shouldn't reach this stage
-               return (nCirc.getCenterY() - nCirc.getRadius());
-       }
+      
+      AnimationTimer gameLoop = new AnimationTimer(){
+          @Override
+          public void handle(long now){
+              //See this for info and TODOs: https://stackoverflow.com/questions/29057870/in-javafx-how-do-i-move-a-sprite-across-the-screen
+              
+              // Player Input
+              player.processInput();
+              
+              player.move();
+              //TODO: Enemies move as well
+              
+              //TODO: Check Collisions
+              
+              player.updateUI();
+              //TODO: Enemies update UI
+              
+              //TODO: Check removability
+              
+              //TODO: Attack / Be Attacked
+              
+              //TODO: Remove Dead Enemies
+              
+              //Updates / Etc...
+          }
+      };
+      gameLoop.start();
    }
    
    // Get Boundaries of Arena
@@ -123,7 +121,7 @@ public class ArenaOne {
            case TOP:
                 return (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.16);
            case BOTTOM:
-                return (Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.16));
+                return (Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.17));
            case LEFT:
                 return (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.145);
            case RIGHT:
