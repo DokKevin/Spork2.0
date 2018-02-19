@@ -6,11 +6,12 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 23jan18   Glenn          First draft completed and ready to be verified
+ * 18Feb18   Kevin          Fixed font not loading.
 */
 
 @font-face {
    -fx-font-family: 'VT323';
-   src: url('fonts/VT323-Regular.ttf');
+   src: url('../title/Fonts/VT323-Regular.ttf');
 }
 
 .text-area{
