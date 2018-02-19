@@ -9,6 +9,7 @@
  * 18Jan18    Kevin          Seperated CharacterGUI and Character Class
  * 31Jan18    Kevin          Determined Parameters and Added Checking to Setters
  * 18Feb18    Kevin          Created Actor Superclass for Character & Monsters
+ * 19Feb18    Kevin          Added collision checking for obstacles.
 */
 
 package actors;
@@ -30,13 +31,6 @@ public class Player extends Actor {
     public int maxExp;
     
     private Input input;
-    
-    private double minX;
-    private double maxX;
-    private double minY;
-    private double maxY;
-    
-    private final double speed = 12;
     
     //constructor for the Singleton. The stats will vary, so begins with nothing
     // Parameters will change as development continues
@@ -60,6 +54,9 @@ public class Player extends Actor {
         exp = minExp;
         username = "";
         job = "Chef"; // TODO: To be changed when we add more class
+        speed = 12;
+        
+        setMoveBounds();
     }
     
     //singleton function to get instance
@@ -80,22 +77,6 @@ public class Player extends Actor {
         return input;
     }
 
-    public double getMoveBoundMinX(){
-        return minX;
-    }
-    
-    public double getMoveBoundMaxX(){
-        return maxX;
-    }
-    
-    public double getMoveBoundMinY(){
-        return minY;
-    }
-    
-    public double getMoveBoundMaxY(){
-        return maxY;
-    }
-    
     //To Change Min and Max values, see variables at top of class.
     public void setExp(int number){
         if(number < minExp){
@@ -114,15 +95,6 @@ public class Player extends Actor {
     
     public void setInput(Input nInp){
         input = nInp;
-    }
-    
-    public void setMoveBounds(double nMinX, double nMaxX, double nMinY, double nMaxY){
-        if(nMinX > 0 && nMaxX > 0 && nMinY > 0 && nMaxY > 0){
-            minX = nMinX;
-            maxX = nMaxX;
-            minY = nMinY;
-            maxY = nMaxY;
-        }
     }
     
     public void processInput(){
@@ -149,23 +121,7 @@ public class Player extends Actor {
     public void move(){
         super.move();
         
-        checkBounds();
-    }
-    
-    private void checkBounds(){
-        // Vertical
-        if(Double.compare((getY() + (getImage().getHeight() / 2.0)), getMoveBoundMinY()) < 0){
-            setY(getMoveBoundMinY() - (getImage().getHeight() / 2.0)); // Top
-        } else if(Double.compare((getY() + getImage().getHeight()), getMoveBoundMaxY()) > 0){
-            setY(getMoveBoundMaxY() - getImage().getHeight()); // Bottom
-        }
-        
-        // Horizontal
-        if(Double.compare(getX(), getMoveBoundMinX()) < 0){
-            setX(getMoveBoundMinX()); // Left
-        } else if(Double.compare((getX() + getImage().getWidth()), getMoveBoundMaxX()) > 0){
-            setX(getMoveBoundMaxX() - getImage().getWidth()); // Right
-        }
+        super.checkBounds();
     }
     
     @Override
