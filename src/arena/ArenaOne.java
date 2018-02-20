@@ -14,16 +14,22 @@
  * 07Feb18    Kevin          Added get extremes function for circles - may need
  *                              updated later - and get bounds function for arena
  * 08Feb18    Kevin          Changed nested if to switch
+ * 18Feb18    Kevin          Added sprite to game & updated movement
+ * 19Feb18    Kevin          Added collision checking
 */
 
 package arena;
 
+import obstacle.*;
 import java.awt.Toolkit;
 import javafx.scene.layout.Pane;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+
+import actors.*;
+import input.Input;
+import java.util.ArrayList;
+import javafx.animation.AnimationTimer;
 
 public class ArenaOne {
     
@@ -31,25 +37,14 @@ public class ArenaOne {
         TOP, BOTTOM, LEFT, RIGHT
     }
     
+    private static boolean collision = false;
+    private static Player player;
+    
+    private static ArrayList<Obstacle> obsList = new ArrayList(5);
+    
    public static void start(Stage stage) {
-      //Drawing a Circle (representing the playable character)
-      Circle chara = new Circle();
-      chara.setCenterX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5);
-      chara.setCenterY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
-      chara.setRadius(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.025);
-      chara.setFill(Color.BROWN);
-      chara.setStrokeWidth(0.0);
-      
-      //Drawing a Circle (representing an obstacle)
-      Circle obs = new Circle();
-      obs.setCenterX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.40);
-      obs.setCenterY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50);
-      obs.setRadius(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
-      obs.setFill(Color.BLUE);
-      obs.setStrokeWidth(0.0);
-
       //Creating a Pane object
-      Pane root = new Pane(chara);
+      Pane root = new Pane();
 
       //Creating a scene object
       Scene scene = new Scene(root, 600, 300);
@@ -63,73 +58,71 @@ public class ArenaOne {
       root.getStyleClass().add("arena");
       stage.setFullScreen(true);
       
-      // Add obstacle to pane
-      root.getChildren().addAll(obs);
-      
-      scene.setOnKeyPressed(e -> {
-          if (null != e.getCode())
-          //TODO Make Obstacle Checking dynamic (and add function(s) for checking pos / obstacles)
-          //TODO Nested ifs are still ugly - we may change how this is done anyway.
-          switch (e.getCode()) {
-              case LEFT:
-                  if((getExtreme(chara, Dir.LEFT) > getBound(Dir.LEFT)) && ((getExtreme(chara, Dir.LEFT) > (getExtreme(obs, Dir.RIGHT) + 1.0)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
-                  {
-                      chara.setCenterX(chara.getCenterX() - 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-                  }     break;
-              case RIGHT:
-                  if((getExtreme(chara, Dir.RIGHT) < getBound(Dir.RIGHT)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < (getExtreme(obs, Dir.LEFT) - 1.0))))
-                  {
-                      chara.setCenterX(chara.getCenterX() + 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-                  }     break;
-              case UP:
-                  if((getExtreme(chara, Dir.TOP) > getBound(Dir.TOP)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < getExtreme(obs, Dir.TOP)) || (getExtreme(chara, Dir.TOP) > (getExtreme(obs, Dir.BOTTOM) + 1.0)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
-                  {
-                      chara.setCenterY(chara.getCenterY() - 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-                  }   break;
-              case DOWN:
-                  if((getExtreme(chara, Dir.BOTTOM) < getBound(Dir.BOTTOM)) && ((getExtreme(chara, Dir.LEFT) > getExtreme(obs, Dir.RIGHT)) || (getExtreme(chara, Dir.BOTTOM) < (getExtreme(obs, Dir.TOP) - 1.0)) || (getExtreme(chara, Dir.TOP) > getExtreme(obs, Dir.BOTTOM)) || (getExtreme(chara, Dir.RIGHT) < getExtreme(obs, Dir.LEFT))))
-                  {
-                      chara.setCenterY(chara.getCenterY() + 1.0); // Changed movement to 1px at a time because it caused an issue with the obstacle
-                  }   break;
-              case SPACE:
-                  break;
-              default:
-                  break;
-          }
-      });
+    // This can be added to its own function when arena gets a superclass
+    //Add player to layer
+    player = Player.getInstance();
+    player.setLayer(root); // This adds player to the layer
+    
+    // Create input so player can move
+    Input input = new Input(scene);
+    input.addListeners(); //TODO: Remove listeners on game over.
+    player.setInput(input);
+    
+    //Position player at center of screen
+    // TODO: Create a setToCenter function for player (to be used when player is changing arenas / levels
+    player.setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5);
+    player.setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
+    // End arena superclass function
+    
+    // This can be its own function too
+    // TODO: put into obstacles array list
+    // TODO: Allow player to interact more naturally with the obstacle (i.e. some overlap when correct)
+    //       Possibly allow player and obstacle to have different panes / layers?
+    Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), 
+                                        (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
+    
+    obsList.add(cinRoll);
+    
+    cinRoll.setLayer(root);
+    cinRoll.updateUI();
+    // End obstacle population function
+    
       //Displaying the contents of the stage
       stage.show();
+      
+      AnimationTimer gameLoop = new AnimationTimer(){
+          @Override
+          public void handle(long now){
+              //See this for info and TODOs: https://stackoverflow.com/questions/29057870/in-javafx-how-do-i-move-a-sprite-across-the-screen
+              
+              // Player Input
+              player.processInput();
+              
+              checkObsCollision();
+              
+              player.move();
+              //TODO: Enemies move as well
+              
+              player.updateUI();
+              //TODO: Enemies update UI
+              
+              //TODO: Check removability
+              
+              //TODO: Check Attack Collisions - this may take some work
+              
+              //TODO: Remove Dead Enemies
+              
+              //Updates / Etc...
+          }
+      };
+      gameLoop.start();
    }
    
-   // Get Extremesd of Character / Obstacles
-   private static double getExtreme(Circle nCirc, Dir nDir){ // May have to change param type later
-       switch (nDir){
-           case TOP:
-                return (nCirc.getCenterY() - nCirc.getRadius());
-           case BOTTOM:
-                return (nCirc.getCenterY() + nCirc.getRadius());
-           case LEFT:
-                return (nCirc.getCenterX() - nCirc.getRadius());
-           case RIGHT:
-                return (nCirc.getCenterX() + nCirc.getRadius());
-           default: // returns top, should return error message. Shouldn't reach this stage
-               return (nCirc.getCenterY() - nCirc.getRadius());
-       }
-   }
-   
-   // Get Boundaries of Arena
-   private static double getBound(Dir nDir){ 
-       switch (nDir){
-           case TOP:
-                return (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.16);
-           case BOTTOM:
-                return (Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.16));
-           case LEFT:
-                return (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.145);
-           case RIGHT:
-                return (Toolkit.getDefaultToolkit().getScreenSize().getWidth() - (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.145));
-           default: // returns top, should return error message. Shouldn't reach this stage
-               return (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.16);
-       }
+   private static void checkObsCollision(){
+       collision = false;
+       
+       obsList.forEach((obstacle) -> {
+           player.checkObsCollision(obstacle);
+        });
    }
 }

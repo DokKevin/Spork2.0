@@ -17,8 +17,9 @@
  * 18Feb18    Kevin          Made username checking more user friendly
 */
 
-package character;
+package characterGUI;
 
+import actors.Player;
 import arena.ArenaOne;
 import java.awt.Toolkit;
 import javafx.beans.value.ChangeListener;
@@ -93,7 +94,7 @@ public class CharacterGUI {
                 errorMessage();
             }
             else{
-                Character initChar = Character.getInstance();
+                Player initChar = Player.getInstance();
                 
                 initChar.setUsername(tfUsername.getText());
                 initChar.setDefense(1);
