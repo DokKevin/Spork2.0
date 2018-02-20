@@ -16,8 +16,9 @@
  * 06Feb18    Glenn          Made Dynamic Fields for resolution
 */
 
-package character;
+package characterGUI;
 
+import actors.Player;
 import arena.ArenaOne;
 import java.awt.Toolkit;
 import static javafx.scene.text.Font.font;
@@ -96,7 +97,7 @@ public class CharacterGUI {
                 errorMessage();
             }
             else{
-                Character initChar = Character.getInstance();
+                Player initChar = Player.getInstance();
                 
                 initChar.setUsername(tfUsername.getText());
                 initChar.setDefense(1);

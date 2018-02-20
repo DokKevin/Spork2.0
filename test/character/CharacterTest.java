@@ -12,6 +12,7 @@
 
 package character;
 
+import actors.Player;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,8 +48,8 @@ public class CharacterTest {
     public void testGetInstance() {
         System.out.println("\n***getInstance Test***");
         System.out.println("\tTesting that getInstance does not create multiple instances");
-        Character expResult = Character.getInstance();
-        Character result = Character.getInstance();
+        Player expResult = Player.getInstance();
+        Player result = Player.getInstance();
         assertEquals("Two instances of Character did not match each other.", expResult, result);
     }
 
@@ -59,7 +60,7 @@ public class CharacterTest {
     public void testSetGetHp() {
         System.out.println("\n***setHp & getHp Test***");
         System.out.println("\t Testing that HP is set and received correctly");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = 6;
         instance.setHp(expResult);
         int result = instance.getHp();
@@ -74,7 +75,7 @@ public class CharacterTest {
         System.out.println("\n***setHp & getHp Max Param Test***");
         System.out.println("\t Testing that HP is set and received correctly "
                 + "when given values outside of the max");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = instance.maxHp;
         instance.setHp(999999);
         int result = instance.getHp();
@@ -89,7 +90,7 @@ public class CharacterTest {
         System.out.println("\n***setHp & getHp Min Param Test***");
         System.out.println("\t Testing that HP is set and received correctly "
                 + "when given values outside of the min");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = instance.minHp;
         instance.setHp(-999999);
         int result = instance.getHp();
@@ -103,7 +104,7 @@ public class CharacterTest {
     public void testSetGetDefense() {
         System.out.println("\n***setDefense & getDefense Test***");
         System.out.println("\t Testing that Defense is set and received correctly");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = 4;
         instance.setDefense(expResult);
         int result = instance.getDefense();
@@ -118,7 +119,7 @@ public class CharacterTest {
         System.out.println("\n***setDef & getDef Max Param Test***");
         System.out.println("\t Testing that Defense is set and received correctly "
                 + "when given values outside of the max");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = instance.maxDef;
         instance.setDefense(999999);
         int result = instance.getDefense();
@@ -133,7 +134,7 @@ public class CharacterTest {
         System.out.println("\n***setDef & getDef Min Param Test***");
         System.out.println("\t Testing that Defense is set and received correctly "
                 + "when given values outside of the min");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = instance.minDef;
         instance.setDefense(-999999);
         int result = instance.getDefense();
@@ -147,7 +148,7 @@ public class CharacterTest {
     public void testSetGetAttack() {
         System.out.println("\n***setAttack & getAttack Test***");
         System.out.println("\t Testing that Attack is set and received correctly");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = 5;
         instance.setAttack(expResult);
         int result = instance.getAttack();
@@ -162,7 +163,7 @@ public class CharacterTest {
         System.out.println("\n***setAtt & getAtt Max Param Test***");
         System.out.println("\t Testing that Attack is set and received correctly "
                 + "when given values outside of the max");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = instance.maxAtt;
         instance.setAttack(999999);
         int result = instance.getAttack();
@@ -177,7 +178,7 @@ public class CharacterTest {
         System.out.println("\n***setAtt & getAtt Min Param Test***");
         System.out.println("\t Testing that Attack is set and received correctly "
                 + "when given values outside of the min");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = instance.minAtt;
         instance.setAttack(-999999);
         int result = instance.getAttack();
@@ -191,7 +192,7 @@ public class CharacterTest {
     public void testSetGetExp() {
         System.out.println("\n***setExp & getExp Test***");
         System.out.println("\t Testing that Exp is set and received correctly");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = 7;
         instance.setExp(expResult);
         int result = instance.getExp();
@@ -206,7 +207,7 @@ public class CharacterTest {
         System.out.println("\n***setExp & getExp Max Param Test***");
         System.out.println("\t Testing that Attack is set and received correctly "
                 + "when given values outside of the max");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = instance.maxExp;
         instance.setExp(999999);
         int result = instance.getExp();
@@ -221,7 +222,7 @@ public class CharacterTest {
         System.out.println("\n***setExp & getExp Min Param Test***");
         System.out.println("\t Testing that Exp is set and received correctly "
                 + "when given values outside of the min");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         int expResult = instance.minExp;
         instance.setExp(-999999);
         int result = instance.getExp();
@@ -235,7 +236,7 @@ public class CharacterTest {
     public void testSetGetUsername() {
         System.out.println("\n***setUsername & getUsername Test***");
         System.out.println("\t Testing that Username is set and received correctly");
-        Character instance = Character.getInstance();
+        Player instance = Player.getInstance();
         String expResult = "DapperOctopus";
         instance.setUsername(expResult);
         String result = instance.getUsername();

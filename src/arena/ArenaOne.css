@@ -6,9 +6,10 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 24jan18    Kevin          First draft completed and ready to be verified
+ * 18Feb18    Kevin          Moved background image to images folder
 */
 
 .arena{
     -fx-background-size: 100% 100%;
-    -fx-background-image: url("Dessert.png");
+    -fx-background-image: url("../images/Dessert.png");
 }

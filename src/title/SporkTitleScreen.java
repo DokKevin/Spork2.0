@@ -14,7 +14,7 @@
 
 package title;
 
-import character.CharacterGUI;
+import characterGUI.CharacterGUI;
 import java.awt.Toolkit;
 import javafx.application.Application;
 import javafx.scene.Scene;
