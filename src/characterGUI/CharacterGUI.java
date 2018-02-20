@@ -14,6 +14,7 @@
  * 28Jan18    Kevin          Fixed Username Checking Flaw
  * 30Jan18    Kevin          Made Stage FullScreen
  * 06Feb18    Glenn          Made Dynamic Fields for resolution
+ * 18Feb18    Kevin          Made username checking more user friendly
 */
 
 package characterGUI;
@@ -21,6 +22,8 @@ package characterGUI;
 import actors.Player;
 import arena.ArenaOne;
 import java.awt.Toolkit;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import static javafx.scene.text.Font.font;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -33,9 +36,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.event.*;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.KeyCode;
 
 public class CharacterGUI {
 
@@ -65,25 +65,22 @@ public class CharacterGUI {
         
         btCreate.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.20);
         tfUsername.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.6);
-        // Check to make sure the username's first char is not a space
-        tfUsername.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        
+        // Prevents username from having a space at the beginning or being greater than 10 characters long
+        // Still allows players to have a space at the end of their name, that would have to be taken care of when pressing submit if we want to allow spaces at all.
+        tfUsername.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void handle(KeyEvent event) {
-                if(tfUsername.getText().length() < 1){
-                    if (event.getCode().equals(KeyCode.SPACE)) {
-                        tfUsername.setText("Set Username"); 
-                        errorMessage(); // TODO: change to its own error
-                    }
-                } else if (tfUsername.getText().length() >= 10){
-                    String tempOne = tfUsername.getText();
-                    char[] tempTwo = new char[tempOne.length()];
-                    tempTwo = tempOne.toCharArray();
-                    String tempThree = new String(tempTwo, 0, 10);
-                    tfUsername.setText(tempThree); // Works, but is not very user friendly. Added to backlog to fix.
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(newValue.charAt(0) == ' '){
+                    tfUsername.setText(oldValue);
+                }
+                
+                if(newValue.length() > 10){
+                    tfUsername.setText(oldValue);
                 }
             }
         });
-
+        
         //This makes radio buttons interactable when clicked, though arrow keys still need to be programmed.
         //  It's a start for the place holders
         rbWarrior.setOnAction(e -> {
