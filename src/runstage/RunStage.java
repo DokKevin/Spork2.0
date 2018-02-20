@@ -12,7 +12,7 @@
 
 package runstage;
 
-import character.CharacterGUI;
+import characterGUI.CharacterGUI;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
