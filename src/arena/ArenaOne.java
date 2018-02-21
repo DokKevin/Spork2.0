@@ -16,6 +16,7 @@
  * 08Feb18    Kevin          Changed nested if to switch
  * 18Feb18    Kevin          Added sprite to game & updated movement
  * 19Feb18    Kevin          Added collision checking
+ * 20Feb18    Glenn          Added a HUD for HP and XP
 */
 
 package arena;
@@ -25,13 +26,16 @@ import java.awt.Toolkit;
 import javafx.scene.layout.Pane;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import javafx.scene.control.ProgressBar;
 import actors.*;
 import input.Input;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 
 public class ArenaOne {
+    static ProgressBar healthBar = new ProgressBar(1F);
+    static ProgressBar xpBar = new ProgressBar(0F);
+    //TODO: there is a white line under the progress bar to remove
     
     private enum Dir{
         TOP, BOTTOM, LEFT, RIGHT
@@ -45,7 +49,6 @@ public class ArenaOne {
    public static void start(Stage stage) {
       //Creating a Pane object
       Pane root = new Pane();
-
       //Creating a scene object
       Scene scene = new Scene(root, 600, 300);
 
@@ -82,13 +85,31 @@ public class ArenaOne {
                                         (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
     
     obsList.add(cinRoll);
-    
     cinRoll.setLayer(root);
     cinRoll.updateUI();
     // End obstacle population function
     
+    healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
+                   Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
+    healthBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
+    xpBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1, 
+                   Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.03);
+    xpBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
+    xpBar.setTranslateY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.058);
+    healthBar.getStyleClass().add("healthBar");
+    xpBar.getStyleClass().add("xpBar");
+    root.getChildren().add(healthBar);
+    root.getChildren().add(xpBar); //can do these two in one-line, but kept hitting a reflection error
+                                   //TODO: get these added together
+    
       //Displaying the contents of the stage
       stage.show();
+      
+      //These two events are for stakeholder demonstration. Both the events and the functuions they call will be removed
+      root.setOnMouseClicked(e -> { //"gets hit" and "kills something"
+         setHP(-0.1); 
+         setXP(10);
+      });
       
       AnimationTimer gameLoop = new AnimationTimer(){
           @Override
@@ -124,5 +145,18 @@ public class ArenaOne {
        obsList.forEach((obstacle) -> {
            player.checkObsCollision(obstacle);
         });
+   }
+   
+   public static void setHP(double amount){
+       healthBar.setProgress(healthBar.getProgress() + amount);
+   }
+   static double maxXp = 100;
+   public static void setXP(double amount){
+       xpBar.setProgress(xpBar.getProgress() + amount/maxXp);
+       if(xpBar.getProgress() >= 1)
+       {
+           xpBar.setProgress(0);
+           maxXp = maxXp + (maxXp * .5);//player's xp gets higher
+       }
    }
 }

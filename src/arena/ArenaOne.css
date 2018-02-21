@@ -13,3 +13,22 @@
     -fx-background-size: 100% 100%;
     -fx-background-image: url("../images/Dessert.png");
 }
+
+.healthBar{
+    -fx-accent: #f00;
+    -fx-indeterminate-bar-animation-time: 1;
+}
+
+.healthBar > .track {
+  -fx-text-box-border: #a50000;
+  -fx-control-inner-background: #bf0000;
+}
+
+.xpBar{
+    -fx-accent: #1fe700;
+}
+
+.xpBar > .track {
+  -fx-text-box-border: #1ac100;
+  -fx-control-inner-background: #17ae00;
+}
