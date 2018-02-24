@@ -273,6 +273,11 @@ public abstract class Actor {
     public void updateUI() {
         imageView.setX(x);
         imageView.setY(y);
+        
+        left = this.getX();
+        right = this.getX() + this.getImgWidth();
+        top = this.getY();
+        bottom = this.getY() + this.getImgHeight();
     }
     
     // Take damage based on monster that's attacking
@@ -319,22 +324,38 @@ public abstract class Actor {
     }
     
     // TODO: Make this per-pixel collision & allow some overlapping
-    // TODO: Bounces when colliding, this is an issue
-    // TODO: Sometimes when colliding after a while he will not reset to outside the object, this allows teleportation through the obstacle.
+    // TODO: Bounces when colliding, this is an issue - Works with horizontal movement, but not with vertical movement for some reason.
+    // TODO: Sometimes when colliding after a while he will not reset to outside the object, this allows teleportation through the obstacle. - Still does this with vertical movement, but not horizontal for some reason.
     public void checkObsCollision(Obstacle nObs){
         if(this.getImageView().getBoundsInParent().intersects(nObs.getImageView().getBoundsInParent())){
             // Vertical
             if(Double.compare(this.getY(), this.getLy()) > 0){
-                this.setY((nObs.getTop() - this.getImgHeight())); 
+                if(Double.compare(this.getBottom(), nObs.getTop()) == 0){
+                    // Do Nothing
+                } else {
+                    this.setY((nObs.getTop() - this.getImgHeight()) - 1); // Moving Downward
+                }
             } else if(Double.compare(this.getY(), this.getLy()) < 0){
-                this.setY(nObs.getBottom()); 
+                if(Double.compare(this.getTop(), nObs.getBottom()) == 0){
+                    // Do Nothing
+                } else {
+                    this.setY(nObs.getBottom());  // Moving Upward
+                }
             }
 
             // Horizontal
             if(Double.compare(this.getX(), this.getLx()) < 0){
-                this.setX(nObs.getRight());
+                if(Double.compare(this.getRight(), nObs.getLeft()) == 0){
+                    // Do Nothing
+                } else {
+                    this.setX(nObs.getRight()); // Moving Left
+                }
             } else if(Double.compare(this.getX(), this.getLx()) > 0){
-                this.setX(nObs.getLeft() - this.getImgWidth());
+                if(Double.compare(this.getLeft(), nObs.getRight()) == 0){
+                    // Do Nothing
+                } else {
+                    this.setX(nObs.getLeft() - this.getImgWidth()); // Moving Right
+                }
             }
         }
     }

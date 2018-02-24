@@ -31,6 +31,8 @@ import actors.*;
 import input.Input;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 public class ArenaOne {
     static ProgressBar healthBar = new ProgressBar(1F);
@@ -105,6 +107,21 @@ public class ArenaOne {
       //Displaying the contents of the stage
       stage.show();
       
+      // Debug
+      Label debug = new Label("Test");
+      debug.setTextFill(Color.web("#ffffff"));
+      root.getChildren().add(debug);
+      
+      Label debug2 = new Label("Yo Mama");
+      debug2.setTextFill(Color.web("#ffffff"));
+      debug2.setTranslateY(15);
+      root.getChildren().add(debug2);
+      
+      Label debug3 = new Label("Debug");
+      debug3.setTextFill(Color.web("#ffffff"));
+      debug3.setTranslateY(30);
+      root.getChildren().add(debug3);
+      
       //These two events are for stakeholder demonstration. Both the events and the functuions they call will be removed
       root.setOnMouseClicked(e -> { //"gets hit" and "kills something"
          setHP(-0.1); 
@@ -115,6 +132,10 @@ public class ArenaOne {
           @Override
           public void handle(long now){
               //See this for info and TODOs: https://stackoverflow.com/questions/29057870/in-javafx-how-do-i-move-a-sprite-across-the-screen
+              
+              debug.setText(Double.toString(player.getBottom()));
+              debug2.setText(Double.toString(cinRoll.getTop()));
+              debug3.setText(Integer.toString(Double.compare(player.getBottom(), cinRoll.getTop())));
               
               // Player Input
               player.processInput();

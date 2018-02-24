@@ -74,6 +74,11 @@ public abstract class Obstacle {
     public void updateUI() {
         imageView.setX(x);
         imageView.setY(y);
+        
+        left = this.getX();
+        right = this.getX() + this.getImgWidth();
+        top = this.getY();
+        bottom = this.getY() + this.getImgHeight();
     }
     
     public void addToLayer() {
