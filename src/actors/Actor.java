@@ -6,6 +6,7 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 18Feb18    Kevin          Initial Abstract Actor Created
+ * 24Feb18    Kevin          Fixed Collision Checking
 */
 
 package actors;
@@ -24,7 +25,6 @@ public abstract class Actor {
     
     protected double x;
     protected double y;
-    protected double r;
     
     protected double left;
     protected double right;
@@ -33,7 +33,9 @@ public abstract class Actor {
     
     protected double dx;
     protected double dy;
-    protected double dr;
+    
+    protected double lx;
+    protected double ly;
     
     protected int hp;
     protected int defense;
@@ -49,10 +51,6 @@ public abstract class Actor {
     protected double maxX;
     protected double minY;
     protected double maxY;
-    
-    protected enum Dir{
-        N, NE, E, SE, S, SW, W, NW, NONE
-    }
     
     boolean canMove = true;
     
@@ -88,11 +86,15 @@ public abstract class Actor {
     public double getY() {
         return y;
     }
-
-    public double getR() {
-        return r;
-    }
     
+    public double getLx() {
+        return lx;
+    }
+
+    public double getLy() {
+        return ly;
+    }
+
     public double getLeft(){
         return left;
     }
@@ -115,10 +117,6 @@ public abstract class Actor {
 
     public double getDy() {
         return dy;
-    }
-
-    public double getDr() {
-        return dr;
     }
 
     public int getHp(){
@@ -157,6 +155,18 @@ public abstract class Actor {
         return actorImg;
     }
     
+    public double getImgHeight(){
+        return getImage().getHeight();
+    }
+    
+    public double getImgWidth(){
+        return getImage().getWidth();
+    }
+    
+    public ImageView getImageView(){
+        return imageView;
+    }
+    
     public double getMoveBoundMinX(){
         return minX;
     }
@@ -187,20 +197,12 @@ public abstract class Actor {
         y = ny;
     }
     
-    public void setR(double nr) {
-        r = nr;
-    }
-    
     public void setDx(double ndx) {
         dx = ndx;
     }
     
     public void setDy(double ndy) {
         dy = ndy;
-    }
-    
-    public void setDr(double ndr) {
-        dr = ndr;
     }
     
     //To Change Min and Max values, see variables at top of class.
@@ -255,10 +257,13 @@ public abstract class Actor {
         if(!canMove){
             return;
         }
-
+        
+        // Record last x and y position for collision checking
+        lx = x;
+        ly = y;
+        
         x += dx;
         y += dy;
-        r += dr;
     }
     
     public boolean isAlive() {
@@ -268,7 +273,6 @@ public abstract class Actor {
     public void updateUI() {
         imageView.setX(x);
         imageView.setY(y);
-        imageView.setRotate(r);
     }
     
     // Take damage based on monster that's attacking
@@ -314,100 +318,24 @@ public abstract class Actor {
         }
     }
     
-    // TODO: Make this per-pixel collision
-    // This may allow players to thred a needle and overlap an object.
-    // This does not work at all.
+    // TODO: Make this per-pixel collision & allow some overlapping
+    // TODO: Bounces when colliding, this is an issue
+    // TODO: Sometimes when colliding after a while he will not reset to outside the object, this allows teleportation through the obstacle.
     public void checkObsCollision(Obstacle nObs){
-        if(((this.getLeft() > nObs.getLeft() && this.getLeft() < nObs.getRight()) && (this.getTop() > nObs.getTop() && this.getTop() < nObs.getBottom())) // character top-left corner is in obstacle
-          || ((this.getRight() < nObs.getRight() && this.getRight() > nObs.getLeft()) && (this.getTop() > nObs.getTop() && this.getTop() < nObs.getBottom())) // character top-right corner is in obstacle
-          || ((this.getBottom() < nObs.getBottom() && this.getBottom() > nObs.getTop()) && (this.getLeft() > nObs.getLeft() && this.getLeft() < nObs.getRight())) // character bottom-left corner is in object      
-          || ((this.getBottom() < nObs.getBottom() && this.getBottom() > nObs.getTop()) && (this.getRight() < nObs.getRight() && this.getRight() > nObs.getLeft())) // character bottom-right corner is in object
-          ){
-            this.setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
-            this.setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5);
-            
-            switch(checkDir()){
-                case N:
-                    this.setY(nObs.getBottom() + 1.0);
-                    break;
-                case NE:
-                    if(this.getRight() - nObs.getLeft() > nObs.getBottom() - this.getTop()){
-                        this.setY(nObs.getBottom() + 1.0);
-                    } else if(this.getRight() - nObs.getLeft() < nObs.getBottom() - this.getTop()){
-                        this.setX(nObs.getLeft() - 1.0);
-                    } else {
-                        this.setY(nObs.getBottom() + 1.0);
-                        this.setX(nObs.getLeft() - 1.0);
-                    }
-                    break;
-                case E:
-                    this.setX(nObs.getLeft() - 1.0);
-                    break;
-                case SE:
-                    if(this.getRight() - nObs.getLeft() > this.getBottom() - nObs.getTop()){
-                        this.setY(nObs.getTop() - 1.0);
-                    } else if(this.getRight() - nObs.getLeft() < this.getBottom() - nObs.getTop()){
-                        this.setX(nObs.getLeft() - 1.0);
-                    } else {
-                        this.setY(nObs.getTop() - 1.0);
-                        this.setX(nObs.getLeft() - 1.0);
-                    }
-                    break;
-                case S:
-                    this.setY(nObs.getTop() - 1.0);
-                    break;
-                case SW:
-                    if(nObs.getRight() - this.getLeft() > this.getBottom() - nObs.getTop()){
-                        this.setY(nObs.getTop() - 1.0);
-                    } else if(nObs.getLeft() - this.getRight() < this.getBottom() - nObs.getTop()){
-                        this.setX(nObs.getRight() + 1.0);
-                    } else {
-                        this.setY(nObs.getTop() - 1.0);
-                        this.setX(nObs.getRight() + 1.0);
-                    }
-                    break;
-                case W:
-                    this.setX(nObs.getRight() + 1.0);
-                    break;
-                case NW:
-                    if(nObs.getRight() - this.getLeft() > nObs.getBottom() - this.getTop()){
-                        this.setY(nObs.getBottom() + 1.0);
-                    } else if(nObs.getRight() - this.getLeft() < nObs.getBottom() - this.getTop()){
-                        this.setX(nObs.getRight() + 1.0);
-                    } else {
-                        this.setY(nObs.getBottom() + 1.0);
-                        this.setX(nObs.getRight() + 1.0);
-                    }
-                    break;
-                default:
-                    // Hopefully won't get here
-                    this.setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
-                    this.setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5);
-                    break;
+        if(this.getImageView().getBoundsInParent().intersects(nObs.getImageView().getBoundsInParent())){
+            // Vertical
+            if(Double.compare(this.getY(), this.getLy()) > 0){
+                this.setY((nObs.getTop() - this.getImgHeight())); 
+            } else if(Double.compare(this.getY(), this.getLy()) < 0){
+                this.setY(nObs.getBottom()); 
             }
-        }
-    }
-    
-    // Not sure if this is efficient enough for application
-    protected Dir checkDir(){
-        if(dy < 0 && dx == 0){
-            return Dir.N;
-        } else if (dy < 0 && dx > 0){
-            return Dir.NE;
-        } else if (dy == 0 && dx > 0){
-            return Dir.E;
-        } else if (dy > 0 && dx > 0){
-            return Dir.SE;
-        } else if (dy > 0 && dx == 0){
-            return Dir.S;
-        } else if (dy > 0 && dx < 0){
-            return Dir.SW;
-        } else if (dy == 0 && dx < 0){
-            return Dir.W;
-        } else if (dy < 0 && dx < 0){
-            return Dir.NW;
-        } else {
-            return Dir.NONE;
+
+            // Horizontal
+            if(Double.compare(this.getX(), this.getLx()) < 0){
+                this.setX(nObs.getRight());
+            } else if(Double.compare(this.getX(), this.getLx()) > 0){
+                this.setX(nObs.getLeft() - this.getImgWidth());
+            }
         }
     }
 }

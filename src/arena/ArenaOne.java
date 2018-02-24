@@ -119,10 +119,10 @@ public class ArenaOne {
               // Player Input
               player.processInput();
               
-              checkObsCollision();
-              
               player.move();
               //TODO: Enemies move as well
+              
+              checkObsCollision();
               
               player.updateUI();
               //TODO: Enemies update UI
