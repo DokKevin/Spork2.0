@@ -3,10 +3,11 @@
  * Authors: Kevin Kauffman, Glenn Sweithelm
  * Actor - Abstract superclass that handles common functionality of actors
  * Change Log
- * ////////////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 18Feb18    Kevin          Initial Abstract Actor Created
  * 24Feb18    Kevin          Fixed Collision Checking
+ * 25Feb18    Kevin          Fixed collision checking for vertical & diagonal movement
 */
 
 package actors;
@@ -324,37 +325,53 @@ public abstract class Actor {
     }
     
     // TODO: Make this per-pixel collision & allow some overlapping
-    // TODO: Bounces when colliding, this is an issue - Works with horizontal movement, but not with vertical movement for some reason.
-    // TODO: Sometimes when colliding after a while he will not reset to outside the object, this allows teleportation through the obstacle. - Still does this with vertical movement, but not horizontal for some reason.
+    // TODO: Causes bouncing when moving diagonally
     public void checkObsCollision(Obstacle nObs){
         if(this.getImageView().getBoundsInParent().intersects(nObs.getImageView().getBoundsInParent())){
             // Vertical
-            if(Double.compare(this.getY(), this.getLy()) > 0){
-                if(Double.compare(this.getBottom(), nObs.getTop()) == 0){
+            if(Double.compare(this.getY(), this.getLy()) > 0){ // Moving Downward
+                if((Double.compare(this.getTop(), nObs.getBottom()) == 0) || // Touching object's bottom
+                   (Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
+                   (Double.compare(this.getRight(), nObs.getLeft()) == 0)    // Touching object's left
+                  ){
                     // Do Nothing
                 } else {
-                    this.setY((nObs.getTop() - this.getImgHeight()) - 1); // Moving Downward
+                    this.setY(nObs.getTop() - this.getImgHeight());
                 }
-            } else if(Double.compare(this.getY(), this.getLy()) < 0){
-                if(Double.compare(this.getTop(), nObs.getBottom()) == 0){
+            } else if(Double.compare(this.getY(), this.getLy()) < 0){ // Moving Upward
+                if((Double.compare(this.getBottom(), nObs.getTop()) == 0) || // Touching object's top
+                   (Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
+                   (Double.compare(this.getRight(), nObs.getLeft()) == 0)    // Touching object's left
+                  ){
                     // Do Nothing
                 } else {
-                    this.setY(nObs.getBottom());  // Moving Upward
+                    this.setY(nObs.getBottom());
                 }
-            }
+            } 
 
             // Horizontal
-            if(Double.compare(this.getX(), this.getLx()) < 0){
-                if(Double.compare(this.getRight(), nObs.getLeft()) == 0){
-                    // Do Nothing
+            if(Double.compare(this.getX(), this.getLx()) < 0){ // Moving Left
+                // Was working here. - For some reason checking if it is simultaneously hitting the right and top is not working.
+                if(Double.compare(this.getLeft(), nObs.getRight()) == 0 && Double.compare(this.getTop(), nObs.getBottom()) == 0){ // Simultaneously touching object's right and bottom
+                    // Do Nothing - may be because he moves and then is no longer touching both and resets
                 } else {
-                    this.setX(nObs.getRight()); // Moving Left
+                    if((Double.compare(this.getRight(), nObs.getLeft()) == 0) || // Touching object's left
+                       (Double.compare(this.getTop(), nObs.getBottom()) == 0) || // Touching object's bottom
+                       (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
+                      ){
+                        // Do Nothing
+                    } else {
+                        this.setX(nObs.getRight());
+                    }
                 }
-            } else if(Double.compare(this.getX(), this.getLx()) > 0){
-                if(Double.compare(this.getLeft(), nObs.getRight()) == 0){
+            } else if(Double.compare(this.getX(), this.getLx()) > 0){ // Moving Right
+                if((Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
+                   (Double.compare(this.getTop(), nObs.getBottom()) == 0) || // Touching object's bottom
+                   (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
+                  ){
                     // Do Nothing
                 } else {
-                    this.setX(nObs.getLeft() - this.getImgWidth()); // Moving Right
+                    this.setX(nObs.getLeft() - this.getImgWidth());
                 }
             }
         }
