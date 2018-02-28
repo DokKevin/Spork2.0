@@ -54,7 +54,7 @@ public class Player extends Actor {
         exp = minExp;
         username = "";
         job = "Chef"; // TODO: To be changed when we add more class
-        speed = 12;
+        speed = 10;
         
         setMoveBounds();
     }

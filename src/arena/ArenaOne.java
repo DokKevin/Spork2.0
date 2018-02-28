@@ -107,31 +107,6 @@ public class ArenaOne {
       //Displaying the contents of the stage
       stage.show();
       
-      // Debug
-      Label debug = new Label("Test");
-      debug.setTextFill(Color.web("#ffffff"));
-      root.getChildren().add(debug);
-      
-      Label debug2 = new Label("Yo Mama");
-      debug2.setTextFill(Color.web("#ffffff"));
-      debug2.setTranslateY(15);
-      root.getChildren().add(debug2);
-      
-      Label debug3 = new Label("Debug");
-      debug3.setTextFill(Color.web("#ffffff"));
-      debug3.setTranslateY(30);
-      root.getChildren().add(debug3);
-      
-      Label debug4 = new Label("Debug4");
-      debug4.setTextFill(Color.web("#ffffff"));
-      debug4.setTranslateY(45);
-      root.getChildren().add(debug4);
-      
-      Label debug5 = new Label("Debug5");
-      debug5.setTextFill(Color.web("#ffffff"));
-      debug5.setTranslateY(60);
-      root.getChildren().add(debug5);
-      
       //These two events are for stakeholder demonstration. Both the events and the functuions they call will be removed
       root.setOnMouseClicked(e -> { //"gets hit" and "kills something"
          setHP(-0.1); 
@@ -142,12 +117,6 @@ public class ArenaOne {
           @Override
           public void handle(long now){
               //See this for info and TODOs: https://stackoverflow.com/questions/29057870/in-javafx-how-do-i-move-a-sprite-across-the-screen
-              
-              debug.setText("Player Top: " + Double.toString(player.getTop()));
-              debug2.setText("Player Left: " + Double.toString(player.getLeft()));
-              debug3.setText("Object Bottom: " + Double.toString(cinRoll.getBottom()));
-              debug4.setText("Object Right: " + Double.toString(cinRoll.getRight()));
-              debug5.setText("Are Intersecting: " + Boolean.toString(player.getImageView().getBoundsInParent().intersects(cinRoll.getImageView().getBoundsInParent())));
               
               // Player Input
               player.processInput();
