@@ -8,6 +8,7 @@
  * 18Feb18    Kevin          Initial Abstract Actor Created
  * 24Feb18    Kevin          Fixed Collision Checking
  * 25Feb18    Kevin          Fixed collision checking for vertical & diagonal movement
+ * 27Feb18    Kevin          Final Collision Checking Update - works diagonally now
 */
 
 package actors;
