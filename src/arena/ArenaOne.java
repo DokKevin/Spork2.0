@@ -80,15 +80,21 @@ public class ArenaOne {
     // End arena superclass function
     
     // This can be its own function too
-    // TODO: put into obstacles array list
+    // TODO: put into obstacles array list - this will have to be made dynamic eventually
     // TODO: Allow player to interact more naturally with the obstacle (i.e. some overlap when correct)
     //       Possibly allow player and obstacle to have different panes / layers?
     Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), 
                                         (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
-    
-    obsList.add(cinRoll);
     cinRoll.setLayer(root);
     cinRoll.updateUI();
+    
+    Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), 
+                                        (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+    gumDrops.setLayer(root);
+    gumDrops.updateUI();
+    
+    obsList.add(cinRoll);
+    obsList.add(gumDrops);
     // End obstacle population function
     
     healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
