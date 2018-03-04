@@ -31,6 +31,8 @@ import actors.*;
 import input.Input;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 public class ArenaOne {
     static ProgressBar healthBar = new ProgressBar(1F);
@@ -119,10 +121,10 @@ public class ArenaOne {
               // Player Input
               player.processInput();
               
-              checkObsCollision();
-              
               player.move();
               //TODO: Enemies move as well
+              
+              checkObsCollision();
               
               player.updateUI();
               //TODO: Enemies update UI

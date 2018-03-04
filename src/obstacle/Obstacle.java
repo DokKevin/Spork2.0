@@ -6,6 +6,7 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 19Feb18    Kevin          Initial Abstract Obstacle Created
+ * 24Feb18    Kevin          Added GetImageView function
 */
 
 package obstacle;
@@ -61,6 +62,10 @@ public abstract class Obstacle {
         return obsImg.getHeight();
     }
     
+    public ImageView getImageView(){
+        return imageView;
+    }
+    
     public void setLayer(Pane nLayer){
         layer = nLayer;
         addToLayer();
@@ -69,6 +74,11 @@ public abstract class Obstacle {
     public void updateUI() {
         imageView.setX(x);
         imageView.setY(y);
+        
+        left = this.getX();
+        right = this.getX() + this.getImgWidth();
+        top = this.getY();
+        bottom = this.getY() + this.getImgHeight();
     }
     
     public void addToLayer() {
