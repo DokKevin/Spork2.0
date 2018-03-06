@@ -89,7 +89,7 @@ public class ArenaOne {
     cinRoll.updateUI();
     
     Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), 
-                                        (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+                                     (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
     gumDrops.setLayer(root);
     gumDrops.updateUI();
     
@@ -99,7 +99,10 @@ public class ArenaOne {
     
     // Maybe also a function
     // Same as above, but for monsters not obstacles
-    Actor gummiWorm = new GummiWorm();
+    Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), 
+                                    (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+    gummiWorm.setLayer(root);
+    gummiWorm.updateUI();
     
     monsList.add(gummiWorm);
     // End monster function
@@ -135,13 +138,19 @@ public class ArenaOne {
               player.processInput();
               
               player.move();
-              //TODO: Enemies move as well
+              
+              monsList.forEach((monster) -> {
+                  monster.move();
+              });
               
               checkObsCollision();
-              checkMonsCollision();
+//              checkMonsCollision();
               
               player.updateUI();
-              //TODO: Enemies update UI
+              
+              monsList.forEach((monster) -> {
+                  monster.updateUI();
+              });
               
               //TODO: Check removability
               
@@ -161,12 +170,12 @@ public class ArenaOne {
         });
    }
    
-   private static void checkMonsCollision(){
-       monsList.forEach((monster) -> {
-           // TODO: Make this function in actor - copy obs collision
-           player.checkMonsCollision(monster);
-        });
-   }
+//   private static void checkMonsCollision(){
+//       monsList.forEach((monster) -> {
+//           // TODO: Make this function in actor - copy obs collision
+//           player.checkMonsCollision(monster);
+//        });
+//   }
    
    public static void setHP(double amount){
        healthBar.setProgress(healthBar.getProgress() + amount);

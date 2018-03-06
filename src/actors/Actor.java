@@ -54,7 +54,8 @@ public abstract class Actor {
     protected double minY;
     protected double maxY;
     
-    boolean canMove = true;
+    protected boolean canMove = true;
+    protected boolean collision = true;
     
     protected enum Direction{
         N, NE, E, SE, S, SW, W, NW, NONE;
@@ -314,19 +315,27 @@ public abstract class Actor {
     }
     
     protected void checkBounds(){
+        boolean hitBound = false;
+        
         // Vertical
         if(Double.compare((getY() + (getImage().getHeight() / 2.0)), getMoveBoundMinY()) < 0){
             setY(getMoveBoundMinY() - (getImage().getHeight() / 2.0)); // Top
+            hitBound = true;
         } else if(Double.compare((getY() + getImage().getHeight()), getMoveBoundMaxY()) > 0){
             setY(getMoveBoundMaxY() - getImage().getHeight()); // Bottom
+            hitBound = true;
         }
         
         // Horizontal
         if(Double.compare(getX(), getMoveBoundMinX()) < 0){
             setX(getMoveBoundMinX()); // Left
+            hitBound = true;
         } else if(Double.compare((getX() + getImage().getWidth()), getMoveBoundMaxX()) > 0){
             setX(getMoveBoundMaxX() - getImage().getWidth()); // Right
+            hitBound = true;
         }
+        
+        setCollision(hitBound);
     }
     
     // TODO: Make this per-pixel collision & allow some overlapping
@@ -458,6 +467,14 @@ public abstract class Actor {
                     }
                     break;
             }
+            
+            setCollision(false);
+        } else {
+            setCollision(true);
         }
+    }
+    
+    public void setCollision(boolean nBool){
+        collision = nBool;
     }
 }
