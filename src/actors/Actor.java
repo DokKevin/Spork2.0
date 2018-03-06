@@ -20,10 +20,10 @@ import javafx.scene.layout.Pane;
 import obstacle.*;
 
 public abstract class Actor {
-    Image actorImg;
-    ImageView imageView;
+    protected Image actorImg;
+    protected ImageView imageView;
     
-    Pane layer;
+    protected Pane layer;
     
     protected double x;
     protected double y;

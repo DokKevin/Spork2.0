@@ -17,6 +17,7 @@
  * 18Feb18    Kevin          Added sprite to game & updated movement
  * 19Feb18    Kevin          Added collision checking
  * 20Feb18    Glenn          Added a HUD for HP and XP
+ * 06Mar18    Kevin          Added first monster
 */
 
 package arena;
@@ -28,11 +29,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.ProgressBar;
 import actors.*;
+import actors.monsters.*;
 import input.Input;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
-import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 
 public class ArenaOne {
     static ProgressBar healthBar = new ProgressBar(1F);
@@ -43,10 +43,11 @@ public class ArenaOne {
         TOP, BOTTOM, LEFT, RIGHT
     }
     
-    private static boolean collision = false;
     private static Player player;
     
     private static ArrayList<Obstacle> obsList = new ArrayList(5);
+    // TODO: Change so monsters have a monster superclass & possibly a ranged vs. melee superclass or marker class pattern
+    private static ArrayList<Actor> monsList = new ArrayList(5);
     
    public static void start(Stage stage) {
       //Creating a Pane object
@@ -80,7 +81,6 @@ public class ArenaOne {
     // End arena superclass function
     
     // This can be its own function too
-    // TODO: put into obstacles array list - this will have to be made dynamic eventually
     // TODO: Allow player to interact more naturally with the obstacle (i.e. some overlap when correct)
     //       Possibly allow player and obstacle to have different panes / layers?
     Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), 
@@ -96,6 +96,13 @@ public class ArenaOne {
     obsList.add(cinRoll);
     obsList.add(gumDrops);
     // End obstacle population function
+    
+    // Maybe also a function
+    // Same as above, but for monsters not obstacles
+    Actor gummiWorm = new GummiWorm();
+    
+    monsList.add(gummiWorm);
+    // End monster function
     
     healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
                    Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
@@ -131,6 +138,7 @@ public class ArenaOne {
               //TODO: Enemies move as well
               
               checkObsCollision();
+              checkMonsCollision();
               
               player.updateUI();
               //TODO: Enemies update UI
@@ -148,10 +156,15 @@ public class ArenaOne {
    }
    
    private static void checkObsCollision(){
-       collision = false;
-       
        obsList.forEach((obstacle) -> {
            player.checkObsCollision(obstacle);
+        });
+   }
+   
+   private static void checkMonsCollision(){
+       monsList.forEach((monster) -> {
+           // TODO: Make this function in actor - copy obs collision
+           player.checkMonsCollision(monster);
         });
    }
    
