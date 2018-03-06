@@ -48,7 +48,7 @@ public class GummiWorm extends Actor {
     @Override
     public void move(){
         // Moves randomly
-        if(collision){
+        if(collision || hitBound){
             int randomNum = ThreadLocalRandom.current().nextInt(0, 8); // Corresponds to directions in Direction enum in Actor.java
             
             switch(randomNum){

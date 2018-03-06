@@ -144,7 +144,7 @@ public class ArenaOne {
               });
               
               checkPlayerCollisions();
-//              checkMonsterCollisions();
+              checkMonsterCollisions();
               
               player.updateUI();
               
@@ -174,17 +174,18 @@ public class ArenaOne {
         });
    }
    
-//   private static void checkMonsterCollisions(){
-//       monsList.forEach((monster) -> {
-//           monster.checkActorCollision(player);
-//       });
-//       
-//       monsList.forEach((monster) -> {
-//           obsList.forEach((obstacle) -> {
-//                monster.checkObsCollision(obstacle);
-//           });
-//       });
-//   }
+   private static void checkMonsterCollisions(){
+       // Change this to monster type instead of actor type when monster superclass is created
+       monsList.forEach((monster) -> {
+           monster.checkActorCollision(player);
+       });
+       
+       monsList.forEach((monster) -> {
+           obsList.forEach((obstacle) -> {
+                monster.checkObsCollision(obstacle);
+           });
+       });
+   }
    
    public static void setHP(double amount){
        healthBar.setProgress(healthBar.getProgress() + amount);

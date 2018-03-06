@@ -56,6 +56,7 @@ public abstract class Actor {
     
     protected boolean canMove = true;
     protected boolean collision = true;
+    protected boolean hitBound = false;
     
     protected enum Direction{
         N, NE, E, SE, S, SW, W, NW, NONE;
@@ -315,27 +316,28 @@ public abstract class Actor {
     }
     
     protected void checkBounds(){
-        boolean hitBound = false;
+        boolean hitVert = false;
+        boolean hitHor = false;
         
         // Vertical
         if(Double.compare((getY() + (getImage().getHeight() / 2.0)), getMoveBoundMinY()) < 0){
             setY(getMoveBoundMinY() - (getImage().getHeight() / 2.0)); // Top
-            hitBound = true;
+            hitVert = true;
         } else if(Double.compare((getY() + getImage().getHeight()), getMoveBoundMaxY()) > 0){
             setY(getMoveBoundMaxY() - getImage().getHeight()); // Bottom
-            hitBound = true;
+            hitVert = true;
         }
         
         // Horizontal
         if(Double.compare(getX(), getMoveBoundMinX()) < 0){
             setX(getMoveBoundMinX()); // Left
-            hitBound = true;
+            hitHor = true;
         } else if(Double.compare((getX() + getImage().getWidth()), getMoveBoundMaxX()) > 0){
             setX(getMoveBoundMaxX() - getImage().getWidth()); // Right
-            hitBound = true;
+            hitHor = true;
         }
         
-        setCollision(hitBound);
+        setHitBound(hitVert || hitHor);
     }
     
     // TODO: Make this per-pixel collision & allow some overlapping
@@ -468,9 +470,9 @@ public abstract class Actor {
                     break;
             }
             
-            setCollision(false);
-        } else {
             setCollision(true);
+        } else {
+            setCollision(false);
         }
     }
     
@@ -604,13 +606,17 @@ public abstract class Actor {
                     break;
             }
             
-            setCollision(false);
-        } else {
             setCollision(true);
+        } else {
+            setCollision(false);
         }
     }
     
     public void setCollision(boolean nBool){
         collision = nBool;
+    }
+    
+    public void setHitBound(boolean nBool){
+        hitBound = nBool;
     }
 }
