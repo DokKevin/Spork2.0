@@ -143,8 +143,8 @@ public class ArenaOne {
                   monster.move();
               });
               
-              checkObsCollision();
-//              checkMonsCollision();
+              checkPlayerCollisions();
+//              checkMonsterCollisions();
               
               player.updateUI();
               
@@ -164,17 +164,26 @@ public class ArenaOne {
       gameLoop.start();
    }
    
-   private static void checkObsCollision(){
+   private static void checkPlayerCollisions(){
        obsList.forEach((obstacle) -> {
            player.checkObsCollision(obstacle);
         });
+       
+       monsList.forEach((monster) -> {
+           player.checkActorCollision(monster);
+        });
    }
    
-//   private static void checkMonsCollision(){
+//   private static void checkMonsterCollisions(){
 //       monsList.forEach((monster) -> {
-//           // TODO: Make this function in actor - copy obs collision
-//           player.checkMonsCollision(monster);
-//        });
+//           monster.checkActorCollision(player);
+//       });
+//       
+//       monsList.forEach((monster) -> {
+//           obsList.forEach((obstacle) -> {
+//                monster.checkObsCollision(obstacle);
+//           });
+//       });
 //   }
    
    public static void setHP(double amount){
