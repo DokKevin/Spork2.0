@@ -20,10 +20,10 @@ import javafx.scene.layout.Pane;
 import obstacle.*;
 
 public abstract class Actor {
-    Image actorImg;
-    ImageView imageView;
+    protected Image actorImg;
+    protected ImageView imageView;
     
-    Pane layer;
+    protected Pane layer;
     
     protected double x;
     protected double y;
@@ -54,7 +54,9 @@ public abstract class Actor {
     protected double minY;
     protected double maxY;
     
-    boolean canMove = true;
+    protected boolean canMove = true;
+    protected boolean collision = true;
+    protected boolean hitBound = false;
     
     protected enum Direction{
         N, NE, E, SE, S, SW, W, NW, NONE;
@@ -314,19 +316,28 @@ public abstract class Actor {
     }
     
     protected void checkBounds(){
+        boolean hitVert = false;
+        boolean hitHor = false;
+        
         // Vertical
         if(Double.compare((getY() + (getImage().getHeight() / 2.0)), getMoveBoundMinY()) < 0){
             setY(getMoveBoundMinY() - (getImage().getHeight() / 2.0)); // Top
+            hitVert = true;
         } else if(Double.compare((getY() + getImage().getHeight()), getMoveBoundMaxY()) > 0){
             setY(getMoveBoundMaxY() - getImage().getHeight()); // Bottom
+            hitVert = true;
         }
         
         // Horizontal
         if(Double.compare(getX(), getMoveBoundMinX()) < 0){
             setX(getMoveBoundMinX()); // Left
+            hitHor = true;
         } else if(Double.compare((getX() + getImage().getWidth()), getMoveBoundMaxX()) > 0){
             setX(getMoveBoundMaxX() - getImage().getWidth()); // Right
+            hitHor = true;
         }
+        
+        setHitBound(hitVert || hitHor);
     }
     
     // TODO: Make this per-pixel collision & allow some overlapping
@@ -458,6 +469,154 @@ public abstract class Actor {
                     }
                     break;
             }
+            
+            setCollision(true);
+        } else {
+            setCollision(false);
         }
+    }
+    
+    // TODO: Make this per-pixel collision & allow some overlapping
+    public void checkActorCollision(Actor nObs){
+        if(this.getImageView().getBoundsInParent().intersects(nObs.getImageView().getBoundsInParent())){
+            Direction moving = Direction.NONE;
+            
+            if (Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) == 0){
+                moving = Direction.N;
+            } else if(Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) > 0){
+                moving = Direction.NE;
+            } else if(Double.compare(this.getX(), this.getLx()) > 0 && Double.compare(this.getY(), this.getLy()) == 0){
+                moving = Direction.E;
+            } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) > 0){
+                moving = Direction.SE;
+            } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) == 0){
+                moving = Direction.S;
+            } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) < 0){
+                moving = Direction.SW;
+            } else if(Double.compare(this.getX(), this.getLx()) < 0 && Double.compare(this.getY(), this.getLy()) == 0){
+                moving = Direction.W;
+            } else if(Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) < 0){
+                moving = Direction.NW;
+            }
+
+            switch(moving){
+                case N:
+                    if((Double.compare(this.getBottom(), nObs.getTop()) == 0) || // Touching object's top
+                       (Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
+                       (Double.compare(this.getRight(), nObs.getLeft()) == 0)    // Touching object's left
+                      ){
+                        // Do Nothing
+                    } else {
+                        this.setY(nObs.getBottom());
+                    }
+                    break;
+                case NE:
+                    if((Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
+                       (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
+                      ){
+                        // Do Nothing
+                    } else if(Double.compare(nObs.getBottom() - this.getTop(), 
+                              this.getRight() - nObs.getLeft()) < 0){ // Hit the object's bottom first
+                        this.setY(nObs.getBottom());
+                    } else if(Double.compare(this.getRight() - nObs.getLeft(), 
+                              nObs.getBottom() - this.getTop()) < 0){ // Hit the object's left first
+                        this.setX(nObs.getLeft() - this.getImgWidth());
+                    } else {
+                        this.setY(nObs.getBottom());
+                        this.setX(nObs.getLeft() - this.getImgWidth() + 1.0);
+                    }
+                    break;
+                case E:
+                    if((Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
+                       (Double.compare(this.getTop(), nObs.getBottom()) == 0) || // Touching object's bottom
+                       (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
+                      ){
+                        // Do Nothing
+                    } else {
+                       this.setX(nObs.getLeft() - this.getImgWidth());
+                    }
+                    break;
+                case SE:
+                    if((Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
+                       (Double.compare(this.getTop(), nObs.getBottom()) == 0)    // Touching object's bottom
+                      ){
+                        // Do Nothing
+                    } else if(Double.compare(this.getBottom() - nObs.getTop(), 
+                              this.getRight() - nObs.getLeft()) < 0){ // Hit the object's top first
+                        this.setY(nObs.getTop() - this.getImgHeight());
+                    } else if(Double.compare(this.getRight() - nObs.getLeft(), 
+                              this.getBottom() - nObs.getTop()) < 0){ // Hit the object's left first
+                        this.setX(nObs.getLeft() - this.getImgWidth());
+                    } else {
+                        this.setY(nObs.getTop() - this.getImgHeight());
+                        this.setX(nObs.getLeft() - this.getImgWidth() + 1.0);
+                    }
+                    break;
+                case S:
+                    if((Double.compare(this.getTop(), nObs.getBottom()) == 0) || // Touching object's bottom
+                       (Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
+                       (Double.compare(this.getRight(), nObs.getLeft()) == 0)    // Touching object's left
+                      ){
+                        // Do Nothing
+                    } else {
+                        this.setY(nObs.getTop() - this.getImgHeight());
+                    }
+                    break;
+                case SW:
+                    if((Double.compare(this.getRight(), nObs.getLeft()) == 0) || // Touching object's left
+                       (Double.compare(this.getTop(), nObs.getBottom()) == 0)    // Touching object's bottom
+                      ){
+                        // Do Nothing
+                    } else if(Double.compare(this.getBottom() - nObs.getTop(), 
+                              nObs.getRight() - this.getLeft()) < 0){ // Hit the object's top first
+                        this.setY(nObs.getTop() - this.getImgHeight());
+                    } else if(Double.compare(nObs.getRight() - this.getLeft(), 
+                              this.getBottom() - nObs.getTop()) < 0){ // Hit the object's right first
+                        this.setX(nObs.getRight());
+                    } else {
+                        this.setY(nObs.getTop() - this.getImgHeight());
+                        this.setX(nObs.getRight() - 1.0);
+                    }
+                    break;
+                case W:
+                    if((Double.compare(this.getRight(), nObs.getLeft()) == 0) || // Touching object's left
+                       (Double.compare(this.getTop(), nObs.getBottom()) == 0) || // Touching object's bottom
+                       (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
+                      ){
+                        // Do Nothing
+                    } else {
+                        this.setX(nObs.getRight());
+                    }
+                    break;
+                case NW:
+                    if((Double.compare(this.getRight(), nObs.getLeft()) == 0) || // Touching object's left
+                       (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
+                      ){
+                        // Do Nothing
+                    } else if(Double.compare(nObs.getBottom() - this.getTop(), 
+                              nObs.getRight() - this.getLeft()) < 0){ // Hit the object's bottom first
+                        this.setY(nObs.getBottom());
+                    } else if(Double.compare(nObs.getRight() - this.getLeft(), 
+                              nObs.getBottom() - this.getTop()) < 0){ // Hit the object's right first
+                        this.setX(nObs.getRight());
+                    } else {
+                        this.setY(nObs.getBottom());
+                        this.setX(nObs.getRight() - 1.0);
+                    }
+                    break;
+            }
+            
+            setCollision(true);
+        } else {
+            setCollision(false);
+        }
+    }
+    
+    public void setCollision(boolean nBool){
+        collision = nBool;
+    }
+    
+    public void setHitBound(boolean nBool){
+        hitBound = nBool;
     }
 }
