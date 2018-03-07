@@ -26,6 +26,11 @@
     -fx-background-radius: 10;
 }
 
+.Text{
+   -fx-font-family: 'VT323';
+   -fx-font-size: 30;
+}
+
 .radio-button{
    -fx-font-family: 'VT323';
    -fx-font-size: 30;

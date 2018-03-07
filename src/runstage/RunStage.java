@@ -36,6 +36,6 @@ public class RunStage extends Application {
         primaryStage.setFullScreen(true);
         primaryStage.show();
 
-        ArenaOne.start(primaryStage); //This will run the GUI-layer method
+        ArenaOne.start(primaryStage, scene); //This will run the GUI-layer method
     }
 }

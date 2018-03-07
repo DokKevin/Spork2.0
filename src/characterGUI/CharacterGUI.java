@@ -24,7 +24,6 @@ import arena.ArenaOne;
 import java.awt.Toolkit;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import static javafx.scene.text.Font.font;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,6 +32,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -43,15 +43,19 @@ public class CharacterGUI {
     static GridPane createChar = new GridPane();
     static Label lUsername = new Label("USERNAME");
     static Label lClass = new Label("CLASS");
-    static Scene scene = new Scene(createChar, 1, 1);
+    //static Scene scene = new Scene(createChar, 1, 1);
     static TextField tfUsername = new TextField();
     static TextArea taStats = new TextArea();
     static RadioButton rbWarrior = new RadioButton("Chef");
     static Button btCreate = new Button("Start New Game");
+    static Button btBack = new Button("Back");
 
     //sets the UI up for Creating character and game
-    public static void setSceneCharacter(Stage stage){
+    public static void setSceneCharacter(Stage stage, Scene scene, GridPane pane){
+        stage.setFullScreenExitHint(null);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         setStyles();
+        scene.setRoot(createChar);
         stage.setScene(scene);
         stage.setFullScreen(true);
         scene.getStylesheets().add(CharacterGUI.class.getResource("CharacterGUI.css").toExternalForm());
@@ -62,8 +66,10 @@ public class CharacterGUI {
         createChar.add(rbWarrior, 1, 2);
         createChar.add(taStats, 1, 3, 4, 1);
         createChar.add(btCreate, 0, 4, 2, 1);
+        createChar.add(btBack, 2, 4);
         
         btCreate.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.20);
+        btBack.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.20);
         tfUsername.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.6);
         
         // Prevents username from having a space at the beginning or being greater than 10 characters long
@@ -91,7 +97,7 @@ public class CharacterGUI {
         //sets all the character values when button is clicked, but only if a name is entered
         btCreate.setOnAction(e -> {
             if(!usernameIsGood()){
-                errorMessage();
+                errorMessage(scene, createChar);
             }
             else{
                 Player initChar = Player.getInstance();
@@ -107,9 +113,12 @@ public class CharacterGUI {
                     initChar.setHp(8);
                     initChar.setAttack(4);
                 }
-                
-                ArenaOne.start(stage);
+                ArenaOne.start(stage, scene);
             }
+        });
+        
+        btBack.setOnAction(e -> {
+            scene.setRoot(pane);
         });
     }
 
@@ -129,30 +138,21 @@ public class CharacterGUI {
     }
 
     //sets up a new stage that displays a message to enter username
-    public static void errorMessage(){
-        Stage error = new Stage();
+    public static void errorMessage(Scene scene, GridPane pane){
         GridPane errorPane = new GridPane();
-        Scene ErrorScene = new Scene(errorPane, 300, 100);
-        Text tError = new Text("Please Enter a Username");
+        scene.setRoot(errorPane);
+        Label tError = new Label("Please Enter a Username");
         Button ok = new Button("Okay");
-        
-        error.setResizable(false);
-        ok.setPrefSize(100, 30);
+        ok.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.20);
         errorPane.setVgap(10);
         errorPane.setAlignment(Pos.CENTER);
-        tError.setFont(font("Imprint MT Shadow", 16));
-        ok.setFont(font("Imprint MT Shadow", 16));
-
+        
         errorPane.add(tError, 0 , 0, 3, 1);
-        errorPane.add(new Label("\t"), 0, 1);
         errorPane.add(ok, 1, 1);
-        error.setTitle("Username");
-        error.setScene(ErrorScene);
-        error.show();
 
         ok.setOnAction(e -> {
             tfUsername.setText("");
-            error.close();
+            scene.setRoot(pane);
         });
     }
 

@@ -18,7 +18,8 @@
  * 19Feb18    Kevin          Added collision checking
  * 20Feb18    Glenn          Added a HUD for HP and XP
  * 06Mar18    Kevin          Added first monster
-*/
+ * 06Mar18    Glenn          Added Escape Menu
+ */
 
 package arena;
 
@@ -30,14 +31,20 @@ import javafx.stage.Stage;
 import javafx.scene.control.ProgressBar;
 import actors.*;
 import actors.monsters.*;
+import characterGUI.EscapeMenu;
 import input.Input;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class ArenaOne {
+    static Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+    static Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
+    static Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
     static ProgressBar healthBar = new ProgressBar(1F);
     static ProgressBar xpBar = new ProgressBar(0F);
-    //TODO: there is a white line under the progress bar to remove
     
     private enum Dir{
         TOP, BOTTOM, LEFT, RIGHT
@@ -49,12 +56,18 @@ public class ArenaOne {
     // TODO: Change so monsters have a monster superclass & possibly a ranged vs. melee superclass or marker class pattern
     private static ArrayList<Actor> monsList = new ArrayList(5);
     
-   public static void start(Stage stage) {
+   public static void start(Stage stage, Scene scene) {
+       Media mp3MusicFile = new Media(ArenaOne.class.getResource("Level1.mp3").toExternalForm()); 
+        MediaPlayer musicplayer = new MediaPlayer(mp3MusicFile);
+        musicplayer.setAutoPlay(true);
+        
+       stage.setFullScreenExitHint(null);
+       stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
       //Creating a Pane object
       Pane root = new Pane();
       //Creating a scene object
-      Scene scene = new Scene(root, 600, 300);
-
+      //Scene scene = new Scene(root, 600, 300);
+      scene.setRoot(root);
       //Setting title to the Stage
       stage.setTitle("Spork");
       
@@ -64,10 +77,18 @@ public class ArenaOne {
       root.getStyleClass().add("arena");
       stage.setFullScreen(true);
       
+      scene.setOnKeyPressed(e -> {
+          switch(e.getCode()){
+              case ESCAPE:
+                  EscapeMenu.setStage(root, stage);
+                  break;
+          }
+      });
+      
     // This can be added to its own function when arena gets a superclass
     //Add player to layer
     player = Player.getInstance();
-    player.setLayer(root); // This adds player to the layer
+    //player.setLayer(root); // This adds player to the layer
     
     // Create input so player can move
     Input input = new Input(scene);
@@ -83,15 +104,13 @@ public class ArenaOne {
     // This can be its own function too
     // TODO: Allow player to interact more naturally with the obstacle (i.e. some overlap when correct)
     //       Possibly allow player and obstacle to have different panes / layers?
-    Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), 
-                                        (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
-    cinRoll.setLayer(root);
-    cinRoll.updateUI();
+    //Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
+    //cinRoll.setLayer(root);
+    //cinRoll.updateUI();
     
-    Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), 
-                                     (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
-    gumDrops.setLayer(root);
-    gumDrops.updateUI();
+    //Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+    //gumDrops.setLayer(root);
+    //gumDrops.updateUI();
     
     obsList.add(cinRoll);
     obsList.add(gumDrops);
@@ -99,10 +118,9 @@ public class ArenaOne {
     
     // Maybe also a function
     // Same as above, but for monsters not obstacles
-    Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), 
-                                    (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
-    gummiWorm.setLayer(root);
-    gummiWorm.updateUI();
+    //Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+    //gummiWorm.setLayer(root);
+    //gummiWorm.updateUI();
     
     monsList.add(gummiWorm);
     // End monster function
@@ -116,8 +134,9 @@ public class ArenaOne {
     xpBar.setTranslateY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.058);
     healthBar.getStyleClass().add("healthBar");
     xpBar.getStyleClass().add("xpBar");
-    root.getChildren().add(healthBar);
-    root.getChildren().add(xpBar); //can do these two in one-line, but kept hitting a reflection error
+    setObjects(root);
+    //root.getChildren().add(healthBar);
+    //root.getChildren().add(xpBar); //can do these two in one-line, but kept hitting a reflection error
                                    //TODO: get these added together
     
       //Displaying the contents of the stage
@@ -162,6 +181,19 @@ public class ArenaOne {
           }
       };
       gameLoop.start();
+   }
+   
+   public static void setObjects(Pane pane){
+       pane.getChildren().clear();
+       pane.getChildren().add(healthBar);
+       pane.getChildren().add(xpBar);
+       cinRoll.setLayer(pane);
+       cinRoll.updateUI();
+       gumDrops.setLayer(pane);
+       gumDrops.updateUI();
+       gummiWorm.setLayer(pane);
+       gummiWorm.updateUI();
+       player.setLayer(pane);
    }
    
    private static void checkPlayerCollisions(){
