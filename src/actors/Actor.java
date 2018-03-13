@@ -10,6 +10,7 @@
  * 25Feb18    Kevin          Fixed collision checking for vertical & diagonal movement
  * 27Feb18    Kevin          Final Collision Checking Update - works diagonally now
  * 12Mar18    Kevin          Attempted to fix actor collisions
+ * 13Mar18    Kevin          minimal fix actor collisions
 */
 
 package actors;
@@ -483,31 +484,38 @@ public abstract class Actor {
         }
     }
     
-    // TODO: Make this per-pixel collision & allow some overlapping
-    public void checkActorCollision(Actor nAct){
-        if(this.getImageView().getBoundsInParent().intersects(nAct.getImageView().getBoundsInParent())){
-            // May cause double bouncing when not involving a player
-            Direction thisMoving = this.checkDir();  
-            Direction otherMoving = nAct.checkDir();  
-            
-            //Does not account for if the player hits the monster
-            if(this.isPlayer() && nAct.isMonster()){                // if this is a player and the other actor is a monster - not sure if I want to do this check, it just adds extra code - it would simplify a lot if all actors rebounded from each other.
-                nAct.bounce(otherMoving, 0);                        // Monster does not bounce, just pauses
-                this.bounce(otherMoving, (nAct.getSpeed() * 25));   // Player bounces in the same direction as the monster is moving
-                
-                // Began looking into momentum and collisions in physics to determine realistic rebounding for objects
-                // Originally thought of having monsters just knock players out of the way
-                // Current code simply moves player in the direction the monster is moving, this is not realistic. - may need to use object's movement directions to determine accurate rebounding
-            }
-        }
-    }
-    
     public void setCollision(boolean nBool){
         collision = nBool;
     }
     
     public void setHitBound(boolean nBool){
         hitBound = nBool;
+    }
+    
+    // TODO: Make this per-pixel collision & allow some overlapping
+    public void checkActorCollision(Actor nAct){
+        if(this.getImageView().getBoundsInParent().intersects(nAct.getImageView().getBoundsInParent())){
+            Direction thisMoving = this.checkDir();  
+            Direction otherMoving = nAct.checkDir();  
+            
+            double thisBounceAm = 0.0;
+            double thatBounceAm = 0.0;
+            
+            double thisBounceDir = 0.0;
+            double thatBounceDir = 0.0;
+           
+            if(this.isMonster() && nAct.isPlayer()){
+                // This Bounce Amount Stays 0
+                thatBounceAm = nAct.getSpeed() * 8;
+            } else {
+                thisBounceAm = this.getSpeed() * 8;
+            }
+            
+            // TODO: Add logic to figure out direction of bounce.
+            
+            this.bounce(otherMoving, thisBounceAm);
+            nAct.bounce(otherMoving, thatBounceAm);
+        }
     }
     
     public Direction checkDir(){
