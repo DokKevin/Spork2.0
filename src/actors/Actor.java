@@ -11,6 +11,7 @@
  * 27Feb18    Kevin          Final Collision Checking Update - works diagonally now
  * 12Mar18    Kevin          Attempted to fix actor collisions
  * 13Mar18    Kevin          minimal fix actor collisions
+ * 19Mar18    Kevin          Fixed actor collisions
 */
 
 package actors;
@@ -496,25 +497,156 @@ public abstract class Actor {
     public void checkActorCollision(Actor nAct){
         if(this.getImageView().getBoundsInParent().intersects(nAct.getImageView().getBoundsInParent())){
             Direction thisMoving = this.checkDir();  
-            Direction otherMoving = nAct.checkDir();  
+            Direction otherMoving = nAct.checkDir();
+            Direction relation = checkRelation(nAct);
             
-            double thisBounceAm = 0.0;
-            double thatBounceAm = 0.0;
-            
-            double thisBounceDir = 0.0;
-            double thatBounceDir = 0.0;
-           
-            if(this.isMonster() && nAct.isPlayer()){
-                // This Bounce Amount Stays 0
-                thatBounceAm = nAct.getSpeed() * 8;
-            } else {
-                thisBounceAm = this.getSpeed() * 8;
+            if(thisMoving == otherMoving || thisMoving == Direction.NONE || otherMoving == Direction.NONE){ // If actors are moving in the same direction
+                switch(thisMoving){
+                    case NONE:
+                        this.bounce(otherMoving, nAct.getSpeed() * 15.0);
+                        nAct.bounce(otherMoving, 0);
+                        break;
+                    case N:
+                        switch(relation){
+                            case N:
+                            case NE:
+                            case NW:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case S:
+                            case SE:
+                            case SW:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case NE:
+                        switch(relation){
+                            case N:
+                            case NE:
+                            case E:
+                            case SE:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case S:
+                            case SW:
+                            case W:
+                            case NW:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case E:
+                        switch(relation){
+                            case NE:
+                            case E:
+                            case SE:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case NW:
+                            case W:
+                            case SW:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case SE:
+                        switch(relation){
+                            case S:
+                            case SW:
+                            case SE:
+                            case E:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case N:
+                            case NE:
+                            case NW:
+                            case W:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case S:
+                        switch(relation){
+                            case S:
+                            case SE:
+                            case SW:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case N:
+                            case NE:
+                            case NW:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case SW:
+                        switch(relation){
+                            case S:
+                            case SW:
+                            case W:
+                            case NW:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case SE:
+                            case E:
+                            case NE:
+                            case N:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case W:
+                        switch(relation){
+                            case NW:
+                            case W:
+                            case SW:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case NE:
+                            case E:
+                            case SE:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case NW:
+                        switch(relation){
+                            case SW:
+                            case W:
+                            case NW:
+                            case N:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case S:
+                            case SE:
+                            case E:
+                            case NE:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                }
+            } else { // else both bounce back - may expand in the future
+                this.bounce(otherMoving, nAct.getSpeed() * 15.0);
+                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
             }
-            
-            // TODO: Add logic to figure out direction of bounce.
-            
-            this.bounce(otherMoving, thisBounceAm);
-            nAct.bounce(otherMoving, thatBounceAm);
         }
     }
     
@@ -575,5 +707,25 @@ public abstract class Actor {
         canMove = false;
         updateUI();
         // TODO: Prevent colliding actors from moving for a moment when thrown backward
+    }
+    
+    public Direction checkRelation(Actor nAct){
+        if(Double.compare(this.getY(), nAct.getY()) < 0 && Double.compare(this.getX(), nAct.getX()) == 0){
+            return Direction.N;
+        } else if(Double.compare(this.getY(), nAct.getY()) < 0 && Double.compare(this.getX(), nAct.getX()) > 0){
+            return Direction.NE;
+        } else if(Double.compare(this.getY(), nAct.getY()) == 0 && Double.compare(this.getX(), nAct.getX()) > 0){
+            return Direction.E;
+        } else if(Double.compare(this.getY(), nAct.getY()) > 0 && Double.compare(this.getX(), nAct.getX()) > 0){
+            return Direction.SE;
+        } else if(Double.compare(this.getY(), nAct.getY()) > 0 && Double.compare(this.getX(), nAct.getX()) == 0){
+            return Direction.S;
+        } else if(Double.compare(this.getY(), nAct.getY()) > 0 && Double.compare(this.getX(), nAct.getX()) < 0){
+            return Direction.SW;
+        } else if(Double.compare(this.getY(), nAct.getY()) == 0 && Double.compare(this.getX(), nAct.getX()) < 0){
+            return Direction.W;
+        } else{
+            return Direction.NW;
+        }
     }
 }
