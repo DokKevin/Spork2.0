@@ -7,6 +7,7 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 06Mar18    Kevin          Initial GummiWorm Created
+ * 12Mar18    Kevin          Added functionality to determine if actor is a monster
 */
 
 package actors.monsters;
@@ -43,6 +44,8 @@ public class GummiWorm extends Actor {
         speed = 3;
         
         setMoveBounds();
+        
+        toggleMonster();
     }
     
     @Override

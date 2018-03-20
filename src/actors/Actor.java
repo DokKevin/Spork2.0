@@ -9,11 +9,18 @@
  * 24Feb18    Kevin          Fixed Collision Checking
  * 25Feb18    Kevin          Fixed collision checking for vertical & diagonal movement
  * 27Feb18    Kevin          Final Collision Checking Update - works diagonally now
+ * 12Mar18    Kevin          Attempted to fix actor collisions
+ * 13Mar18    Kevin          minimal fix actor collisions
+ * 19Mar18    Kevin          Fixed actor collisions
+ * 20Mar18    Kevin          Prevent Actors from moving for a few seconds after
+ *                           colliding
 */
 
 package actors;
 
 import java.awt.Toolkit;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -57,6 +64,10 @@ public abstract class Actor {
     protected boolean canMove = true;
     protected boolean collision = true;
     protected boolean hitBound = false;
+    protected boolean amPlayer = false; // May want to look into marker interface
+    protected boolean amMonster = false; // May want to look into marker interface
+    
+    private Timer timer = new Timer();
     
     protected enum Direction{
         N, NE, E, SE, S, SW, W, NW, NONE;
@@ -191,6 +202,18 @@ public abstract class Actor {
         return maxY;
     }
     
+    public double getSpeed(){
+        return speed;
+    }
+    
+    public boolean isPlayer(){
+        return amPlayer;
+    }
+    
+    public boolean isMonster(){
+        return amMonster;
+    }
+    
     // Setters
     public void setLayer(Pane nLayer) {
         layer = nLayer;
@@ -255,6 +278,14 @@ public abstract class Actor {
         maxX = Toolkit.getDefaultToolkit().getScreenSize().getWidth() - (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.145);
         minY = Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.16;
         maxY = Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.17);
+    }
+    
+    protected void togglePlayer(){ // only called in constructor of object to say if it is a player or not
+        amPlayer = !amPlayer;
+    }
+    
+    protected void toggleMonster(){ // only called in constructor of objec to say if it is a monster or not
+        amMonster = !amMonster;
     }
     
     public boolean isRemovable() {
@@ -343,25 +374,7 @@ public abstract class Actor {
     // TODO: Make this per-pixel collision & allow some overlapping
     public void checkObsCollision(Obstacle nObs){
         if(this.getImageView().getBoundsInParent().intersects(nObs.getImageView().getBoundsInParent())){
-            Direction moving = Direction.NONE;
-            
-            if (Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) == 0){
-                moving = Direction.N;
-            } else if(Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) > 0){
-                moving = Direction.NE;
-            } else if(Double.compare(this.getX(), this.getLx()) > 0 && Double.compare(this.getY(), this.getLy()) == 0){
-                moving = Direction.E;
-            } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) > 0){
-                moving = Direction.SE;
-            } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) == 0){
-                moving = Direction.S;
-            } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) < 0){
-                moving = Direction.SW;
-            } else if(Double.compare(this.getX(), this.getLx()) < 0 && Double.compare(this.getY(), this.getLy()) == 0){
-                moving = Direction.W;
-            } else if(Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) < 0){
-                moving = Direction.NW;
-            }
+            Direction moving = checkDir();
 
             switch(moving){
                 case N:
@@ -468,142 +481,8 @@ public abstract class Actor {
                         this.setX(nObs.getRight() - 1.0);
                     }
                     break;
-            }
-            
-            setCollision(true);
-        } else {
-            setCollision(false);
-        }
-    }
-    
-    // TODO: Make this per-pixel collision & allow some overlapping
-    public void checkActorCollision(Actor nObs){
-        if(this.getImageView().getBoundsInParent().intersects(nObs.getImageView().getBoundsInParent())){
-            Direction moving = Direction.NONE;
-            
-            if (Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) == 0){
-                moving = Direction.N;
-            } else if(Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) > 0){
-                moving = Direction.NE;
-            } else if(Double.compare(this.getX(), this.getLx()) > 0 && Double.compare(this.getY(), this.getLy()) == 0){
-                moving = Direction.E;
-            } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) > 0){
-                moving = Direction.SE;
-            } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) == 0){
-                moving = Direction.S;
-            } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) < 0){
-                moving = Direction.SW;
-            } else if(Double.compare(this.getX(), this.getLx()) < 0 && Double.compare(this.getY(), this.getLy()) == 0){
-                moving = Direction.W;
-            } else if(Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) < 0){
-                moving = Direction.NW;
-            }
-
-            switch(moving){
-                case N:
-                    if((Double.compare(this.getBottom(), nObs.getTop()) == 0) || // Touching object's top
-                       (Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
-                       (Double.compare(this.getRight(), nObs.getLeft()) == 0)    // Touching object's left
-                      ){
-                        // Do Nothing
-                    } else {
-                        this.setY(nObs.getBottom());
-                    }
-                    break;
-                case NE:
-                    if((Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
-                       (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
-                      ){
-                        // Do Nothing
-                    } else if(Double.compare(nObs.getBottom() - this.getTop(), 
-                              this.getRight() - nObs.getLeft()) < 0){ // Hit the object's bottom first
-                        this.setY(nObs.getBottom());
-                    } else if(Double.compare(this.getRight() - nObs.getLeft(), 
-                              nObs.getBottom() - this.getTop()) < 0){ // Hit the object's left first
-                        this.setX(nObs.getLeft() - this.getImgWidth());
-                    } else {
-                        this.setY(nObs.getBottom());
-                        this.setX(nObs.getLeft() - this.getImgWidth() + 1.0);
-                    }
-                    break;
-                case E:
-                    if((Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
-                       (Double.compare(this.getTop(), nObs.getBottom()) == 0) || // Touching object's bottom
-                       (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
-                      ){
-                        // Do Nothing
-                    } else {
-                       this.setX(nObs.getLeft() - this.getImgWidth());
-                    }
-                    break;
-                case SE:
-                    if((Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
-                       (Double.compare(this.getTop(), nObs.getBottom()) == 0)    // Touching object's bottom
-                      ){
-                        // Do Nothing
-                    } else if(Double.compare(this.getBottom() - nObs.getTop(), 
-                              this.getRight() - nObs.getLeft()) < 0){ // Hit the object's top first
-                        this.setY(nObs.getTop() - this.getImgHeight());
-                    } else if(Double.compare(this.getRight() - nObs.getLeft(), 
-                              this.getBottom() - nObs.getTop()) < 0){ // Hit the object's left first
-                        this.setX(nObs.getLeft() - this.getImgWidth());
-                    } else {
-                        this.setY(nObs.getTop() - this.getImgHeight());
-                        this.setX(nObs.getLeft() - this.getImgWidth() + 1.0);
-                    }
-                    break;
-                case S:
-                    if((Double.compare(this.getTop(), nObs.getBottom()) == 0) || // Touching object's bottom
-                       (Double.compare(this.getLeft(), nObs.getRight()) == 0) || // Touching object's right
-                       (Double.compare(this.getRight(), nObs.getLeft()) == 0)    // Touching object's left
-                      ){
-                        // Do Nothing
-                    } else {
-                        this.setY(nObs.getTop() - this.getImgHeight());
-                    }
-                    break;
-                case SW:
-                    if((Double.compare(this.getRight(), nObs.getLeft()) == 0) || // Touching object's left
-                       (Double.compare(this.getTop(), nObs.getBottom()) == 0)    // Touching object's bottom
-                      ){
-                        // Do Nothing
-                    } else if(Double.compare(this.getBottom() - nObs.getTop(), 
-                              nObs.getRight() - this.getLeft()) < 0){ // Hit the object's top first
-                        this.setY(nObs.getTop() - this.getImgHeight());
-                    } else if(Double.compare(nObs.getRight() - this.getLeft(), 
-                              this.getBottom() - nObs.getTop()) < 0){ // Hit the object's right first
-                        this.setX(nObs.getRight());
-                    } else {
-                        this.setY(nObs.getTop() - this.getImgHeight());
-                        this.setX(nObs.getRight() - 1.0);
-                    }
-                    break;
-                case W:
-                    if((Double.compare(this.getRight(), nObs.getLeft()) == 0) || // Touching object's left
-                       (Double.compare(this.getTop(), nObs.getBottom()) == 0) || // Touching object's bottom
-                       (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
-                      ){
-                        // Do Nothing
-                    } else {
-                        this.setX(nObs.getRight());
-                    }
-                    break;
-                case NW:
-                    if((Double.compare(this.getRight(), nObs.getLeft()) == 0) || // Touching object's left
-                       (Double.compare(this.getBottom(), nObs.getTop()) == 0)    // Touching object's top
-                      ){
-                        // Do Nothing
-                    } else if(Double.compare(nObs.getBottom() - this.getTop(), 
-                              nObs.getRight() - this.getLeft()) < 0){ // Hit the object's bottom first
-                        this.setY(nObs.getBottom());
-                    } else if(Double.compare(nObs.getRight() - this.getLeft(), 
-                              nObs.getBottom() - this.getTop()) < 0){ // Hit the object's right first
-                        this.setX(nObs.getRight());
-                    } else {
-                        this.setY(nObs.getBottom());
-                        this.setX(nObs.getRight() - 1.0);
-                    }
-                    break;
+                default: // If it is not moving
+                    break; // do nothing
             }
             
             setCollision(true);
@@ -618,5 +497,246 @@ public abstract class Actor {
     
     public void setHitBound(boolean nBool){
         hitBound = nBool;
+    }
+    
+    // TODO: Make this per-pixel collision & allow some overlapping
+    public void checkActorCollision(Actor nAct){
+        if(this.getImageView().getBoundsInParent().intersects(nAct.getImageView().getBoundsInParent())){
+            Direction thisMoving = this.checkDir();  
+            Direction otherMoving = nAct.checkDir();
+            Direction relation = checkRelation(nAct);
+            
+            if(thisMoving == otherMoving || thisMoving == Direction.NONE || otherMoving == Direction.NONE){ // If actors are moving in the same direction
+                switch(thisMoving){
+                    case NONE:
+                        this.bounce(otherMoving, nAct.getSpeed() * 15.0);
+                        nAct.bounce(otherMoving, 0);
+                        break;
+                    case N:
+                        switch(relation){
+                            case N:
+                            case NE:
+                            case NW:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case S:
+                            case SE:
+                            case SW:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case NE:
+                        switch(relation){
+                            case N:
+                            case NE:
+                            case E:
+                            case SE:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case S:
+                            case SW:
+                            case W:
+                            case NW:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case E:
+                        switch(relation){
+                            case NE:
+                            case E:
+                            case SE:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case NW:
+                            case W:
+                            case SW:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case SE:
+                        switch(relation){
+                            case S:
+                            case SW:
+                            case SE:
+                            case E:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case N:
+                            case NE:
+                            case NW:
+                            case W:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case S:
+                        switch(relation){
+                            case S:
+                            case SE:
+                            case SW:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case N:
+                            case NE:
+                            case NW:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case SW:
+                        switch(relation){
+                            case S:
+                            case SW:
+                            case W:
+                            case NW:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case SE:
+                            case E:
+                            case NE:
+                            case N:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case W:
+                        switch(relation){
+                            case NW:
+                            case W:
+                            case SW:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case NE:
+                            case E:
+                            case SE:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                    case NW:
+                        switch(relation){
+                            case SW:
+                            case W:
+                            case NW:
+                            case N:
+                                nAct.bounce(thisMoving, 0.0);
+                                this.bounce(thisMoving, nAct.getSpeed() * 15.0);
+                                break;
+                            case S:
+                            case SE:
+                            case E:
+                            case NE:
+                                this.bounce(thisMoving, 0.0);
+                                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+                                break;
+                        }
+                        break;
+                }
+            } else { // else both bounce back - may expand in the future
+                this.bounce(otherMoving, nAct.getSpeed() * 15.0);
+                nAct.bounce(thisMoving, this.getSpeed() * 15.0);
+            }
+        }
+    }
+    
+    public Direction checkDir(){
+        if (Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) == 0){
+            return Direction.N;
+        } else if(Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) > 0){
+            return Direction.NE;
+        } else if(Double.compare(this.getX(), this.getLx()) > 0 && Double.compare(this.getY(), this.getLy()) == 0){
+            return Direction.E;
+        } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) > 0){
+            return Direction.SE;
+        } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) == 0){
+            return Direction.S;
+        } else if(Double.compare(this.getY(), this.getLy()) > 0 && Double.compare(this.getX(), this.getLx()) < 0){
+            return Direction.SW;
+        } else if(Double.compare(this.getX(), this.getLx()) < 0 && Double.compare(this.getY(), this.getLy()) == 0){
+            return Direction.W;
+        } else if(Double.compare(this.getY(), this.getLy()) < 0 && Double.compare(this.getX(), this.getLx()) < 0){
+            return Direction.NW;
+        }
+        
+        return Direction.NONE;
+    }
+    
+    public void bounce(Direction nDir, double nAmount){
+        switch(nDir){
+            case N:
+                setY(getY() - nAmount);
+                break;
+            case NE:
+                setX(getX() + nAmount);
+                setY(getY() - nAmount);
+                break;
+            case E:
+                setX(getX() + nAmount);
+                break;
+            case SE:
+                setX(getX() + nAmount);
+                setY(getY() + nAmount);
+                break;
+            case S:
+                setY(getY() + nAmount);
+                break;
+            case SW:
+                setX(getX() - nAmount);
+                setY(getY() + nAmount);
+                break;
+            case W:
+                setX(getX() - nAmount);
+                break;
+            case NW:
+                setX(getX() - nAmount);
+                setY(getY() - nAmount);
+                break;
+        }
+        
+        updateUI();
+        canMove = false;
+        timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                canMove = true;
+            }
+        }, 1*1000);
+    }
+    
+    public Direction checkRelation(Actor nAct){
+        if(Double.compare(this.getY(), nAct.getY()) < 0 && Double.compare(this.getX(), nAct.getX()) == 0){
+            return Direction.N;
+        } else if(Double.compare(this.getY(), nAct.getY()) < 0 && Double.compare(this.getX(), nAct.getX()) > 0){
+            return Direction.NE;
+        } else if(Double.compare(this.getY(), nAct.getY()) == 0 && Double.compare(this.getX(), nAct.getX()) > 0){
+            return Direction.E;
+        } else if(Double.compare(this.getY(), nAct.getY()) > 0 && Double.compare(this.getX(), nAct.getX()) > 0){
+            return Direction.SE;
+        } else if(Double.compare(this.getY(), nAct.getY()) > 0 && Double.compare(this.getX(), nAct.getX()) == 0){
+            return Direction.S;
+        } else if(Double.compare(this.getY(), nAct.getY()) > 0 && Double.compare(this.getX(), nAct.getX()) < 0){
+            return Direction.SW;
+        } else if(Double.compare(this.getY(), nAct.getY()) == 0 && Double.compare(this.getX(), nAct.getX()) < 0){
+            return Direction.W;
+        } else{
+            return Direction.NW;
+        }
     }
 }

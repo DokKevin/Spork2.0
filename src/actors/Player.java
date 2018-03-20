@@ -10,6 +10,7 @@
  * 31Jan18    Kevin          Determined Parameters and Added Checking to Setters
  * 18Feb18    Kevin          Created Actor Superclass for Character & Monsters
  * 19Feb18    Kevin          Added collision checking for obstacles.
+ * 12Mar18    Kevin          Added functionality to determine if actor is a player
 */
 
 package actors;
@@ -57,6 +58,8 @@ public class Player extends Actor {
         speed = 10;
         
         setMoveBounds();
+        
+        togglePlayer();
     }
     
     //singleton function to get instance
