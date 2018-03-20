@@ -12,11 +12,15 @@
  * 12Mar18    Kevin          Attempted to fix actor collisions
  * 13Mar18    Kevin          minimal fix actor collisions
  * 19Mar18    Kevin          Fixed actor collisions
+ * 20Mar18    Kevin          Prevent Actors from moving for a few seconds after
+ *                           colliding
 */
 
 package actors;
 
 import java.awt.Toolkit;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -62,6 +66,8 @@ public abstract class Actor {
     protected boolean hitBound = false;
     protected boolean amPlayer = false; // May want to look into marker interface
     protected boolean amMonster = false; // May want to look into marker interface
+    
+    private Timer timer = new Timer();
     
     protected enum Direction{
         N, NE, E, SE, S, SW, W, NW, NONE;
@@ -704,9 +710,14 @@ public abstract class Actor {
                 break;
         }
         
-        canMove = false;
         updateUI();
-        // TODO: Prevent colliding actors from moving for a moment when thrown backward
+        canMove = false;
+        timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                canMove = true;
+            }
+        }, 1*1000);
     }
     
     public Direction checkRelation(Actor nAct){
