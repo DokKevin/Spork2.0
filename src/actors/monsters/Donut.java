@@ -1,14 +1,11 @@
 /*
  * SE Project: SPORK
  * Authors: Kevin Kauffman, Glenn Sweithelm
- * GummiWorm - A monster that extends actor. Interacts autonomously with the 
- *             player & fights
+ * Donut - A monster that fights the player. Interacts autonomously with player. 
  * Change Log
- * /////////////////////////////////////////////////////////////////////////////
+ * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
- * 06Mar18    Kevin          Initial GummiWorm Created
- * 12Mar18    Kevin          Added functionality to determine if actor is a monster
- * 22Mar18    Kevin          Moved change direction to its own function
+ * 06Mar18    Kevin          Initial Donut Created
 */
 
 package actors.monsters;
@@ -19,9 +16,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class GummiWorm extends Actor {
-    public GummiWorm(double nx, double ny){
-        actorImg = new Image("/images/gummiWormSprite.png",
+// TODO: create Monster Superclass - Ranged Monster & Melee Monster Subclasses - Monsters extend correct Ranged / Melee Class
+public class Donut extends Actor {
+    public Donut(double nx, double ny){
+        actorImg = new Image("/images/donutSprite.png",
                              Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1,
                              Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.1,
                              true, false);

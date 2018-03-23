@@ -19,6 +19,7 @@
  * 20Feb18    Glenn          Added a HUD for HP and XP
  * 06Mar18    Kevin          Added first monster
  * 06Mar18    Glenn          Added Escape Menu
+ * 22Mar18    Kevin          Added new Monster (Donut)
  */
 
 package arena;
@@ -41,6 +42,7 @@ import javafx.scene.media.MediaPlayer;
 
 public class ArenaOne {
     static Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+    static Actor donut = new Donut((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.50), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.70));
     static Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
     static Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
     static ProgressBar healthBar = new ProgressBar(1F);
@@ -57,33 +59,33 @@ public class ArenaOne {
     private static ArrayList<Actor> monsList = new ArrayList(5);
     
    public static void start(Stage stage, Scene scene) {
-       Media mp3MusicFile = new Media(ArenaOne.class.getResource("Level1.mp3").toExternalForm()); 
+        Media mp3MusicFile = new Media(ArenaOne.class.getResource("Level1.mp3").toExternalForm()); 
         MediaPlayer musicplayer = new MediaPlayer(mp3MusicFile);
         musicplayer.setAutoPlay(true);
         
-       stage.setFullScreenExitHint(null);
-       stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-      //Creating a Pane object
-      Pane root = new Pane();
-      //Creating a scene object
-      //Scene scene = new Scene(root, 600, 300);
-      scene.setRoot(root);
-      //Setting title to the Stage
-      stage.setTitle("Spork");
+        stage.setFullScreenExitHint(null);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        //Creating a Pane object
+        Pane root = new Pane();
+        //Creating a scene object
+        //Scene scene = new Scene(root, 600, 300);
+        scene.setRoot(root);
+        //Setting title to the Stage
+        stage.setTitle("Spork");
       
-      //Adding scene to the stage
-      stage.setScene(scene);
-      scene.getStylesheets().add(ArenaOne.class.getResource("ArenaOne.css").toExternalForm());
-      root.getStyleClass().add("arena");
-      stage.setFullScreen(true);
+        //Adding scene to the stage
+        stage.setScene(scene);
+        scene.getStylesheets().add(ArenaOne.class.getResource("ArenaOne.css").toExternalForm());
+        root.getStyleClass().add("arena");
+        stage.setFullScreen(true);
       
-      scene.setOnKeyPressed(e -> {
-          switch(e.getCode()){
-              case ESCAPE:
-                  EscapeMenu.setStage(root, stage);
-                  break;
-          }
-      });
+        scene.setOnKeyPressed(e -> {
+            switch(e.getCode()){
+                case ESCAPE:
+                    EscapeMenu.setStage(root, stage);
+                    break;
+            }
+        });
       
     // This can be added to its own function when arena gets a superclass
     //Add player to layer
@@ -123,6 +125,7 @@ public class ArenaOne {
     //gummiWorm.updateUI();
     
     monsList.add(gummiWorm);
+    monsList.add(donut);
     // End monster function
     
     healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
@@ -193,6 +196,8 @@ public class ArenaOne {
        gumDrops.updateUI();
        gummiWorm.setLayer(pane);
        gummiWorm.updateUI();
+       donut.setLayer(pane);
+       donut.updateUI();
        player.setLayer(pane);
    }
    
@@ -215,6 +220,12 @@ public class ArenaOne {
        monsList.forEach((monster) -> {
            obsList.forEach((obstacle) -> {
                 monster.checkObsCollision(obstacle);
+           });
+       });
+       
+       monsList.forEach((monster) -> {
+           monsList.forEach((monster2) -> {
+                monster.checkActorCollision(monster2);
            });
        });
    }

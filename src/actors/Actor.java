@@ -14,6 +14,7 @@
  * 19Mar18    Kevin          Fixed actor collisions
  * 20Mar18    Kevin          Prevent Actors from moving for a few seconds after
  *                           colliding
+ * 22Mar18    Kevin          Updated Monster Collisions
 */
 
 package actors;
@@ -67,13 +68,11 @@ public abstract class Actor {
     protected boolean amPlayer = false; // May want to look into marker interface
     protected boolean amMonster = false; // May want to look into marker interface
     
-    private Timer timer = new Timer();
+    private final Timer timer = new Timer();
     
     protected enum Direction{
         N, NE, E, SE, S, SW, W, NW, NONE;
     }
-    
-    public Actor() {}
     
     public void addToLayer() {
         layer.getChildren().add(imageView);
@@ -483,12 +482,8 @@ public abstract class Actor {
                     break;
                 default: // If it is not moving
                     break; // do nothing
-            }
-            
-            setCollision(true);
-        } else {
-            setCollision(false);
-        }
+            } // Else do nothing
+        } 
     }
     
     public void setCollision(boolean nBool){
@@ -501,6 +496,10 @@ public abstract class Actor {
     
     // TODO: Make this per-pixel collision & allow some overlapping
     public void checkActorCollision(Actor nAct){
+        if(this == nAct){
+            return;
+        } // else do nothing
+        
         if(this.getImageView().getBoundsInParent().intersects(nAct.getImageView().getBoundsInParent())){
             Direction thisMoving = this.checkDir();  
             Direction otherMoving = nAct.checkDir();
@@ -653,6 +652,14 @@ public abstract class Actor {
                 this.bounce(otherMoving, nAct.getSpeed() * 15.0);
                 nAct.bounce(thisMoving, this.getSpeed() * 15.0);
             }
+            
+            if(this.isMonster()){
+                this.changeDirection();
+            } // Else do nothing
+            
+            if(nAct.isMonster()){
+                nAct.changeDirection();
+            } // Else do nothing
         }
     }
     
@@ -739,4 +746,6 @@ public abstract class Actor {
             return Direction.NW;
         }
     }
+    
+    public abstract void changeDirection();
 }
