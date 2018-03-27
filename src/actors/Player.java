@@ -11,6 +11,7 @@
  * 18Feb18    Kevin          Created Actor Superclass for Character & Monsters
  * 19Feb18    Kevin          Added collision checking for obstacles.
  * 12Mar18    Kevin          Added functionality to determine if actor is a player
+ * 22Mar18    Kevin          Overrode new changeDirection method
 */
 
 package actors;
@@ -129,7 +130,12 @@ public class Player extends Actor {
     
     @Override
     public void checkRemovability(){
-        //Do nothing for now - Character will not die
+        //Do nothing for now - Character will not be removed from arena
         //TODO: make game over / restart at check point
+    }
+    
+    @Override
+    public void changeDirection(){
+        // Do nothing, movement is handled by the player's input
     }
 }
