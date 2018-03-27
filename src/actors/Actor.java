@@ -14,6 +14,7 @@
  * 19Mar18    Kevin          Fixed actor collisions
  * 20Mar18    Kevin          Prevent Actors from moving for a few seconds after
  *                           colliding
+ * 22Mar18    Kevin          Updated Boundaries
  * 22Mar18    Kevin          Updated Monster Collisions
 */
 
@@ -273,10 +274,10 @@ public abstract class Actor {
     }
     
     protected void setMoveBounds(){
-        minX = Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.145;
-        maxX = Toolkit.getDefaultToolkit().getScreenSize().getWidth() - (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.145);
-        minY = Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.16;
-        maxY = Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.17);
+        minX = Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.0775;
+        maxX = Toolkit.getDefaultToolkit().getScreenSize().getWidth() - (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.0775);
+        minY = Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.09;
+        maxY = Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.09);
     }
     
     protected void togglePlayer(){ // only called in constructor of object to say if it is a player or not
@@ -505,6 +506,9 @@ public abstract class Actor {
             Direction otherMoving = nAct.checkDir();
             Direction relation = checkRelation(nAct);
             
+            this.setCollision(true);
+            nAct.setCollision(true);
+            
             if(thisMoving == otherMoving || thisMoving == Direction.NONE || otherMoving == Direction.NONE){ // If actors are moving in the same direction
                 switch(thisMoving){
                     case NONE:
@@ -660,6 +664,8 @@ public abstract class Actor {
             if(nAct.isMonster()){
                 nAct.changeDirection();
             } // Else do nothing
+        } else {
+            setCollision(false);
         }
     }
     

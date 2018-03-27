@@ -8,11 +8,12 @@
  * 24jan18    Kevin          First draft completed and ready to be verified
  * 18Feb18    Kevin          Moved background image to images folder
  * 06Mar18    Glenn          Added Button CSS
+ * 22Mar18    Kevin          Updated Arena Sprite Image
 */
 
 .arena{
     -fx-background-size: 100% 100%;
-    -fx-background-image: url("../images/Dessert.png");
+    -fx-background-image: url("../images/dessertSprite.png");
 }
 
 .healthBar{

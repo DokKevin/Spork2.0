@@ -19,6 +19,7 @@
  * 20Feb18    Glenn          Added a HUD for HP and XP
  * 06Mar18    Kevin          Added first monster
  * 06Mar18    Glenn          Added Escape Menu
+ * 22Mar18    Kevin          Added Some Comments
  * 22Mar18    Kevin          Added new Monster (Donut)
  */
 
@@ -190,11 +191,11 @@ public class ArenaOne {
        pane.getChildren().clear();
        pane.getChildren().add(healthBar);
        pane.getChildren().add(xpBar);
-       cinRoll.setLayer(pane);
+       cinRoll.setLayer(pane); // Will want to do this based off of the obsList instead of individual obstacles
        cinRoll.updateUI();
        gumDrops.setLayer(pane);
        gumDrops.updateUI();
-       gummiWorm.setLayer(pane);
+       gummiWorm.setLayer(pane); // Will want to do this based off of the monsList instead of individual monsters
        gummiWorm.updateUI();
        donut.setLayer(pane);
        donut.updateUI();
