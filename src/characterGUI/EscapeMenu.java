@@ -6,10 +6,11 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 06Mar18    Glenn          First draft created for the Escape Menu
+ * 29Mar18    Kevin          Updated imports
 */
 package characterGUI;
 
-import arena.ArenaOne;
+import arena.LevelOneRoomOne;
 import java.awt.Toolkit;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -31,7 +32,7 @@ public class EscapeMenu {
         setPositions();
         
         Resume.setOnAction(e -> {
-            ArenaOne.setObjects(pane);
+            LevelOneRoomOne.setObjects(pane);
         });
         
         Exit.setOnAction(e -> {

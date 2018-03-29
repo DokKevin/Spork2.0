@@ -9,11 +9,12 @@
  * 30Jan18    Kevin          Initial Release
  * 18Feb18    Kevin          Changed to work with CharacterGUI
  * 24Feb18    Kevin          Changed to work with ArenaOne
+ * 29Mar18    Kevin          Minor Updates - Updated imports
 */
 
 package runstage;
 
-import arena.ArenaOne;
+import arena.LevelOneRoomOne;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -36,6 +37,6 @@ public class RunStage extends Application {
         primaryStage.setFullScreen(true);
         primaryStage.show();
 
-        ArenaOne.start(primaryStage, scene); //This will run the GUI-layer method
+        LevelOneRoomOne.start(primaryStage, scene); //This will run the GUI-layer method
     }
 }
