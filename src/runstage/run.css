@@ -1,12 +1,11 @@
 /*
  * SE Project: SPORK
  * Authors: Kevin Kauffman, Glenn Sweithelm
- * Character - Handled the CSS for the TitleScreen Class
+ * run.css - Handled the CSS for the runscreen Class
  * Change Log
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
- * 23jan18   Glenn          First draft completed and ready to be verified
- * 24Feb18   Glenn          Fixed Font not loading
+ * 30Mar18    Kevin          Initial CSS File created
 */
 
 @font-face {

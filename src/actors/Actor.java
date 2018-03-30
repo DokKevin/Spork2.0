@@ -13,9 +13,13 @@
  * 13Mar18    Kevin          minimal fix actor collisions
  * 19Mar18    Kevin          Fixed actor collisions
  * 20Mar18    Kevin          Prevent Actors from moving for a few seconds after
- *                           colliding
+ *                              colliding
  * 22Mar18    Kevin          Updated Boundaries
  * 22Mar18    Kevin          Updated Monster Collisions
+ * 30Mar18    Kevin          Changed Stats to Doubles
+ *                           Changed isPlayer, isMonster, and setStats to abstract
+ *                           Allow Monsters to damage players by running into them
+ *                           Added death functionality
 */
 
 package actors;
@@ -48,10 +52,10 @@ public abstract class Actor {
     protected double lx;
     protected double ly;
     
-    protected int hp;
-    protected int defense;
-    protected int attack;
-    protected int speed;
+    protected double hp;
+    protected double defense;
+    protected double attack;
+    protected double speed;
     
     protected boolean removable = false;
     
@@ -66,8 +70,6 @@ public abstract class Actor {
     protected boolean canMove = true;
     protected boolean collision = true;
     protected boolean hitBound = false;
-    protected boolean amPlayer = false; // May want to look into marker interface
-    protected boolean amMonster = false; // May want to look into marker interface
     
     private final Timer timer = new Timer();
     
@@ -85,13 +87,12 @@ public abstract class Actor {
     
     // min and max stats. May change depending on future development.
     // Made public to accomodate testing without using/creating getters.
-    public int minHp = 0;
-    public int maxHp = 0;
-    public int minDef = 0;
-    public int maxDef = 0;
-    public int minAtt = 0;
-    public int maxAtt = 0;
-    
+    public double minHp = 0.0;
+    public double maxHp = 0.0;
+    public double minDef = 0.0;
+    public double maxDef = 0.0;
+    public double minAtt = 0.0;
+    public double maxAtt = 0.0;
     
     // Getters
     public Pane getLayer() {
@@ -138,15 +139,22 @@ public abstract class Actor {
         return dy;
     }
 
-    public int getHp(){
+    public double getHp(){
         return hp;
     }
+    
+    public double getMaxHp(){
+        return maxHp;
+    }
+    public double getMinHp(){
+        return minHp;
+    }
 
-    public int getDefense(){
+    public double getDefense(){
         return defense;
     }
 
-    public int getAttack(){
+    public double getAttack(){
         return attack;
     }
     
@@ -206,13 +214,8 @@ public abstract class Actor {
         return speed;
     }
     
-    public boolean isPlayer(){
-        return amPlayer;
-    }
-    
-    public boolean isMonster(){
-        return amMonster;
-    }
+    public abstract boolean isPlayer();
+    public abstract boolean isMonster();
     
     // Setters
     public void setLayer(Pane nLayer) {
@@ -237,7 +240,7 @@ public abstract class Actor {
     }
     
     //To Change Min and Max values, see variables at top of class.
-    public void setHp(int number){
+    public void setHp(double number){
         if(number < minHp){
             kill();
         } else if (number > maxHp){
@@ -280,14 +283,6 @@ public abstract class Actor {
         maxY = Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.09);
     }
     
-    protected void togglePlayer(){ // only called in constructor of object to say if it is a player or not
-        amPlayer = !amPlayer;
-    }
-    
-    protected void toggleMonster(){ // only called in constructor of objec to say if it is a monster or not
-        amMonster = !amMonster;
-    }
-    
     public boolean isRemovable() {
         return removable;
     }
@@ -320,7 +315,7 @@ public abstract class Actor {
     }
     
     // Take damage based on monster that's attacking
-    public void getDamagedBy( Actor monster) {
+    public void getDamagedBy(Actor monster) {
         setHp(getHp() - monster.getAttack());
     }
 
@@ -502,6 +497,12 @@ public abstract class Actor {
         } // else do nothing
         
         if(this.getImageView().getBoundsInParent().intersects(nAct.getImageView().getBoundsInParent())){
+            if(this.isMonster() && nAct.isPlayer()){
+                nAct.getDamagedBy(this);
+            } else if (this.isPlayer() && nAct.isMonster()){
+                this.getDamagedBy(nAct);
+            }
+
             Direction thisMoving = this.checkDir();  
             Direction otherMoving = nAct.checkDir();
             Direction relation = checkRelation(nAct);
@@ -754,4 +755,10 @@ public abstract class Actor {
     }
     
     public abstract void changeDirection();
+    
+    public boolean isDead(){
+        return (Double.compare(getHp(), 0.0) <= 0);
+    }
+    
+    protected abstract void setStats();
 }

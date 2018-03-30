@@ -6,8 +6,9 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 06Mar18    Glenn          First draft created for the Escape Menu
+ * 30Mar18    Glenn          Updated Package
 */
-package characterGUI;
+package menus;
 
 import arena.ArenaOne;
 import java.awt.Toolkit;
@@ -33,6 +34,8 @@ public class EscapeMenu {
         Resume.setOnAction(e -> {
             ArenaOne.setObjects(pane);
         });
+        
+        // Needs logic for Main Menu and Options
         
         Exit.setOnAction(e -> {
             stage.close();

@@ -21,6 +21,9 @@
  * 06Mar18    Glenn          Added Escape Menu
  * 22Mar18    Kevin          Added Some Comments
  * 22Mar18    Kevin          Added new Monster (Donut)
+ * 30Mar18    Kevin          Updated Based on new Superclasses
+ *                           Added new Damage Functionality
+ *                           Added new Death Functionality
  */
 
 package arena;
@@ -33,21 +36,25 @@ import javafx.stage.Stage;
 import javafx.scene.control.ProgressBar;
 import actors.*;
 import actors.monsters.*;
-import characterGUI.EscapeMenu;
+import menus.EscapeMenu;
 import input.Input;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import menus.GameOver;
 
 public class ArenaOne {
     static Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
     static Actor donut = new Donut((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.50), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.70));
     static Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
     static Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
-    static ProgressBar healthBar = new ProgressBar(1F);
-    static ProgressBar xpBar = new ProgressBar(0F);
+    static ProgressBar healthBar;
+    static ProgressBar xpBar;
+    static Stage currStage;
+    static Scene currScene;
+    static Pane root;
     
     private enum Dir{
         TOP, BOTTOM, LEFT, RIGHT
@@ -64,26 +71,29 @@ public class ArenaOne {
         MediaPlayer musicplayer = new MediaPlayer(mp3MusicFile);
         musicplayer.setAutoPlay(true);
         
-        stage.setFullScreenExitHint(null);
-        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        currStage = stage;
+        currScene = scene;
+        
+        currStage.setFullScreenExitHint(null);
+        currStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         //Creating a Pane object
-        Pane root = new Pane();
+        root = new Pane();
         //Creating a scene object
         //Scene scene = new Scene(root, 600, 300);
-        scene.setRoot(root);
+        currScene.setRoot(root);
         //Setting title to the Stage
-        stage.setTitle("Spork");
+        currStage.setTitle("Spork");
       
         //Adding scene to the stage
-        stage.setScene(scene);
-        scene.getStylesheets().add(ArenaOne.class.getResource("ArenaOne.css").toExternalForm());
+        currStage.setScene(currScene);
+        currScene.getStylesheets().add(ArenaOne.class.getResource("ArenaOne.css").toExternalForm());
         root.getStyleClass().add("arena");
-        stage.setFullScreen(true);
+        currStage.setFullScreen(true);
       
-        scene.setOnKeyPressed(e -> {
+        currScene.setOnKeyPressed(e -> {
             switch(e.getCode()){
                 case ESCAPE:
-                    EscapeMenu.setStage(root, stage);
+                    EscapeMenu.setStage(root, currStage);
                     break;
             }
         });
@@ -91,10 +101,12 @@ public class ArenaOne {
     // This can be added to its own function when arena gets a superclass
     //Add player to layer
     player = Player.getInstance();
+    healthBar = player.getHpBar();
+    xpBar = player.getExpBar();
     //player.setLayer(root); // This adds player to the layer
     
     // Create input so player can move
-    Input input = new Input(scene);
+    Input input = new Input(currScene);
     input.addListeners(); //TODO: Remove listeners on game over.
     player.setInput(input);
     
@@ -144,20 +156,13 @@ public class ArenaOne {
                                    //TODO: get these added together
     
       //Displaying the contents of the stage
-      stage.show();
-      
-      //These two events are for stakeholder demonstration. Both the events and the functuions they call will be removed
-      root.setOnMouseClicked(e -> { //"gets hit" and "kills something"
-         setHP(-0.1); 
-         setXP(10);
-      });
+      currStage.show();
       
       AnimationTimer gameLoop = new AnimationTimer(){
           @Override
           public void handle(long now){
               //See this for info and TODOs: https://stackoverflow.com/questions/29057870/in-javafx-how-do-i-move-a-sprite-across-the-screen
               
-              // Player Input
               player.processInput();
               
               player.move();
@@ -166,8 +171,8 @@ public class ArenaOne {
                   monster.move();
               });
               
-              checkPlayerCollisions();
               checkMonsterCollisions();
+              checkPlayerCollisions();
               
               player.updateUI();
               
@@ -175,13 +180,18 @@ public class ArenaOne {
                   monster.updateUI();
               });
               
-              //TODO: Check removability
-              
               //TODO: Check Attack Collisions - this may take some work
               
-              //TODO: Remove Dead Enemies
+              checkDeaths();
               
-              //Updates / Etc...
+              if(player.isDead()){
+                // Activate Game Over, may change in future development
+                stop();
+                GameOver.setStage(root, currStage);
+              }
+              
+              // TODO: Move to Player class after death logic is in
+//              updateXpBar(player.getExp()/player.getMaxExp());
           }
       };
       gameLoop.start();
@@ -203,44 +213,47 @@ public class ArenaOne {
    }
    
    private static void checkPlayerCollisions(){
-       obsList.forEach((obstacle) -> {
-           player.checkObsCollision(obstacle);
-        });
-       
-       monsList.forEach((monster) -> {
-           player.checkActorCollision(monster);
-        });
+        if(!obsList.isEmpty()){
+            obsList.forEach((obstacle) -> {
+                player.checkObsCollision(obstacle);
+            });
+        }
+        
+        if(!monsList.isEmpty()){
+            monsList.forEach((monster) -> {
+                player.checkActorCollision(monster);
+            });
+        }
    }
    
    private static void checkMonsterCollisions(){
-       // Change this to monster type instead of actor type when monster superclass is created
-       monsList.forEach((monster) -> {
-           monster.checkActorCollision(player);
-       });
-       
-       monsList.forEach((monster) -> {
-           obsList.forEach((obstacle) -> {
-                monster.checkObsCollision(obstacle);
-           });
-       });
-       
-       monsList.forEach((monster) -> {
-           monsList.forEach((monster2) -> {
-                monster.checkActorCollision(monster2);
-           });
-       });
+        if(!monsList.isEmpty()){
+            monsList.forEach((monster) -> {
+                monster.checkActorCollision(player);
+            });
+
+            monsList.forEach((monster) -> {
+                obsList.forEach((obstacle) -> {
+                     monster.checkObsCollision(obstacle);
+                });
+            });
+
+            monsList.forEach((monster) -> {
+                monsList.forEach((monster2) -> {
+                     monster.checkActorCollision(monster2);
+                });
+            });
+        }
    }
    
-   public static void setHP(double amount){
-       healthBar.setProgress(healthBar.getProgress() + amount);
-   }
-   static double maxXp = 100;
-   public static void setXP(double amount){
-       xpBar.setProgress(xpBar.getProgress() + amount/maxXp);
-       if(xpBar.getProgress() >= 1)
-       {
-           xpBar.setProgress(0);
-           maxXp = maxXp + (maxXp * .5);//player's xp gets higher
-       }
-   }
+    public static void checkDeaths(){
+        if(!monsList.isEmpty()){
+            monsList.forEach((monster) -> {
+                if(monster.isDead()){
+                    monster.removeFromLayer();
+                    monsList.remove(monster);
+                }
+            });
+        }
+    }
 }

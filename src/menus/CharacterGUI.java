@@ -15,9 +15,10 @@
  * 30Jan18    Kevin          Made Stage FullScreen
  * 06Feb18    Glenn          Made Dynamic Fields for resolution
  * 18Feb18    Kevin          Made username checking more user friendly
+ * 30Mar18    Kevin          Updated Package
 */
 
-package characterGUI;
+package menus;
 
 import actors.Player;
 import arena.ArenaOne;
@@ -34,7 +35,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class CharacterGUI {

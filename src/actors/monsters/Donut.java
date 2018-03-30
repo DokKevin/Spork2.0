@@ -3,21 +3,21 @@
  * Authors: Kevin Kauffman, Glenn Sweithelm
  * Donut - A monster that fights the player. Interacts autonomously with player. 
  * Change Log
- * ////////////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 06Mar18    Kevin          Initial Donut Created
+ * 30Mar18    Kevin          Extends correct Superclass now
+ *                           Overrode new abstract methods
 */
 
 package actors.monsters;
 
-import actors.Actor;
 import java.awt.Toolkit;
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-// TODO: create Monster Superclass - Ranged Monster & Melee Monster Subclasses - Monsters extend correct Ranged / Melee Class
-public class Donut extends Actor {
+public class Donut extends RangedMonster {
     public Donut(double nx, double ny){
         actorImg = new Image("/images/donutSprite.png",
                              Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1,
@@ -43,11 +43,9 @@ public class Donut extends Actor {
         left = getX();
         right = getX() + actorImg.getWidth();
         
-        speed = 3;
+        setStats();
         
         setMoveBounds();
-        
-        toggleMonster();
     }
     
     @Override
@@ -98,5 +96,12 @@ public class Donut extends Actor {
                 setDx(-speed);
                 break;
         }
+    }
+    
+    @Override
+    protected void setStats(){
+        speed = 3;
+        attack = 10.0; // Set to 10 temporarily to test game over screen
+        hp = 10.0;
     }
 }
