@@ -11,6 +11,7 @@
  * 22Mar18    Kevin          Moved change direction to its own function
  * 30Mar18    Kevin          Extends correct Superclass now
  *                           Overrode new abstract methods
+ * 31Mar18    Kevin          Monsters can't move until player does first
 */
 
 package actors.monsters;
@@ -107,5 +108,7 @@ public class GummiWorm extends MeleeMonster {
         speed = 3.0;
         attack = 1.0;
         hp = 10.0;
+        
+        super.setStats();
     }
 }

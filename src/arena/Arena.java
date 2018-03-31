@@ -7,6 +7,7 @@
  * Date       Contributer    Change
  * 29Mar18    Kevin          Initial Arena Superclass Created - Superclass for
  *                              arena classes
+ * 31Mar18    Kevin          Fixed Healthbar Issue
 */
 
 package arena;
@@ -28,15 +29,17 @@ public abstract class Arena {
     protected static ArrayList<Actor> monsList = new ArrayList(5);
     protected static Player player = Player.getInstance();
     protected static Input input = new Input();
-    static ProgressBar healthBar = new ProgressBar(1F);
-    static ProgressBar xpBar = new ProgressBar(0F);
-    static Stage currStage;
-    static Scene currScene;
-    static Pane root;
+    protected static ProgressBar healthBar;
+    protected static ProgressBar xpBar;
+    protected static Stage currStage;
+    protected static Scene currScene;
+    protected static Pane root;
     
     protected static AnimationTimer gameLoop = new AnimationTimer(){
         @Override
         public void handle(long now){
+            checkMoved();
+            
             player.processInput();
 
             player.move();
@@ -108,20 +111,24 @@ public abstract class Arena {
         pane.getChildren().add(healthBar);
         pane.getChildren().add(xpBar);
         
-        obsList.forEach((obstacle) -> {
-            obstacle.setLayer(pane);
-            obstacle.updateUI();
-        });
+        if(!obsList.isEmpty()){
+            obsList.forEach((obstacle) -> {
+                obstacle.setLayer(pane);
+                obstacle.updateUI();
+            });
+        }
         
-        monsList.forEach((monster) -> {
-            monster.setLayer(pane);
-            monster.updateUI();
-        });
+        if(!monsList.isEmpty()){
+            monsList.forEach((monster) -> {
+                monster.setLayer(pane);
+                monster.updateUI();
+            });
+        }
         
         player.setLayer(pane);
     }
    
-    public static void checkDeaths(){
+    private static void checkDeaths(){
         if(!monsList.isEmpty()){
             monsList.forEach((monster) -> {
                 if(monster.isDead()){
@@ -129,6 +136,16 @@ public abstract class Arena {
                     monsList.remove(monster);
                 }
             });
+        }
+    }
+    
+    private static void checkMoved(){
+        if (player.hasMoved()){
+            if(!monsList.isEmpty()){
+                monsList.forEach((monster) -> {
+                    monster.startMovement();
+                });
+            }
         }
     }
     

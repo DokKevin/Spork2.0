@@ -16,6 +16,7 @@
  * 30Mar18    Kevin          Updated Stats Variable Types & Overrode New Methods
  *                           Player Handles Progress & Exp Bar
  *                           Updated Damage Functionality
+ * 31Mar18    Kevin          Monsters can't move until player does first
 */
 
 package actors;
@@ -41,6 +42,8 @@ public class Player extends Actor {
     
     static ProgressBar healthBar = new ProgressBar(1F);
     static ProgressBar xpBar = new ProgressBar(0F);
+    
+    private boolean hasMoved = false;
     
     // constructor for the Singleton. The stats will vary, so begins with nothing
     // Parameters will change as development continues
@@ -129,6 +132,13 @@ public class Player extends Actor {
     public void move(){
         super.move();
         
+        if(!hasMoved){
+            if ((Double.compare(getY(), getLy()) != 0) ||
+                (Double.compare(getX(), getLx()) != 0)){
+                hasMoved = true;
+            }
+        } // else do nothing
+        
         super.checkBounds();
     }
     
@@ -193,5 +203,9 @@ public class Player extends Actor {
         username = "";
         job = "Chef"; // TODO: To be changed when we add more class
         speed = 10.0;
+    }
+    
+    public boolean hasMoved(){
+        return hasMoved;
     }
 }

@@ -21,6 +21,7 @@
  *                           Changed isPlayer, isMonster, and setStats to abstract
  *                           Allow Monsters to damage players by running into them
  *                           Added death functionality
+ * 31Mar18    Kevin          Monsters can't move until player does first
 */
 
 package actors;
@@ -334,6 +335,10 @@ public abstract class Actor {
     // Set flag that this actor can't move anymore.
     public void stopMovement() {
         canMove = false;
+    }
+    
+    public void startMovement() {
+        canMove = true;
     }
 
     public void checkRemovability(){

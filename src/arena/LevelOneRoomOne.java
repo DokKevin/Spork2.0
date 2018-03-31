@@ -26,6 +26,7 @@
  * 30Mar18    Kevin          Updated Based on new Superclasses
  *                           Added new Damage Functionality
  *                           Added new Death Functionality
+ * 31Mar18    Kevin          Fixed Healthbar Issue
  */
 
 package arena;
@@ -37,7 +38,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import actors.*;
 import actors.monsters.*;
-import javafx.scene.control.ProgressBar;
 import menus.EscapeMenu;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.media.Media;
@@ -45,9 +45,6 @@ import javafx.scene.media.MediaPlayer;
 
 // May change this to simply "Room" when creating maps randomly and having a level subclass (i.e. there is one room class and it is filled randomly with stuff based on the level instead of having multiple room classes.
 public class LevelOneRoomOne extends Arena{
-    static ProgressBar healthBar;
-    static ProgressBar xpBar;
-    
     private enum Dir{
         TOP, BOTTOM, LEFT, RIGHT
     }

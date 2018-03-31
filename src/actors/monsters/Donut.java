@@ -8,6 +8,7 @@
  * 06Mar18    Kevin          Initial Donut Created
  * 30Mar18    Kevin          Extends correct Superclass now
  *                           Overrode new abstract methods
+ * 31Mar18    Kevin          Monsters can't move until player does first
 */
 
 package actors.monsters;
@@ -103,5 +104,7 @@ public class Donut extends RangedMonster {
         speed = 3;
         attack = 10.0; // Set to 10 temporarily to test game over screen
         hp = 10.0;
+        
+        super.setStats();
     }
 }
