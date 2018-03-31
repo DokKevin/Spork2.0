@@ -3,9 +3,11 @@
  * Authors: Kevin Kauffman, Glenn Sweithelm
  * Input - Handles input from the user to move the character.
  * Change Log
- * ////////////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 18Feb18    Kevin          Initial Input Handler created
+ * 29Mar18    Kevin          Minor Updates - Changed constructor to default &
+ *                              added setSceneFunction for easier use with Player
 */
 
 package input;
@@ -22,14 +24,16 @@ public class Input {
     
     // Default key codes - may vary if we allow remapping of keys later
     // Add more here & when evaluating bitset when/if they are used in the game
-    private KeyCode upPress = KeyCode.UP;
-    private KeyCode downPress = KeyCode.DOWN;
-    private KeyCode leftPress = KeyCode.LEFT;
-    private KeyCode rightPress = KeyCode.RIGHT;
+    private final KeyCode upPress = KeyCode.UP;
+    private final KeyCode downPress = KeyCode.DOWN;
+    private final KeyCode leftPress = KeyCode.LEFT;
+    private final KeyCode rightPress = KeyCode.RIGHT;
     
     Scene scene;
     
-    public Input(Scene nScene){
+    public Input(){}
+    
+    public void setScene(Scene nScene){
         scene = nScene;
     }
     
