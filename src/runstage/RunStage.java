@@ -34,6 +34,8 @@ public class RunStage extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.setFullScreenExitHint(null);
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         
         scene.getStylesheets().add(RunStage.class.getResource("run.css").toExternalForm());
         
