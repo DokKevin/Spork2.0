@@ -16,6 +16,7 @@
  *                              colliding
  * 22Mar18    Kevin          Updated Boundaries
  * 22Mar18    Kevin          Updated Monster Collisions
+ * 29Mar18    Kevin          Mostly fixed collisions causes multiple bounces
  * 30Mar18    Kevin          Changed Stats to Doubles
  *                           Changed isPlayer, isMonster, and setStats to abstract
  *                           Allow Monsters to damage players by running into them
@@ -514,20 +515,20 @@ public abstract class Actor {
                 switch(thisMoving){
                     case NONE:
                         this.bounce(otherMoving, nAct.getSpeed() * 15.0);
-                        nAct.bounce(otherMoving, 0);
+                        nAct.bounce(nAct.getOppDir(otherMoving), this.getSpeed());
                         break;
                     case N:
                         switch(relation){
                             case N:
                             case NE:
                             case NW:
-                                nAct.bounce(thisMoving, 0.0);
+                                nAct.bounce(nAct.getOppDir(otherMoving), this.getSpeed());
                                 this.bounce(thisMoving, nAct.getSpeed() * 15.0);
                                 break;
                             case S:
                             case SE:
                             case SW:
-                                this.bounce(thisMoving, 0.0);
+                                this.bounce(this.getOppDir(thisMoving), nAct.getSpeed());
                                 nAct.bounce(thisMoving, this.getSpeed() * 15.0);
                                 break;
                         }
@@ -538,14 +539,14 @@ public abstract class Actor {
                             case NE:
                             case E:
                             case SE:
-                                nAct.bounce(thisMoving, 0.0);
+                                nAct.bounce(nAct.getOppDir(otherMoving), this.getSpeed());
                                 this.bounce(thisMoving, nAct.getSpeed() * 15.0);
                                 break;
                             case S:
                             case SW:
                             case W:
                             case NW:
-                                this.bounce(thisMoving, 0.0);
+                                this.bounce(this.getOppDir(thisMoving), nAct.getSpeed());
                                 nAct.bounce(thisMoving, this.getSpeed() * 15.0);
                                 break;
                         }
@@ -555,13 +556,13 @@ public abstract class Actor {
                             case NE:
                             case E:
                             case SE:
-                                nAct.bounce(thisMoving, 0.0);
+                                nAct.bounce(nAct.getOppDir(otherMoving), this.getSpeed());
                                 this.bounce(thisMoving, nAct.getSpeed() * 15.0);
                                 break;
                             case NW:
                             case W:
                             case SW:
-                                this.bounce(thisMoving, 0.0);
+                                this.bounce(this.getOppDir(thisMoving), nAct.getSpeed());
                                 nAct.bounce(thisMoving, this.getSpeed() * 15.0);
                                 break;
                         }
@@ -572,14 +573,14 @@ public abstract class Actor {
                             case SW:
                             case SE:
                             case E:
-                                nAct.bounce(thisMoving, 0.0);
+                                nAct.bounce(nAct.getOppDir(otherMoving), this.getSpeed());
                                 this.bounce(thisMoving, nAct.getSpeed() * 15.0);
                                 break;
                             case N:
                             case NE:
                             case NW:
                             case W:
-                                this.bounce(thisMoving, 0.0);
+                                this.bounce(this.getOppDir(thisMoving), nAct.getSpeed());
                                 nAct.bounce(thisMoving, this.getSpeed() * 15.0);
                                 break;
                         }
@@ -589,13 +590,13 @@ public abstract class Actor {
                             case S:
                             case SE:
                             case SW:
-                                nAct.bounce(thisMoving, 0.0);
+                                nAct.bounce(nAct.getOppDir(otherMoving), this.getSpeed());
                                 this.bounce(thisMoving, nAct.getSpeed() * 15.0);
                                 break;
                             case N:
                             case NE:
                             case NW:
-                                this.bounce(thisMoving, 0.0);
+                                this.bounce(this.getOppDir(thisMoving), nAct.getSpeed());
                                 nAct.bounce(thisMoving, this.getSpeed() * 15.0);
                                 break;
                         }
@@ -606,14 +607,14 @@ public abstract class Actor {
                             case SW:
                             case W:
                             case NW:
-                                nAct.bounce(thisMoving, 0.0);
+                                nAct.bounce(nAct.getOppDir(otherMoving), this.getSpeed());
                                 this.bounce(thisMoving, nAct.getSpeed() * 15.0);
                                 break;
                             case SE:
                             case E:
                             case NE:
                             case N:
-                                this.bounce(thisMoving, 0.0);
+                                this.bounce(this.getOppDir(thisMoving), nAct.getSpeed());
                                 nAct.bounce(thisMoving, this.getSpeed() * 15.0);
                                 break;
                         }
@@ -623,13 +624,13 @@ public abstract class Actor {
                             case NW:
                             case W:
                             case SW:
-                                nAct.bounce(thisMoving, 0.0);
+                                nAct.bounce(nAct.getOppDir(otherMoving), this.getSpeed());
                                 this.bounce(thisMoving, nAct.getSpeed() * 15.0);
                                 break;
                             case NE:
                             case E:
                             case SE:
-                                this.bounce(thisMoving, 0.0);
+                                this.bounce(this.getOppDir(thisMoving), nAct.getSpeed());
                                 nAct.bounce(thisMoving, this.getSpeed() * 15.0);
                                 break;
                         }
@@ -640,14 +641,14 @@ public abstract class Actor {
                             case W:
                             case NW:
                             case N:
-                                nAct.bounce(thisMoving, 0.0);
+                                nAct.bounce(nAct.getOppDir(otherMoving), this.getSpeed());
                                 this.bounce(thisMoving, nAct.getSpeed() * 15.0);
                                 break;
                             case S:
                             case SE:
                             case E:
                             case NE:
-                                this.bounce(thisMoving, 0.0);
+                                this.bounce(this.getOppDir(thisMoving), nAct.getSpeed());
                                 nAct.bounce(thisMoving, this.getSpeed() * 15.0);
                                 break;
                         }
@@ -755,6 +756,29 @@ public abstract class Actor {
     }
     
     public abstract void changeDirection();
+    
+    public Direction getOppDir(Direction nDir){
+        switch(nDir){
+            case N:
+                return Direction.S;
+            case NE:
+                return Direction.SW;
+            case E:
+                return Direction.W;
+            case SE:
+                return Direction.NW;
+            case S:
+                return Direction.N;
+            case SW:
+                return Direction.NE;
+            case W:
+                return Direction.E;
+            case NW:
+                return Direction.SE;
+            default: // Should not get here
+                return Direction.N;
+        }
+    }
     
     public boolean isDead(){
         return (Double.compare(getHp(), 0.0) <= 0);

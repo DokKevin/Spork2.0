@@ -9,7 +9,13 @@
  * 18Feb18    Kevin          Moved background image to images folder
  * 06Mar18    Glenn          Added Button CSS
  * 22Mar18    Kevin          Updated Arena Sprite Image
+ * 29Mar18    Kevin          Updated Font to Prevent Loading Error
 */
+
+@font-face {
+   -fx-font-family: 'VT323';
+   src: url('..title/Fonts/VT323-Regular.ttf');
+}
 
 .arena{
     -fx-background-size: 100% 100%;

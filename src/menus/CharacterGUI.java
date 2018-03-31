@@ -21,7 +21,7 @@
 package menus;
 
 import actors.Player;
-import arena.ArenaOne;
+import arena.LevelOneRoomOne;
 import java.awt.Toolkit;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -113,7 +113,7 @@ public class CharacterGUI {
                     initChar.setHp(8);
                     initChar.setAttack(4);
                 }
-                ArenaOne.start(stage, scene);
+                LevelOneRoomOne.start(stage, scene);
             }
         });
         

@@ -12,6 +12,7 @@
  * 19Feb18    Kevin          Added collision checking for obstacles.
  * 12Mar18    Kevin          Added functionality to determine if actor is a player
  * 22Mar18    Kevin          Overrode new changeDirection method
+ * 29Mar18    Kevin          Added setToCenter method
  * 30Mar18    Kevin          Updated Stats Variable Types & Overrode New Methods
  *                           Player Handles Progress & Exp Bar
  *                           Updated Damage Functionality
@@ -140,6 +141,11 @@ public class Player extends Actor {
     @Override
     public void changeDirection(){
         // Do nothing, movement is handled by the player's input
+    }
+    
+    public void setToCenter(){
+        setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5);
+        setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
     }
     
     @Override
