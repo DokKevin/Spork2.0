@@ -9,17 +9,19 @@
  * 06Mar18    Kevin          Initial GummiWorm Created
  * 12Mar18    Kevin          Added functionality to determine if actor is a monster
  * 22Mar18    Kevin          Moved change direction to its own function
+ * 30Mar18    Kevin          Extends correct Superclass now
+ *                           Overrode new abstract methods
+ * 31Mar18    Kevin          Monsters can't move until player does first
 */
 
 package actors.monsters;
 
-import actors.Actor;
 import java.awt.Toolkit;
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class GummiWorm extends Actor {
+public class GummiWorm extends MeleeMonster {
     public GummiWorm(double nx, double ny){
         actorImg = new Image("/images/gummiWormSprite.png",
                              Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1,
@@ -45,11 +47,9 @@ public class GummiWorm extends Actor {
         left = getX();
         right = getX() + actorImg.getWidth();
         
-        speed = 3;
+        setStats();
         
         setMoveBounds();
-        
-        toggleMonster();
     }
     
     @Override
@@ -100,5 +100,15 @@ public class GummiWorm extends Actor {
                 setDx(-speed);
                 break;
         }
+    }
+    
+    // This will have to be enhanced
+    @Override
+    protected void setStats(){
+        speed = 3.0;
+        attack = 1.0;
+        hp = 10.0;
+        
+        super.setStats();
     }
 }

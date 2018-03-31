@@ -12,12 +12,11 @@
  * 06Feb18    Glenn          Made Fields dynamic to resolution
  * 06Mar18    Glenn          Eliminated Jitters of Scene transition
  * 06Mar18    Glenn          Added Exit Button
- * 29Mar18    Kevin          Minor Updates - Updated tabbing
+ * 30Mar18    Kevin          Updated Package
  */
 
-package title;
+package menus;
 
-import characterGUI.CharacterGUI;
 import java.awt.Toolkit;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -29,17 +28,16 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class SporkTitleScreen extends Application {
-    public static void main(String[] args) {
-        launch(args);
-    }
-    
+   public static void main(String[] args) {
+      launch(args);
+   }
     GridPane root = new GridPane();
     Scene scene = new Scene(root, 1440, 700);
     Button newGame = new Button("New Game");
     Button loadGame = new Button("Load Game");
     Button options = new Button("Options");
     Button Exit = new Button("Exit Game");
-    Image SporkTitleImage = new Image("file:src/title/SporkLogo-01.png");
+    Image SporkTitleImage = new Image("file:src/menus/SporkLogo-01.png");
     ImageView TitleImageView = new ImageView(SporkTitleImage);
 
     @Override

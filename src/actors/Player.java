@@ -13,12 +13,17 @@
  * 12Mar18    Kevin          Added functionality to determine if actor is a player
  * 22Mar18    Kevin          Overrode new changeDirection method
  * 29Mar18    Kevin          Added setToCenter method
+ * 30Mar18    Kevin          Updated Stats Variable Types & Overrode New Methods
+ *                           Player Handles Progress & Exp Bar
+ *                           Updated Damage Functionality
+ * 31Mar18    Kevin          Monsters can't move until player does first
 */
 
 package actors;
 
 import input.Input;
 import java.awt.Toolkit;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -26,42 +31,29 @@ public class Player extends Actor {
     //Instantiates Singleton
     private static Player player = new Player();
     
-    private int exp;
+    private double exp;
     private String username;
-    private String job; //These are classes
+    private String job; //These are classes (ex: Bar-pear-ian)
     
-    public int minExp;
-    public int maxExp;
+    public double minExp;
+    public double maxExp;
     
     private Input input;
     
-    //constructor for the Singleton. The stats will vary, so begins with nothing
+    static ProgressBar healthBar = new ProgressBar(1F);
+    static ProgressBar xpBar = new ProgressBar(0F);
+    
+    private boolean hasMoved = false;
+    
+    // constructor for the Singleton. The stats will vary, so begins with nothing
     // Parameters will change as development continues
     private Player(){
         actorImg = new Image("/images/chefSprite.png", Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1, Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.1, true, false);
         imageView = new ImageView(actorImg);
         
-        // Override min stats
-        minHp = 0;
-        maxHp = 10;
-        minDef = 1;
-        maxDef = 10;
-        minAtt = 1;
-        maxAtt = 10;
-        minExp = 0; // These two will be dependant on level
-        maxExp = 10; // Will change when development gets to level
-        
-        hp = minHp;
-        defense = minDef;
-        attack = minAtt;
-        exp = minExp;
-        username = "";
-        job = "Chef"; // TODO: To be changed when we add more class
-        speed = 10;
+        setStats();
         
         setMoveBounds();
-        
-        togglePlayer();
     }
     
     //singleton function to get instance
@@ -74,12 +66,27 @@ public class Player extends Actor {
         return username;
     }
     
-    public int getExp(){
+    public double getExp(){
         return exp;
+    }
+    
+    public double getMaxExp(){
+        return maxExp;
+    }
+    public double getMinExp(){
+        return minExp;
     }
     
     public Input getInput(){
         return input;
+    }
+    
+    public ProgressBar getHpBar(){
+        return healthBar;
+    }
+    
+    public ProgressBar getExpBar(){
+        return xpBar;
     }
 
     //To Change Min and Max values, see variables at top of class.
@@ -94,7 +101,6 @@ public class Player extends Actor {
     }
 
     public void setUsername(String name){
-        // Only to be called when usernameIsGood method is used.
         username = name;
     }
     
@@ -126,6 +132,13 @@ public class Player extends Actor {
     public void move(){
         super.move();
         
+        if(!hasMoved){
+            if ((Double.compare(getY(), getLy()) != 0) ||
+                (Double.compare(getX(), getLx()) != 0)){
+                hasMoved = true;
+            }
+        } // else do nothing
+        
         super.checkBounds();
     }
     
@@ -143,5 +156,56 @@ public class Player extends Actor {
     public void setToCenter(){
         setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5);
         setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
+    }
+    
+    @Override
+    public boolean isPlayer(){
+        return true;
+    }
+    
+    @Override
+    public boolean isMonster(){
+        return false;
+    }
+    
+    public static void updateHpBar(double amount){
+        healthBar.setProgress(amount);
+    }
+   
+   public static void updateXpBar(double amount){
+        xpBar.setProgress(amount);
+        if(xpBar.getProgress() >= 1){
+            xpBar.setProgress(0); // Will need to determine how xp bar will behave when leveling up
+        }
+    }
+   
+    @Override
+    public void getDamagedBy(Actor monster) {
+        setHp(getHp() - monster.getAttack());
+        updateHpBar(getHp()/getMaxHp());
+    }
+    
+    @Override
+    protected void setStats(){
+        // Override min stats - these will be dependent on class eventually
+        maxHp = 10.0;
+        minDef = 1.0;
+        maxDef = 10.0;
+        minAtt = 1.0;
+        maxAtt = 10.0;
+        minExp = 0.0;
+        maxExp = 10.0;
+        
+        hp = maxHp;
+        defense = maxDef;
+        attack = maxAtt;
+        exp = minExp;
+        username = "";
+        job = "Chef"; // TODO: To be changed when we add more class
+        speed = 10.0;
+    }
+    
+    public boolean hasMoved(){
+        return hasMoved;
     }
 }

@@ -23,6 +23,10 @@
  * 29Mar18    Kevin          Updated to LevelOneRoomOne & Moved Game Handling to
  *                              its own file
  *                           Also updated tabs to fit NetBeans standards
+ * 30Mar18    Kevin          Updated Based on new Superclasses
+ *                           Added new Damage Functionality
+ *                           Added new Death Functionality
+ * 31Mar18    Kevin          Fixed Healthbar Issue
  */
 
 package arena;
@@ -34,14 +38,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import actors.*;
 import actors.monsters.*;
-import characterGUI.EscapeMenu;
+import menus.EscapeMenu;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 // May change this to simply "Room" when creating maps randomly and having a level subclass (i.e. there is one room class and it is filled randomly with stuff based on the level instead of having multiple room classes.
 public class LevelOneRoomOne extends Arena{
-    
     private enum Dir{
         TOP, BOTTOM, LEFT, RIGHT
     }
@@ -63,32 +66,38 @@ public class LevelOneRoomOne extends Arena{
         MediaPlayer musicplayer = new MediaPlayer(mp3MusicFile);
         musicplayer.setAutoPlay(true);
         
-        stage.setFullScreenExitHint(null);
-        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        currStage = stage;
+        currScene = scene;
+        
+        currStage.setFullScreenExitHint(null);
+        currStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         //Creating a Pane object
-        Pane root = new Pane();
+        root = new Pane();
         //Creating a scene object
-        scene.setRoot(root);
+        currScene.setRoot(root);
         //Setting title to the Stage
-        stage.setTitle("Spork");
+        currStage.setTitle("Spork");
       
         //Adding scene to the stage
-        stage.setScene(scene);
+        currStage.setScene(scene);
         // May change ArenaOne.css to LevelOne.css
-        scene.getStylesheets().add(LevelOneRoomOne.class.getResource("ArenaOne.css").toExternalForm());
+        currScene.getStylesheets().add(LevelOneRoomOne.class.getResource("ArenaOne.css").toExternalForm());
         root.getStyleClass().add("arena");
-        stage.setFullScreen(true);
+        currStage.setFullScreen(true);
       
-        scene.setOnKeyPressed(e -> {
+        currScene.setOnKeyPressed(e -> {
             switch(e.getCode()){
                 case ESCAPE:
-                    EscapeMenu.setStage(root, stage);
+                    EscapeMenu.setStage(root, currStage);
                     break;
             }
         });
-      
+        
+        healthBar = player.getHpBar();
+        xpBar = player.getExpBar();
+        
         // Create input so player can move
-        input.setScene(scene);
+        input.setScene(currScene);
         input.addListeners(); //TODO: Remove listeners on game over.
         // Seems like a smell to require setting the player's input every time.
         player.setInput(input);
@@ -109,14 +118,8 @@ public class LevelOneRoomOne extends Arena{
         setObjects(root);
 
         //Displaying the contents of the stage
-        stage.show();
+        currStage.show();
 
-        //These two events are for stakeholder demonstration. Both the events and the functuions they call will be removed
-        root.setOnMouseClicked(e -> { //"gets hit" and "kills something"
-            setHP(-0.1); 
-            setXP(10);
-        });
-        
         gameLoop.start();
     }
 }

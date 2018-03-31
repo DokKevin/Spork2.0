@@ -9,17 +9,16 @@
  * 17Sept17   Glenn          First draft completed and ready to be verified
  * 21Sept17   Kevin          Premilinary check for username meeting spec
  *                           Don't allow users to enter a space as the first
- *                              letter of username.
+ *                           letter of username.
  * 16Jan18    Kevin          Updated Labels
  * 28Jan18    Kevin          Fixed Username Checking Flaw
  * 30Jan18    Kevin          Made Stage FullScreen
  * 06Feb18    Glenn          Made Dynamic Fields for resolution
  * 18Feb18    Kevin          Made username checking more user friendly
- * 29Mar18    Kevin          Minor Changes - got rid of usernameIsGood function
- *                              as it was unnecessary & updated imports
+ * 30Mar18    Kevin          Updated Package
 */
 
-package characterGUI;
+package menus;
 
 import actors.Player;
 import arena.LevelOneRoomOne;
@@ -44,6 +43,7 @@ public class CharacterGUI {
     static GridPane createChar = new GridPane();
     static Label lUsername = new Label("USERNAME");
     static Label lClass = new Label("CLASS");
+    //static Scene scene = new Scene(createChar, 1, 1);
     static TextField tfUsername = new TextField();
     static TextArea taStats = new TextArea();
     static RadioButton rbWarrior = new RadioButton("Chef");
@@ -96,7 +96,7 @@ public class CharacterGUI {
         
         //sets all the character values when button is clicked, but only if a name is entered
         btCreate.setOnAction(e -> {
-            if(tfUsername.getText().length() < 1){
+            if(!usernameIsGood()){
                 errorMessage(scene, createChar);
             }
             else{
@@ -137,7 +137,6 @@ public class CharacterGUI {
         rbWarrior.setSelected(true);                            //Default selected
     }
 
-    // TODO: Set Up Error Messages Class
     //sets up a new stage that displays a message to enter username
     public static void errorMessage(Scene scene, GridPane pane){
         GridPane errorPane = new GridPane();
@@ -156,4 +155,16 @@ public class CharacterGUI {
             scene.setRoot(pane);
         });
     }
+
+    // This might be good to put in the username error once we get that
+    // encapsulated
+    public static boolean usernameIsGood(){
+        if(tfUsername.getText().length() < 1 || tfUsername.getText().length() > 10){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    
 }
