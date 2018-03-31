@@ -17,12 +17,15 @@
  *                           Player Handles Progress & Exp Bar
  *                           Updated Damage Functionality
  * 31Mar18    Kevin          Monsters can't move until player does first
+ * 31Mar18    Glenn          Added Inventory
 */
 
 package actors;
 
+import Items.Item;
 import input.Input;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,8 +43,10 @@ public class Player extends Actor {
     
     private Input input;
     
-    static ProgressBar healthBar = new ProgressBar(1F);
-    static ProgressBar xpBar = new ProgressBar(0F);
+    private static ProgressBar healthBar = new ProgressBar(1F);
+    private static ProgressBar xpBar = new ProgressBar(0F);
+    
+    private static ArrayList<Item> inventory = new ArrayList(10);
     
     private boolean hasMoved = false;
     
@@ -207,5 +212,16 @@ public class Player extends Actor {
     
     public boolean hasMoved(){
         return hasMoved;
+    }
+    
+    public void addItem(Item nItem){
+        if(inventory.size() < 10){
+            inventory.add(nItem);
+            nItem.removeFromLayer();
+        } // else do nothing
+    }
+    
+    public ArrayList getInventory(){
+        return inventory;
     }
 }

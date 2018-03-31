@@ -27,10 +27,13 @@
  *                           Added new Damage Functionality
  *                           Added new Death Functionality
  * 31Mar18    Kevin          Fixed Healthbar Issue
+ * 31Mar18    Glenn          Added Toothpick
  */
 
 package arena;
 
+import Items.Item;
+import Items.Toothpick;
 import obstacle.*;
 import java.awt.Toolkit;
 import javafx.scene.layout.Pane;
@@ -61,6 +64,10 @@ public class LevelOneRoomOne extends Arena{
         obsList.add(cinRoll);
         Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
         obsList.add(gumDrops);
+        
+        // Add Items - this will be changed to random in later iterations
+        Item toothPick = new Toothpick((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.25), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.25));
+        itemList.add(toothPick);
         
         Media mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("Level1.mp3").toExternalForm()); 
         MediaPlayer musicplayer = new MediaPlayer(mp3MusicFile);

@@ -8,10 +8,12 @@
  * 29Mar18    Kevin          Initial Arena Superclass Created - Superclass for
  *                              arena classes
  * 31Mar18    Kevin          Fixed Healthbar Issue
+ * 31Mar18    Glenn          Added Items to Map
 */
 
 package arena;
 
+import Items.Item;
 import actors.Actor;
 import actors.Player;
 import input.Input;
@@ -27,6 +29,7 @@ import obstacle.Obstacle;
 public abstract class Arena {
     protected static ArrayList<Obstacle> obsList = new ArrayList(5);
     protected static ArrayList<Actor> monsList = new ArrayList(5);
+    protected static ArrayList<Item> itemList = new ArrayList(5);
     protected static Player player = Player.getInstance();
     protected static Input input = new Input();
     protected static ProgressBar healthBar;
@@ -50,6 +53,7 @@ public abstract class Arena {
 
             checkMonsterCollisions();
             checkPlayerCollisions();
+            checkItemCollisions();
 
             player.updateUI();
 
@@ -125,6 +129,13 @@ public abstract class Arena {
             });
         }
         
+        if(!itemList.isEmpty()){
+            itemList.forEach((item) -> {
+                item.setLayer(pane);
+                item.updateUI();
+            });
+        }
+        
         player.setLayer(pane);
     }
    
@@ -146,6 +157,20 @@ public abstract class Arena {
                     monster.startMovement();
                 });
             }
+        }
+    }
+    
+    private static void checkItemCollisions(){
+        if(!itemList.isEmpty()){
+            itemList.forEach((item) -> {
+                if(player.getInventory().contains(item)){
+                    itemList.remove(item);
+                } else {
+                    if(player.getImageView().getBoundsInParent().intersects(item.getImageView().getBoundsInParent())){
+                        player.addItem(item);
+                    } // else do nothing
+                }
+            });
         }
     }
     
