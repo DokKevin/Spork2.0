@@ -13,6 +13,7 @@
  *                           Overrode new abstract methods
  * 31Mar18    Kevin          Monsters can't move until player does first
  * 03Apr18    Kevin          Temp attack change
+ *                           Added realistic stats
 */
 
 package actors.monsters;
@@ -107,8 +108,8 @@ public class GummiWorm extends MeleeMonster {
     @Override
     protected void setStats(){
         speed = 3.0;
-        attack = 0.0; // TEMP
-        hp = 10.0;
+        attack = 1.0;
+        hp = 2.0;
         
         super.setStats();
     }

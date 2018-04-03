@@ -20,6 +20,7 @@
  * 31Mar18    Glenn          Added Inventory
  * 03Apr18    Kevin          Add functionality to change arenas
  *                           Fixed Monster Bounce Error
+ *                           Added realistic stats
 */
 
 package actors;
@@ -219,11 +220,11 @@ public class Player extends Actor {
     @Override
     protected void setStats(){
         // Override min stats - these will be dependent on class eventually
-        maxHp = 10.0;
+        maxHp = 16.0;
         minDef = 1.0;
         maxDef = 10.0;
         minAtt = 1.0;
-        maxAtt = 10.0;
+        maxAtt = 10.0; // Attack will be based on weapon
         minExp = 0.0;
         maxExp = 10.0;
         

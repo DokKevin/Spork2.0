@@ -7,6 +7,7 @@
  * Date       Contributer    Change
  * 03Apr18    Kevin          Initial MiniBossRoom Created - initially is almost clone
  *                              of LevelOneRoomOne
+ *                           Added mini boss to room
  */
 
 package arena.room;
@@ -113,10 +114,8 @@ public class MiniBossRoom extends Arena{
         itemList.clear();
         
         // Add Monsters - this will be changed to random in later iterations
-        Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
-        monsList.add(gummiWorm);
-        Actor donut = new Donut((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.50), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.70));
-        monsList.add(donut);
+        Actor sourGummiWyrm = new SourGummiWyrm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.5), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5));
+        monsList.add(sourGummiWyrm);
         
         // Add Obstacles - this will be changed to random in later iterations
         Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
