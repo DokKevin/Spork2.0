@@ -1,42 +1,16 @@
 /*
  * SE Project: SPORK
  * Authors: Kevin Kauffman, Glenn Sweithelm
- * LevelOneRoomOne - Handles the functionality of the game
+ * RoomNine - Is the ninth room for the map
  * Change Log
- * ////////////////////////////////////////////////////////////////////////////
+ * /////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
- * 24jan18    Kevin          Changed from Animation_Demo to ArenaOne and created
- *                              background and adjusted boundaries.
- * 30Jan18    Kevin          Made Stage FullScreen & Fixed Boundaries
- * 06Feb18    Kevin          Made ball size and position dynamic
- *                           Added fixed, generic obstacle - to be dynamic later
- * 07Feb18    Kevin          Added get extremes function for circles - may need
- *                              updated later - and get bounds function for arena
- * 08Feb18    Kevin          Changed nested if to switch
- * 18Feb18    Kevin          Added sprite to game & updated movement
- * 19Feb18    Kevin          Added collision checking
- * 20Feb18    Glenn          Added a HUD for HP and XP
- * 06Mar18    Kevin          Added first monster
- * 06Mar18    Glenn          Added Escape Menu
- * 22Mar18    Kevin          Added Some Comments
- * 22Mar18    Kevin          Added new Monster (Donut)
- * 29Mar18    Kevin          Updated to LevelOneRoomOne & Moved Game Handling to
- *                              its own file
- *                           Also updated tabs to fit NetBeans standards
- * 30Mar18    Kevin          Updated Based on new Superclasses
- *                           Added new Damage Functionality
- *                           Added new Death Functionality
- * 31Mar18    Kevin          Fixed Healthbar Issue
- * 31Mar18    Glenn          Added Toothpick
- * 03Apr18    Kevin          Fixed shared lists error & added functionality to
- *                              change arenas.
- *                           Updated doorList with new rooms
+ * 03Apr18    Kevin          Initial RoomNine Created - initially is almost clone
+ *                              of LevelOneRoomOne
  */
 
 package arena.room;
 
-import Items.Item;
-import Items.Toothpick;
 import obstacle.*;
 import java.awt.Toolkit;
 import javafx.scene.layout.Pane;
@@ -52,18 +26,18 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 // May change this to simply "Room" when creating maps randomly and having a level subclass (i.e. there is one room class and it is filled randomly with stuff based on the level instead of having multiple room classes.
-public class LevelOneRoomOne extends Arena{
-    private static LevelOneRoomOne roomOne = new LevelOneRoomOne();
+public class RoomNine extends Arena{
+    private static RoomNine room = new RoomNine();
     
     private enum Dir{
         TOP, BOTTOM, LEFT, RIGHT
     }
     
-    public static LevelOneRoomOne getInstance(){
-        return roomOne;
+    public static RoomNine getInstance(){
+        return room;
     }
     
-    private LevelOneRoomOne(){}
+    private RoomNine(){}
     
     @Override
     public void start(Stage stage, Scene scene) {
@@ -107,9 +81,6 @@ public class LevelOneRoomOne extends Arena{
         // Seems like a smell to require setting the player's input every time.
         player.setInput(input);
     
-        //Position player at center of screen
-        player.setToCenter();
-    
         healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
                        Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
         healthBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
@@ -132,10 +103,10 @@ public class LevelOneRoomOne extends Arena{
     
     @Override
     protected void init(){
-        doorList[0] = RoomThree.getInstance();
-        doorList[1] = RoomFive.getInstance();
+        doorList[0] = NoRoom.getInstance();
+        doorList[1] = RoomSix.getInstance();
         doorList[2] = NoRoom.getInstance();
-        doorList[3] = RoomTwo.getInstance();
+        doorList[3] = RoomTen.getInstance();
         
         monsList.clear();
         obsList.clear();
@@ -152,10 +123,6 @@ public class LevelOneRoomOne extends Arena{
         obsList.add(cinRoll);
         Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
         obsList.add(gumDrops);
-        
-        // Add Items - this will be changed to random in later iterations
-        Item toothPick = new Toothpick((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.25), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.25));
-        itemList.add(toothPick);
         
         mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("../Level1.mp3").toExternalForm()); 
         musicPlayer = new MediaPlayer(mp3MusicFile);

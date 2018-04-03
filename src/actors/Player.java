@@ -19,6 +19,7 @@
  * 31Mar18    Kevin          Monsters can't move until player does first
  * 31Mar18    Glenn          Added Inventory
  * 03Apr18    Kevin          Add functionality to change arenas
+ *                           Fixed Monster Bounce Error
 */
 
 package actors;
@@ -50,6 +51,7 @@ public class Player extends Actor {
     private static ArrayList<Item> inventory = new ArrayList(10);
     
     private boolean hasMoved = false;
+    private boolean isFirst = true;
     
     // constructor for the Singleton. The stats will vary, so begins with nothing
     // Parameters will change as development continues
@@ -238,8 +240,17 @@ public class Player extends Actor {
         return hasMoved;
     }
     
+    public boolean isFirst(){
+        return isFirst;
+    }
+    
+    public void notFirst(){
+        isFirst = false;
+    }
+    
     public void resetMoved(){
         hasMoved = false;
+        isFirst = true;
         dx = x;
         dy = y;
     }

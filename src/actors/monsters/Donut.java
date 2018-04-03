@@ -9,6 +9,7 @@
  * 30Mar18    Kevin          Extends correct Superclass now
  *                           Overrode new abstract methods
  * 31Mar18    Kevin          Monsters can't move until player does first
+ * 03Apr18    Kevin          Temp Attack Change
 */
 
 package actors.monsters;
@@ -102,7 +103,7 @@ public class Donut extends RangedMonster {
     @Override
     protected void setStats(){
         speed = 3;
-        attack = 10.0; // Set to 10 temporarily to test game over screen
+        attack = 0.0; // TEMP
         hp = 10.0;
         
         super.setStats();

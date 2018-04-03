@@ -11,6 +11,7 @@
  * 31Mar18    Glenn          Added Items to Map
  * 03Apr18    Kevin          Added doors & ability to move between arenas & moved
  *                              game handler to its own class
+ *                           Fixed Monster Bounce Error
 */
 
 package arena;
@@ -144,12 +145,14 @@ public abstract class Arena {
     }
     
     public void checkMoved(){
-        if (player.hasMoved()){
+        if (player.hasMoved() && player.isFirst()){
             if(!monsList.isEmpty()){
                 monsList.forEach((monster) -> {
                     monster.startMovement();
                 });
             }
+            
+            player.notFirst();
         }
     }
     
