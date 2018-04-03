@@ -16,14 +16,15 @@
  * 06Feb18    Glenn          Made Dynamic Fields for resolution
  * 18Feb18    Kevin          Made username checking more user friendly
  * 30Mar18    Kevin          Updated Package
+ * 03Apr18    Kevin          Handle new Arena Architecture
 */
 
 package menus;
 
 import actors.Player;
-import arena.LevelOneRoomOne;
+import arena.room.LevelOneRoomOne;
+import gameHandler.GameHandler;
 import java.awt.Toolkit;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -38,12 +39,12 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class CharacterGUI {
-
+    private static LevelOneRoomOne firstArena = LevelOneRoomOne.getInstance();
+    
     //All this stuff is the UI elements
     static GridPane createChar = new GridPane();
     static Label lUsername = new Label("USERNAME");
     static Label lClass = new Label("CLASS");
-    //static Scene scene = new Scene(createChar, 1, 1);
     static TextField tfUsername = new TextField();
     static TextArea taStats = new TextArea();
     static RadioButton rbWarrior = new RadioButton("Chef");
@@ -74,16 +75,13 @@ public class CharacterGUI {
         
         // Prevents username from having a space at the beginning or being greater than 10 characters long
         // Still allows players to have a space at the end of their name, that would have to be taken care of when pressing submit if we want to allow spaces at all.
-        tfUsername.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(newValue.charAt(0) == ' '){
-                    tfUsername.setText(oldValue);
-                }
-                
-                if(newValue.length() > 10){
-                    tfUsername.setText(oldValue);
-                }
+        tfUsername.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if(newValue.charAt(0) == ' '){
+                tfUsername.setText(oldValue);
+            }
+            
+            if(newValue.length() > 10){
+                tfUsername.setText(oldValue);
             }
         });
         
@@ -113,7 +111,9 @@ public class CharacterGUI {
                     initChar.setHp(8);
                     initChar.setAttack(4);
                 }
-                LevelOneRoomOne.start(stage, scene);
+                GameHandler.stopGame();
+                GameHandler.setArena(firstArena);
+                firstArena.start(stage, scene);
             }
         });
         
@@ -122,9 +122,9 @@ public class CharacterGUI {
         });
     }
 
-    //I am just about positive there is the ability to apply CSS stylesheets to elements as you would html,
-    //  though I have never been succesful in getting it figured out. As such, this could be done so much better
-    //  once it is figured out.
+    // I am just about positive there is the ability to apply CSS stylesheets to elements as you would html,
+    // though I have never been succesful in getting it figured out. As such, this could be done so much better
+    // once it is figured out.
     public static void setStyles(){
         taStats.setEditable(false);                             //This will display info, so it shouldn't be editable
         taStats.setWrapText(true);
