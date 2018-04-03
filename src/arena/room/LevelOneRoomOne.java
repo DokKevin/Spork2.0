@@ -28,9 +28,11 @@
  *                           Added new Death Functionality
  * 31Mar18    Kevin          Fixed Healthbar Issue
  * 31Mar18    Glenn          Added Toothpick
+ * 03Apr18    Kevin          Fixed shared lists error & added functionality to
+ *                              change arenas.
  */
 
-package arena;
+package arena.room;
 
 import Items.Item;
 import Items.Toothpick;
@@ -41,6 +43,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import actors.*;
 import actors.monsters.*;
+import arena.Arena;
+import gameHandler.GameHandler;
 import menus.EscapeMenu;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.media.Media;
@@ -48,30 +52,23 @@ import javafx.scene.media.MediaPlayer;
 
 // May change this to simply "Room" when creating maps randomly and having a level subclass (i.e. there is one room class and it is filled randomly with stuff based on the level instead of having multiple room classes.
 public class LevelOneRoomOne extends Arena{
+    private static LevelOneRoomOne roomOne = new LevelOneRoomOne();
+    
     private enum Dir{
         TOP, BOTTOM, LEFT, RIGHT
     }
     
-    public static void start(Stage stage, Scene scene) {
-        // Add Monsters - this will be changed to random in later iterations
-        Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
-        monsList.add(gummiWorm);
-        Actor donut = new Donut((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.50), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.70));
-        monsList.add(donut);
+    public static LevelOneRoomOne getInstance(){
+        return roomOne;
+    }
+    
+    private LevelOneRoomOne(){}
+    
+    @Override
+    public void start(Stage stage, Scene scene) {
+        init();
         
-        // Add Obstacles - this will be changed to random in later iterations
-        Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
-        obsList.add(cinRoll);
-        Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
-        obsList.add(gumDrops);
-        
-        // Add Items - this will be changed to random in later iterations
-        Item toothPick = new Toothpick((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.25), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.25));
-        itemList.add(toothPick);
-        
-        Media mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("Level1.mp3").toExternalForm()); 
-        MediaPlayer musicplayer = new MediaPlayer(mp3MusicFile);
-        musicplayer.setAutoPlay(true);
+        musicPlayer.setAutoPlay(true);
         
         currStage = stage;
         currScene = scene;
@@ -88,14 +85,14 @@ public class LevelOneRoomOne extends Arena{
         //Adding scene to the stage
         currStage.setScene(scene);
         // May change ArenaOne.css to LevelOne.css
-        currScene.getStylesheets().add(LevelOneRoomOne.class.getResource("ArenaOne.css").toExternalForm());
+        currScene.getStylesheets().add(LevelOneRoomOne.class.getResource("../ArenaOne.css").toExternalForm());
         root.getStyleClass().add("arena");
         currStage.setFullScreen(true);
       
         currScene.setOnKeyPressed(e -> {
             switch(e.getCode()){
                 case ESCAPE:
-                    EscapeMenu.setStage(root, currStage);
+                    EscapeMenu.setStage(root, currStage, this);
                     break;
             }
         });
@@ -126,7 +123,40 @@ public class LevelOneRoomOne extends Arena{
 
         //Displaying the contents of the stage
         currStage.show();
+        
+        addDoors();
 
-        gameLoop.start();
+        GameHandler.startGame();
+    }
+    
+    @Override
+    protected void init(){
+        doorList[0] = NoRoom.getInstance();
+        doorList[1] = NoRoom.getInstance();
+        doorList[2] = NoRoom.getInstance();
+        doorList[3] = RoomTwo.getInstance();
+        
+        monsList.clear();
+        obsList.clear();
+        itemList.clear();
+        
+        // Add Monsters - this will be changed to random in later iterations
+        Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+        monsList.add(gummiWorm);
+        Actor donut = new Donut((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.50), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.70));
+        monsList.add(donut);
+        
+        // Add Obstacles - this will be changed to random in later iterations
+        Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
+        obsList.add(cinRoll);
+        Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+        obsList.add(gumDrops);
+        
+        // Add Items - this will be changed to random in later iterations
+        Item toothPick = new Toothpick((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.25), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.25));
+        itemList.add(toothPick);
+        
+        mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("../Level1.mp3").toExternalForm()); 
+        musicPlayer = new MediaPlayer(mp3MusicFile);
     }
 }

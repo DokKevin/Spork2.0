@@ -18,6 +18,7 @@
  *                           Updated Damage Functionality
  * 31Mar18    Kevin          Monsters can't move until player does first
  * 31Mar18    Glenn          Added Inventory
+ * 03Apr18    Kevin          Add functionality to change arenas
 */
 
 package actors;
@@ -163,6 +164,29 @@ public class Player extends Actor {
         setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
     }
     
+    public void changeArena(Direction dir){
+        switch(dir){
+            case N:
+                setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.45);
+                setY(maxY);
+                break;
+            case E:
+                setX(minX);
+                setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.45);
+                break;
+            case S:
+                setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.45);
+                setY(minY);
+                break;
+            case W:
+                setX(maxX);
+                setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.45);
+                break;
+        }
+        
+        resetMoved();
+    }
+    
     @Override
     public boolean isPlayer(){
         return true;
@@ -212,6 +236,12 @@ public class Player extends Actor {
     
     public boolean hasMoved(){
         return hasMoved;
+    }
+    
+    public void resetMoved(){
+        hasMoved = false;
+        dx = x;
+        dy = y;
     }
     
     public void addItem(Item nItem){
