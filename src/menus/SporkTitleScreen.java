@@ -13,6 +13,7 @@
  * 06Mar18    Glenn          Eliminated Jitters of Scene transition
  * 06Mar18    Glenn          Added Exit Button
  * 30Mar18    Kevin          Updated Package
+ * 03Apr18    Kevin          Updated spacing
  */
 
 package menus;
@@ -28,9 +29,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class SporkTitleScreen extends Application {
-   public static void main(String[] args) {
-      launch(args);
-   }
+    public static void main(String[] args) {
+        launch(args);
+    }
+   
     GridPane root = new GridPane();
     Scene scene = new Scene(root, 1440, 700);
     Button newGame = new Button("New Game");

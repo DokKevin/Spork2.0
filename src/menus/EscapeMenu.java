@@ -7,11 +7,13 @@
  * Date       Contributer    Change
  * 06Mar18    Glenn          First draft created for the Escape Menu
  * 30Mar18    Kevin          Updated Package
+ * 03Apr18    Kevin          Updated for new Arena Architecture
 */
 package menus;
 
 import actors.Player;
-import arena.LevelOneRoomOne;
+import arena.room.LevelOneRoomOne;
+import arena.Arena;
 import java.awt.Toolkit;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -24,7 +26,7 @@ public class EscapeMenu {
     static Button Exit = new Button("Exit Game");
     
     
-    public static void setStage(Pane pane, Stage stage){
+    public static void setStage(Pane pane, Stage stage, Arena currArena){
         pane.getChildren().clear();
         pane.getChildren().add(Resume);
         pane.getChildren().add(Options);
@@ -33,7 +35,7 @@ public class EscapeMenu {
         setPositions();
         
         Resume.setOnAction(e -> {
-            LevelOneRoomOne.setObjects(pane);
+            currArena.setObjects(pane);
             Player.getInstance().setMovable(true);
         });
         

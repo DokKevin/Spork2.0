@@ -12,11 +12,13 @@
  * 29Mar18    Kevin          Minor Updates - Updated imports
  * 30Mar18    Kevin          Updated to work more naturally - fixed dropping
  *                              font & allowing esc key to work
+ * 03Apr18    Kevin          Updated for new Arena Architecture
 */
 
 package runstage;
 
-import arena.LevelOneRoomOne;
+import arena.room.LevelOneRoomOne;
+import gameHandler.GameHandler;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -47,6 +49,8 @@ public class RunStage extends Application {
         primaryStage.setFullScreenExitHint(null);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
-        LevelOneRoomOne.start(primaryStage, scene); //This will run the GUI-layer method
+        LevelOneRoomOne level = LevelOneRoomOne.getInstance();
+        GameHandler.setArena(level);
+        level.start(primaryStage, scene); //This will run the GUI-layer method
     }
 }

@@ -22,6 +22,8 @@
  *                           Allow Monsters to damage players by running into them
  *                           Added death functionality
  * 31Mar18    Kevin          Monsters can't move until player does first
+ * 03Apr18    Kevin          Made Direction Public
+ *                           Used functions where appropriate
 */
 
 package actors;
@@ -75,7 +77,7 @@ public abstract class Actor {
     
     private final Timer timer = new Timer();
     
-    protected enum Direction{
+    public enum Direction{
         N, NE, E, SE, S, SW, W, NW, NONE;
     }
     
@@ -739,11 +741,11 @@ public abstract class Actor {
         }
         
         updateUI();
-        canMove = false;
+        this.stopMovement();
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                canMove = true;
+                startMovement();
             }
         }, 1*1000);
     }

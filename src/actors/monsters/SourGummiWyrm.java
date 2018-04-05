@@ -1,16 +1,11 @@
 /*
  * SE Project: SPORK
  * Authors: Kevin Kauffman, Glenn Sweithelm
- * Donut - A monster that fights the player. Interacts autonomously with player. 
+ * SourGummiWyrm - A monster, a mini boss for the first level
  * Change Log
  * /////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
- * 06Mar18    Kevin          Initial Donut Created
- * 30Mar18    Kevin          Extends correct Superclass now
- *                           Overrode new abstract methods
- * 31Mar18    Kevin          Monsters can't move until player does first
- * 03Apr18    Kevin          Temp Attack Change
- *                           Added Realistic Stats
+ * 03Apr18    Kevin          Initial SourGummiWyrm Created
 */
 
 package actors.monsters;
@@ -20,11 +15,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Donut extends RangedMonster {
-    public Donut(double nx, double ny){
-        actorImg = new Image("/images/donutSprite.png",
-                             Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1,
-                             Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.1,
+public class SourGummiWyrm extends MeleeMonster {
+    public SourGummiWyrm(double nx, double ny){
+        actorImg = new Image("/images/sourGummiWyrmSprite.png",
+                             Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2,
+                             Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.2,
                              true, false);
         imageView = new ImageView(actorImg);
         
@@ -101,11 +96,12 @@ public class Donut extends RangedMonster {
         }
     }
     
+    // This will have to be enhanced
     @Override
     protected void setStats(){
-        speed = 3;
-        attack = 2.0;
-        hp = 4.0;
+        speed = 3.0;
+        attack = 4.0;
+        hp = 8.0;
         
         super.setStats();
     }

@@ -18,6 +18,9 @@
  *                           Updated Damage Functionality
  * 31Mar18    Kevin          Monsters can't move until player does first
  * 31Mar18    Glenn          Added Inventory
+ * 03Apr18    Kevin          Add functionality to change arenas
+ *                           Fixed Monster Bounce Error
+ *                           Added realistic stats
 */
 
 package actors;
@@ -52,6 +55,7 @@ public class Player extends Actor {
     private static ArrayList<Item> inventory = new ArrayList(10);
     
     private boolean hasMoved = false;
+    private boolean isFirst = true;
     
     // constructor for the Singleton. The stats will vary, so begins with nothing
     // Parameters will change as development continues
@@ -174,6 +178,29 @@ public class Player extends Actor {
         setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.5);
     }
     
+    public void changeArena(Direction dir){
+        switch(dir){
+            case N:
+                setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.45);
+                setY(maxY);
+                break;
+            case E:
+                setX(minX);
+                setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.45);
+                break;
+            case S:
+                setX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.45);
+                setY(minY);
+                break;
+            case W:
+                setX(maxX);
+                setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.45);
+                break;
+        }
+        
+        resetMoved();
+    }
+    
     @Override
     public boolean isPlayer(){
         return true;
@@ -204,11 +231,11 @@ public class Player extends Actor {
     @Override
     protected void setStats(){
         // Override min stats - these will be dependent on class eventually
-        maxHp = 10.0;
+        maxHp = 16.0;
         minDef = 1.0;
         maxDef = 10.0;
         minAtt = 1.0;
-        maxAtt = 10.0;
+        maxAtt = 10.0; // Attack will be based on weapon
         minExp = 0.0;
         maxExp = 10.0;
         
@@ -223,6 +250,21 @@ public class Player extends Actor {
     
     public boolean hasMoved(){
         return hasMoved;
+    }
+    
+    public boolean isFirst(){
+        return isFirst;
+    }
+    
+    public void notFirst(){
+        isFirst = false;
+    }
+    
+    public void resetMoved(){
+        hasMoved = false;
+        isFirst = true;
+        dx = x;
+        dy = y;
     }
     
     public void addItem(Item nItem){
