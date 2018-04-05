@@ -20,6 +20,7 @@ import input.Input;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -34,6 +35,8 @@ public abstract class Arena {
     protected static Input input = new Input();
     protected static ProgressBar healthBar;
     protected static ProgressBar xpBar;
+    protected static Label HPLabel;
+    protected static Label XPLabel;
     protected static Stage currStage;
     protected static Scene currScene;
     protected static Pane root;
@@ -114,6 +117,8 @@ public abstract class Arena {
         pane.getChildren().clear();
         pane.getChildren().add(healthBar);
         pane.getChildren().add(xpBar);
+        pane.getChildren().add(HPLabel);
+        pane.getChildren().add(XPLabel);
         
         if(!obsList.isEmpty()){
             obsList.forEach((obstacle) -> {

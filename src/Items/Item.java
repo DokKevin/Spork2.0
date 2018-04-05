@@ -16,13 +16,13 @@ import javafx.scene.layout.Pane;
 
 public abstract class Item {
     protected Image itemImg;
-    protected ImageView imageView;
+    protected static ImageView imageView;
     protected Pane layer;
     protected double attack;
     protected double x;
     protected double y;
     
-    public ImageView getImageView(){
+    public static ImageView getImageView(){
         return imageView;
     }
     

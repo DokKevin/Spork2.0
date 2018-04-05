@@ -26,6 +26,7 @@ import Items.Item;
 import input.Input;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,6 +46,8 @@ public class Player extends Actor {
     
     private static ProgressBar healthBar = new ProgressBar(1F);
     private static ProgressBar xpBar = new ProgressBar(0F);
+    private static Label HPLabel = new Label("Health");
+    private static Label XPLabel = new Label("experience");
     
     private static ArrayList<Item> inventory = new ArrayList(10);
     
@@ -92,6 +95,14 @@ public class Player extends Actor {
     
     public ProgressBar getExpBar(){
         return xpBar;
+    }
+    
+    public Label getHPLabel(){
+        return HPLabel;
+    }
+    
+    public Label getXPLabel(){
+        return XPLabel;
     }
 
     //To Change Min and Max values, see variables at top of class.

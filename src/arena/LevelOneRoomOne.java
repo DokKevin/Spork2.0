@@ -45,9 +45,12 @@ import menus.EscapeMenu;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import menus.InventoryMenu;
 
 // May change this to simply "Room" when creating maps randomly and having a level subclass (i.e. there is one room class and it is filled randomly with stuff based on the level instead of having multiple room classes.
 public class LevelOneRoomOne extends Arena{
+    private static boolean escMenuOpen = false;
+    private static boolean inventoryOpen = false;
     private enum Dir{
         TOP, BOTTOM, LEFT, RIGHT
     }
@@ -95,13 +98,37 @@ public class LevelOneRoomOne extends Arena{
         currScene.setOnKeyPressed(e -> {
             switch(e.getCode()){
                 case ESCAPE:
-                    EscapeMenu.setStage(root, currStage);
+                    if(!escMenuOpen){
+                        player.setMovable(false);
+                        EscapeMenu.setStage(root, currStage);
+                        escMenuOpen = true;
+                    }
+                    else{
+                        player.setMovable(true);
+                        setObjects(root);
+                        escMenuOpen = false;
+                    }
+                    break;
+                case I:
+                    if(!inventoryOpen){
+                        InventoryMenu.setMenu(root);
+                        player.setMovable(false);
+                        inventoryOpen = true;
+                    }
+                    else{
+                        InventoryMenu.clearMenu(root);
+                        player.setMovable(true);
+                        setObjects(root);
+                        inventoryOpen = false;
+                    }
                     break;
             }
         });
         
         healthBar = player.getHpBar();
         xpBar = player.getExpBar();
+        HPLabel = player.getHPLabel();
+        XPLabel = player.getXPLabel();
         
         // Create input so player can move
         input.setScene(currScene);
@@ -115,13 +142,17 @@ public class LevelOneRoomOne extends Arena{
         healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
                        Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
         healthBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
+        healthBar.setTranslateY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
         xpBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1, 
                        Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.03);
-        xpBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
-        xpBar.setTranslateY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.058);
+        xpBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.29);
+        xpBar.setTranslateY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
         healthBar.getStyleClass().add("healthBar");
         xpBar.getStyleClass().add("xpBar");
-        
+        HPLabel.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
+        XPLabel.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.29);
+        HPLabel.getStyleClass().add("HPLabel");
+        XPLabel.getStyleClass().add("XPLabel");
         setObjects(root);
 
         //Displaying the contents of the stage

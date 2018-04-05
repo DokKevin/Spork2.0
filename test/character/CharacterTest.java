@@ -63,7 +63,7 @@ public class CharacterTest {
         Player instance = Player.getInstance();
         int expResult = 6;
         instance.setHp(expResult);
-        int result = instance.getHp();
+        double result = instance.getHp();
         assertEquals("HP Setter or Getter did not work.", expResult, result);
     }
     
@@ -76,9 +76,9 @@ public class CharacterTest {
         System.out.println("\t Testing that HP is set and received correctly "
                 + "when given values outside of the max");
         Player instance = Player.getInstance();
-        int expResult = instance.maxHp;
+        double expResult = instance.maxHp;
         instance.setHp(999999);
-        int result = instance.getHp();
+        double result = instance.getHp();
         assertEquals("HP Max Param Setter did not work.", expResult, result);
     }
     
@@ -91,9 +91,9 @@ public class CharacterTest {
         System.out.println("\t Testing that HP is set and received correctly "
                 + "when given values outside of the min");
         Player instance = Player.getInstance();
-        int expResult = instance.minHp;
+        double expResult = instance.minHp;
         instance.setHp(-999999);
-        int result = instance.getHp();
+        double result = instance.getHp();
         assertEquals("HP Min Param Setter did not work.", expResult, result);
     }
     
@@ -107,7 +107,7 @@ public class CharacterTest {
         Player instance = Player.getInstance();
         int expResult = 4;
         instance.setDefense(expResult);
-        int result = instance.getDefense();
+        double result = instance.getDefense();
         assertEquals("Defense Setter or Getter did not work.", expResult, result);
     }
     
@@ -120,9 +120,9 @@ public class CharacterTest {
         System.out.println("\t Testing that Defense is set and received correctly "
                 + "when given values outside of the max");
         Player instance = Player.getInstance();
-        int expResult = instance.maxDef;
+        double expResult = instance.maxDef;
         instance.setDefense(999999);
-        int result = instance.getDefense();
+        double result = instance.getDefense();
         assertEquals("Def Max Param Setter did not work.", expResult, result);
     }
     
@@ -135,9 +135,9 @@ public class CharacterTest {
         System.out.println("\t Testing that Defense is set and received correctly "
                 + "when given values outside of the min");
         Player instance = Player.getInstance();
-        int expResult = instance.minDef;
+        double expResult = instance.minDef;
         instance.setDefense(-999999);
-        int result = instance.getDefense();
+        double result = instance.getDefense();
         assertEquals("Defense Min Param Setter did not work.", expResult, result);
     }
     
@@ -151,7 +151,7 @@ public class CharacterTest {
         Player instance = Player.getInstance();
         int expResult = 5;
         instance.setAttack(expResult);
-        int result = instance.getAttack();
+        double result = instance.getAttack();
         assertEquals("Attack Setter or Getter did not work.", expResult, result);
     }
     
@@ -164,9 +164,9 @@ public class CharacterTest {
         System.out.println("\t Testing that Attack is set and received correctly "
                 + "when given values outside of the max");
         Player instance = Player.getInstance();
-        int expResult = instance.maxAtt;
+        double expResult = instance.maxAtt;
         instance.setAttack(999999);
-        int result = instance.getAttack();
+        double result = instance.getAttack();
         assertEquals("Att Max Param Setter did not work.", expResult, result);
     }
     
@@ -179,9 +179,9 @@ public class CharacterTest {
         System.out.println("\t Testing that Attack is set and received correctly "
                 + "when given values outside of the min");
         Player instance = Player.getInstance();
-        int expResult = instance.minAtt;
+        double expResult = instance.minAtt;
         instance.setAttack(-999999);
-        int result = instance.getAttack();
+        double result = instance.getAttack();
         assertEquals("Attack Min Param Setter did not work.", expResult, result);
     }
     
@@ -195,7 +195,7 @@ public class CharacterTest {
         Player instance = Player.getInstance();
         int expResult = 7;
         instance.setExp(expResult);
-        int result = instance.getExp();
+        double result = instance.getExp();
         assertEquals("Attack Setter or Getter did not work.", expResult, result);
     }
     
@@ -208,9 +208,9 @@ public class CharacterTest {
         System.out.println("\t Testing that Attack is set and received correctly "
                 + "when given values outside of the max");
         Player instance = Player.getInstance();
-        int expResult = instance.maxExp;
+        double expResult = instance.maxExp;
         instance.setExp(999999);
-        int result = instance.getExp();
+        double result = instance.getExp();
         assertEquals("Exp Max Param Setter did not work.", expResult, result);
     }
     
@@ -223,9 +223,9 @@ public class CharacterTest {
         System.out.println("\t Testing that Exp is set and received correctly "
                 + "when given values outside of the min");
         Player instance = Player.getInstance();
-        int expResult = instance.minExp;
+        double expResult = instance.minExp;
         instance.setExp(-999999);
-        int result = instance.getExp();
+        double result = instance.getExp();
         assertEquals("Exp Min Param Setter did not work.", expResult, result);
     }
     
