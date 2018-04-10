@@ -13,6 +13,7 @@ import Items.Item;
 import Items.Toothpick;
 import actors.Player;
 import java.awt.Toolkit;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,11 +21,33 @@ import javafx.scene.shape.Rectangle;
 public class InventoryMenu {
     static Rectangle menu = new Rectangle();
     static Pane inventory = new Pane();
-    static Item Toothpick = new Toothpick(20, 20);
+    static ImageView itemIcon;
+    static double translateX;
+    static double translateY;
+    static int iterator;
+    
     public static void setMenu(Pane pane){
+        translateX = 0;
+        translateY = Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05;
+        iterator = 1;
         pane.getChildren().add(inventory);
         inventory.getChildren().add(menu);
         setModes();
+        if(!Player.getInstance().getInventory().isEmpty()){
+            Player.getInstance().getInventory().forEach((item) -> {
+                itemIcon = item.getImageView();
+                itemIcon.setTranslateX(translateX);
+                itemIcon.setTranslateY(translateY);
+                inventory.getChildren().add(itemIcon);
+                translateX += Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.10;
+                iterator++;
+                if(iterator == 7){
+                    translateX = 0;
+                    translateY = Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.2;
+                }
+            });
+            
+        }
     }
     
     public static void clearMenu(Pane pane){

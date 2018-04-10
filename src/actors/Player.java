@@ -268,13 +268,13 @@ public class Player extends Actor {
     }
     
     public void addItem(Item nItem){
-        if(inventory.size() < 10){
+        if(inventory.size() < 12){
             inventory.add(nItem);
             nItem.removeFromLayer();
         } // else do nothing
     }
     
-    public ArrayList getInventory(){
+    public ArrayList<Item> getInventory(){
         return inventory;
     }
 }

@@ -12,7 +12,6 @@
 package menus;
 
 import actors.Player;
-import arena.room.LevelOneRoomOne;
 import arena.Arena;
 import java.awt.Toolkit;
 import javafx.scene.control.Button;
