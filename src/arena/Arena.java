@@ -12,6 +12,8 @@
  * 03Apr18    Kevin          Added doors & ability to move between arenas & moved
  *                              game handler to its own class
  *                           Fixed Monster Bounce Error
+ * 10Apr18    Glenn          Put alot of redundant code into the superclass to
+                                help future expansions
 */
 
 package arena;
@@ -19,6 +21,7 @@ package arena;
 import Items.Item;
 import actors.Actor;
 import actors.Player;
+import arena.room.LevelOneRoomOne;
 import arena.room.NoRoom;
 import gameHandler.GameHandler;
 import input.Input;
@@ -29,6 +32,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -69,8 +73,8 @@ public abstract class Arena {
     protected static Input input = new Input();
     protected static ProgressBar healthBar;
     protected static ProgressBar xpBar;
-    protected static Label HPLabel;
-    protected static Label XPLabel;
+    protected static Label HPLabel = new Label("Health");
+    protected static Label XPLabel = new Label("Experience");
     protected static Stage currStage;
     protected static Scene currScene;
     protected static Pane root;
@@ -111,12 +115,43 @@ public abstract class Arena {
         }
     }
     
+    public void setSettings(Pane pane, Scene scene, Stage stage){
+        musicPlayer.setAutoPlay(true);
+        
+        currStage = stage;
+        //currScene = scene;
+        
+        currStage.setFullScreenExitHint(null);
+        currStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        
+        //Creating a scene object
+        currScene.setRoot(root);
+        //Setting title to the Stage
+        currStage.setTitle("Spork");
+      
+        //Adding scene to the stage
+        currStage.setScene(scene);
+        // May change ArenaOne.css to LevelOne.css
+        //currScene.getStylesheets().add(LevelOneRoomOne.class.getResource("../ArenaOne.css").toExternalForm());
+        root.getStyleClass().add("arena");
+        currStage.setFullScreen(true);
+        
+        // Create input so player can move
+        input.setScene(currScene);
+        input.addListeners(); //TODO: Remove listeners on game over.
+        // Seems like a smell to require setting the player's input every time.
+        player.setInput(input);
+    }
+    
     public void setObjects(Pane pane){
+        healthBar = player.getHpBar();
+        xpBar = player.getExpBar();
         pane.getChildren().clear();
         pane.getChildren().add(healthBar);
         pane.getChildren().add(xpBar);
         pane.getChildren().add(HPLabel);
         pane.getChildren().add(XPLabel);
+        addDoors();
         
         healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
                        Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);

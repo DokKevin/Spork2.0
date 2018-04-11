@@ -6,11 +6,10 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 06Mar18    Glenn          First draft created for the Escape Menu
+ * 07Apr18    Glenn          Inventory Successfully displaying correctly
 */
 package menus;
 
-import Items.Item;
-import Items.Toothpick;
 import actors.Player;
 import java.awt.Toolkit;
 import javafx.scene.image.ImageView;
