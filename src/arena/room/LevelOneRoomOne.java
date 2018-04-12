@@ -46,13 +46,12 @@ import actors.*;
 import actors.monsters.*;
 import arena.Arena;
 import gameHandler.GameHandler;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 // May change this to simply "Room" when creating maps randomly and having a level subclass (i.e. there is one room class and it is filled randomly with stuff based on the level instead of having multiple room classes.
 public class LevelOneRoomOne extends Arena{
-    
+    private boolean justStarting = true;
     private static LevelOneRoomOne roomOne = new LevelOneRoomOne();
     
     private enum Dir{
@@ -68,49 +67,19 @@ public class LevelOneRoomOne extends Arena{
     @Override
     public void start(Stage stage, Scene scene) {
         init();
-        
-        musicPlayer.setAutoPlay(true);
-        
-        currStage = stage;
         currScene = scene;
-        
-        currStage.setFullScreenExitHint(null);
-        currStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        //Creating a Pane object
         root = new Pane();
-        //Creating a scene object
-        currScene.setRoot(root);
-        //Setting title to the Stage
-        currStage.setTitle("Spork");
-      
-        //Adding scene to the stage
-        currStage.setScene(scene);
-        // May change ArenaOne.css to LevelOne.css
         currScene.getStylesheets().add(LevelOneRoomOne.class.getResource("../ArenaOne.css").toExternalForm());
-        root.getStyleClass().add("arena");
-        currStage.setFullScreen(true);
         
-        healthBar = player.getHpBar();
-        xpBar = player.getExpBar();
-        HPLabel = player.getHPLabel();
-        XPLabel = player.getXPLabel();
-        
-        // Create input so player can move
-        input.setScene(currScene);
-        input.addListeners(); //TODO: Remove listeners on game over.
-        // Seems like a smell to require setting the player's input every time.
-        player.setInput(input);
-    
-        //Position player at center of screen
-        player.setToCenter();
-        
+        setSettings(root, scene, stage);
+        if(justStarting){
+            player.setToCenter();
+            justStarting = false;
+        }
         setObjects(root);
 
         //Displaying the contents of the stage
         currStage.show();
-        
-        addDoors();
-
         GameHandler.startGame();
     }
     

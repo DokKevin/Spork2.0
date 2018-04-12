@@ -42,62 +42,13 @@ public class RoomTwo extends Arena{
     @Override
     public void start(Stage stage, Scene scene) {
         init();
-        
-        musicPlayer.setAutoPlay(true);
-        
-        currStage = stage;
         currScene = scene;
-        
-        currStage.setFullScreenExitHint(null);
-        currStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        //Creating a Pane object
         root = new Pane();
-        //Creating a scene object
-        currScene.setRoot(root);
-        //Setting title to the Stage
-        currStage.setTitle("Spork");
-      
-        //Adding scene to the stage
-        currStage.setScene(scene);
-        // May change ArenaOne.css to LevelOne.css
-        currScene.getStylesheets().add(LevelOneRoomOne.class.getResource("../ArenaOne.css").toExternalForm());
-        root.getStyleClass().add("arena");
-        currStage.setFullScreen(true);
-      
-        currScene.setOnKeyPressed(e -> {
-            switch(e.getCode()){
-                case ESCAPE:
-                    EscapeMenu.setStage(root, currStage, this);
-                    break;
-            }
-        });
-        
-        healthBar = player.getHpBar();
-        xpBar = player.getExpBar();
-        
-        // Create input so player can move
-        input.setScene(currScene);
-        input.addListeners(); //TODO: Remove listeners on game over.
-        // Seems like a smell to require setting the player's input every time.
-        player.setInput(input);
-    
-        healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
-                       Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
-        healthBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
-        xpBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1, 
-                       Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.03);
-        xpBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
-        xpBar.setTranslateY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.058);
-        healthBar.getStyleClass().add("healthBar");
-        xpBar.getStyleClass().add("xpBar");
-        
+        setSettings(root, scene, stage);
         setObjects(root);
 
         //Displaying the contents of the stage
         currStage.show();
-        
-        addDoors();
-
         GameHandler.startGame();
     }
     
