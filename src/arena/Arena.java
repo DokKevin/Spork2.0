@@ -25,6 +25,7 @@ import input.Input;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,9 +33,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import menus.EscapeMenu;
+import menus.InventoryMenu;
 import obstacle.Obstacle;
 
 public abstract class Arena {
+    protected boolean escMenuOpen = false;
+    protected boolean inventoryOpen = false;
     protected static ArrayList<Obstacle> obsList = new ArrayList(5);
     protected static ArrayList<Actor> monsList = new ArrayList(5);
     protected static ArrayList<Item> itemList = new ArrayList(5);
@@ -64,6 +69,8 @@ public abstract class Arena {
     protected static Input input = new Input();
     protected static ProgressBar healthBar;
     protected static ProgressBar xpBar;
+    protected static Label HPLabel;
+    protected static Label XPLabel;
     protected static Stage currStage;
     protected static Scene currScene;
     protected static Pane root;
@@ -104,10 +111,57 @@ public abstract class Arena {
         }
     }
     
-    public static void setObjects(Pane pane){
+    public void setObjects(Pane pane){
         pane.getChildren().clear();
         pane.getChildren().add(healthBar);
         pane.getChildren().add(xpBar);
+        pane.getChildren().add(HPLabel);
+        pane.getChildren().add(XPLabel);
+        
+        healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
+                       Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
+        healthBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
+        healthBar.setTranslateY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
+        xpBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1, 
+                       Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.03);
+        xpBar.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.29);
+        xpBar.setTranslateY(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.05);
+        healthBar.getStyleClass().add("healthBar");
+        xpBar.getStyleClass().add("xpBar");
+        HPLabel.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.07);
+        XPLabel.setTranslateX(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.29);
+        HPLabel.getStyleClass().add("HPLabel");
+        XPLabel.getStyleClass().add("XPLabel");
+        
+        currScene.setOnKeyPressed(e -> {
+            switch(e.getCode()){
+                case ESCAPE:
+                    if(!escMenuOpen){
+                        
+                        player.setMovable(false);
+                        EscapeMenu.setStage(root, currStage, this);
+                        escMenuOpen = true;
+                    }
+                    else{
+                        player.setMovable(true);
+                        setObjects(root);
+                        escMenuOpen = false;
+                    }
+                    break;
+                case I:
+                    if(!inventoryOpen){
+                        InventoryMenu.setMenu(root);
+                        GameHandler.stopGame();
+                        inventoryOpen = true;
+                    }
+                    else{
+                        InventoryMenu.clearMenu(root);
+                        GameHandler.startGame();
+                        inventoryOpen = false;
+                    }       
+                    break;
+            }
+        });
         
         if(!obsList.isEmpty()){
             obsList.forEach((obstacle) -> {

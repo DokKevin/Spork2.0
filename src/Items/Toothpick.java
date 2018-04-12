@@ -21,7 +21,6 @@ public class Toothpick extends MeleeItem {
                              Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.1,
                              true, false);
         imageView = new ImageView(itemImg);
-        
         // This checking will have to be enhanced, it should not be able to be outside playable area.
         if(nx > 0){
             x = nx;

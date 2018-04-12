@@ -218,6 +218,10 @@ public abstract class Actor {
         return speed;
     }
     
+    public boolean getMove(){
+        return canMove;
+    }
+    
     public abstract boolean isPlayer();
     public abstract boolean isMonster();
     
@@ -274,6 +278,10 @@ public abstract class Actor {
         } else {
             attack = number;
         }
+    }
+    
+    public void setMovable(boolean move){
+        this.canMove = move;
     }
     
     public void setRemovable(boolean nRem) {

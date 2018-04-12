@@ -11,6 +11,7 @@
 */
 package menus;
 
+import actors.Player;
 import arena.Arena;
 import java.awt.Toolkit;
 import javafx.scene.control.Button;
@@ -34,6 +35,7 @@ public class EscapeMenu {
         
         Resume.setOnAction(e -> {
             currArena.setObjects(pane);
+            Player.getInstance().setMovable(true);
         });
         
         // Needs logic for Main Menu and Options
