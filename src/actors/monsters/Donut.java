@@ -11,6 +11,7 @@
  * 31Mar18    Kevin          Monsters can't move until player does first
  * 03Apr18    Kevin          Temp Attack Change
  *                           Added Realistic Stats
+ * 15Apr18    Kevin          Fixed One Hit Kill Error
 */
 
 package actors.monsters;
@@ -106,6 +107,7 @@ public class Donut extends RangedMonster {
         speed = 3;
         attack = 2.0;
         hp = 4.0;
+        maxHp = 4.0;
         
         super.setStats();
     }

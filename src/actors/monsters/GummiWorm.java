@@ -14,6 +14,7 @@
  * 31Mar18    Kevin          Monsters can't move until player does first
  * 03Apr18    Kevin          Temp attack change
  *                           Added realistic stats
+ * 15Apr18    Kevin          Fixed One Hit Kill Error
 */
 
 package actors.monsters;
@@ -110,6 +111,7 @@ public class GummiWorm extends MeleeMonster {
         speed = 3.0;
         attack = 1.0;
         hp = 2.0;
+        maxHp = 2.0;
         
         super.setStats();
     }

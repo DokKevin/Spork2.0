@@ -7,6 +7,7 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 03Apr18    Kevin          Initial GameHandler Created
+ * 15Apr18    Kevin          Added combat functionality
 */
 
 package gameHandler;
@@ -26,7 +27,6 @@ public class GameHandler {
             currArena.checkMoved();
             
             player.processInput();
-
             player.move();
 
             currArena.getMonsList().forEach((monster) -> {
@@ -36,8 +36,10 @@ public class GameHandler {
             currArena.checkMonsterCollisions();
             currArena.checkPlayerCollisions();
             currArena.checkItemCollisions();
+            currArena.checkAttack();
 
             player.updateUI();
+            player.updateButtons();
 
             currArena.getMonsList().forEach((monster) -> {
                 monster.updateUI();

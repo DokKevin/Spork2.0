@@ -24,6 +24,7 @@
  * 31Mar18    Kevin          Monsters can't move until player does first
  * 03Apr18    Kevin          Made Direction Public
  *                           Used functions where appropriate
+ * 15Apr18    Kevin          Updated getDamagedBy Function Param Name
 */
 
 package actors;
@@ -327,8 +328,8 @@ public abstract class Actor {
     }
     
     // Take damage based on monster that's attacking
-    public void getDamagedBy(Actor monster) {
-        setHp(getHp() - monster.getAttack());
+    public void getDamagedBy(Actor nAct) {
+        setHp(getHp() - nAct.getAttack());
     }
 
     // Set Health to 0

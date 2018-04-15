@@ -6,6 +6,7 @@
  * /////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 03Apr18    Kevin          Initial SourGummiWyrm Created
+ * 15Apr18    Kevin          Fixed One Hit Kill Error
 */
 
 package actors.monsters;
@@ -102,6 +103,7 @@ public class SourGummiWyrm extends MeleeMonster {
         speed = 3.0;
         attack = 4.0;
         hp = 8.0;
+        maxHp = 8.0;
         
         super.setStats();
     }

@@ -8,6 +8,7 @@
  * 18Feb18    Kevin          Initial Input Handler created
  * 29Mar18    Kevin          Minor Updates - Changed constructor to default &
  *                              added setSceneFunction for easier use with Player
+ * 15Apr18    Kevin          Added combat functionality
 */
 
 package input;
@@ -28,6 +29,7 @@ public class Input {
     private final KeyCode downPress = KeyCode.DOWN;
     private final KeyCode leftPress = KeyCode.LEFT;
     private final KeyCode rightPress = KeyCode.RIGHT;
+    private final KeyCode spacePress = KeyCode.SPACE;
     
     Scene scene;
     
@@ -81,4 +83,7 @@ public class Input {
         return keyboardInp.get(rightPress.ordinal()) && !keyboardInp.get(leftPress.ordinal());
     }
 
+    public boolean isAttacking() {
+        return keyboardInp.get(spacePress.ordinal());
+    }
 }
