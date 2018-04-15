@@ -10,6 +10,7 @@
  * 06Mar18    Glenn          Added Button CSS
  * 22Mar18    Kevin          Updated Arena Sprite Image
  * 29Mar18    Kevin          Updated Font to Prevent Loading Error
+ * 15Apr18    Kevin          Attempted to fix font loading error
 */
 
 @font-face {
@@ -62,8 +63,12 @@
 
 .HPLabel{
     -fx-text-fill: #fff;
+    -fx-font-family: 'VT323';
+    -fx-font-size: 35;
 }
 
 .XPLabel{
     -fx-text-fill: #fff;
+    -fx-font-family: 'VT323';
+    -fx-font-size: 35;
 }

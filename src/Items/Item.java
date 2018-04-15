@@ -6,6 +6,7 @@
  * /////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 31Mar18    Glenn          Initial Item Superclass created
+ * 15Apr18    Kevin          Allowed items to be horizontal and Vertical
 */
 
 package Items;
@@ -15,7 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public abstract class Item {
-    protected Image itemImg;
+    protected Image itemHorizontalImg;
+    protected Image itemVerticalImg;
     protected ImageView imageView;
     protected Pane layer;
     protected double attack;
@@ -42,5 +44,13 @@ public abstract class Item {
     
     public void removeFromLayer() {
         layer.getChildren().remove(imageView);
+    }
+    
+    public void setHorizontal(){
+        imageView.setImage(itemHorizontalImg);
+    }
+    
+    public void setVertical(){
+        imageView.setImage(itemVerticalImg);
     }
 }

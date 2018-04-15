@@ -21,6 +21,7 @@
  * 03Apr18    Kevin          Add functionality to change arenas
  *                           Fixed Monster Bounce Error
  *                           Added realistic stats
+ * 15Apr18    Kevin          Added Combat Functionality
 */
 
 package actors;
@@ -29,7 +30,8 @@ import Items.Item;
 import input.Input;
 import java.awt.Toolkit;
 import java.util.ArrayList;
-import javafx.scene.control.Label;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -50,10 +52,21 @@ public class Player extends Actor {
     private static ProgressBar healthBar = new ProgressBar(1F);
     private static ProgressBar xpBar = new ProgressBar(0F);
     
+    private Image attackButtonReadyImage = new Image("/images/attackButtonReadySprite.png", Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1, Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.1, true, false); 
+    private Image attackButtonActiveImage = new Image("/images/attackButtonActiveSprite.png", Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.1, Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.1, true, false); 
+    private ImageView attackButtonView = new ImageView(attackButtonActiveImage); 
+    
     private static ArrayList<Item> inventory = new ArrayList(10);
     
     private boolean hasMoved = false;
     private boolean isFirst = true;
+    private boolean canAttack = false;
+    private boolean removeItem = false;
+    private boolean checkAttack = false;
+    
+    private final Timer timer = new Timer();
+    
+    private Direction lastDir;
     
     // constructor for the Singleton. The stats will vary, so begins with nothing
     // Parameters will change as development continues
@@ -98,6 +111,10 @@ public class Player extends Actor {
     public ProgressBar getExpBar(){
         return xpBar;
     }
+    
+    public ImageView getAttackView(){
+        return attackButtonView;
+    }
 
     //To Change Min and Max values, see variables at top of class.
     public void setExp(int number){
@@ -136,6 +153,113 @@ public class Player extends Actor {
         } else {
             setDx(0);
         }
+        
+        if(input.isAttacking() && canAttack){
+            canAttack = false;
+            showEquipped();
+            stopMovement(); 
+            timer.schedule(new TimerTask(){ 
+                @Override 
+                public void run(){ 
+                    removeItem = true; 
+                } 
+            }, 1*1000/5); 
+        }
+    }
+    
+    public void setCanAttack(boolean nBool){
+        canAttack = nBool;
+    }
+    
+    public void updateButtons(){
+        if(canAttack){
+            attackButtonView.setImage(attackButtonReadyImage);
+        } else {
+            attackButtonView.setImage(attackButtonActiveImage);
+        }
+        
+        if(inventory.isEmpty()){
+            canAttack = false;
+        }
+        
+        if(removeItem){
+            hideEquipped();
+        }
+    }
+    
+    private void showEquipped(){
+        Item equipped = inventory.get(0); 
+        Image equippedImg = equipped.getImageView().getImage(); 
+         
+        // TODO: This is going to need some updating - going to want to update the directions of the images 
+        switch(lastDir){ 
+            case N: 
+                equipped.setHorizontal();
+                equipped.getImageView().setX(getX() + (getImage().getWidth() / 2.0)); 
+                equipped.getImageView().setY(getY() - equippedImg.getHeight()); 
+                break; 
+            case NE: 
+                equipped.setVertical();
+                equipped.getImageView().setX(getX() + getImage().getWidth()); 
+                equipped.getImageView().setY(getY() + (getImage().getHeight() / 2.0));  
+                break; 
+            case E: 
+                equipped.setVertical();
+                equipped.getImageView().setX(getX() + getImage().getWidth()); 
+                equipped.getImageView().setY(getY() + (getImage().getHeight() / 2.0)); 
+                break; 
+            case SE: 
+                equipped.setVertical();
+                equipped.getImageView().setX(getX() + getImage().getWidth()); 
+                equipped.getImageView().setY(getY() + (getImage().getHeight() / 2.0)); 
+                break; 
+            case S: 
+                equipped.setHorizontal();
+                equipped.getImageView().setX(getX() + (getImage().getWidth() / 2.0)); 
+                equipped.getImageView().setY(getY() + getImage().getHeight()); 
+                break; 
+            case SW: 
+                equipped.setVertical();
+                equipped.getImageView().setX(getX() - equippedImg.getWidth()); 
+                equipped.getImageView().setY(getY() + (getImage().getHeight() / 2.0));  
+                break; 
+            case W: 
+                equipped.setVertical();
+                equipped.getImageView().setX(getX() - equippedImg.getWidth()); 
+                equipped.getImageView().setY(getY() + (getImage().getHeight() / 2.0)); 
+                break; 
+            case NW: 
+                equipped.setVertical();
+                equipped.getImageView().setX(getX() - equippedImg.getWidth()); 
+                equipped.getImageView().setY(getY() + (getImage().getHeight() / 2.0)); 
+                break; 
+            default: 
+                equipped.getImageView().setX(getX() + (getImage().getWidth() / 2.0)); 
+                equipped.getImageView().setY(getY() - equippedImg.getHeight()); 
+        } 
+         
+        layer.getChildren().add(equipped.getImageView()); 
+        
+        checkAttack = true;
+    }
+    
+    private void hideEquipped(){
+        layer.getChildren().remove(inventory.get(0).getImageView());
+        canAttack = true;
+        removeItem = false;
+        startMovement();
+        checkAttack = false;
+    }
+    
+    public boolean getCheckAttack(){
+        return checkAttack;
+    }
+    
+    public void checkHit(Actor nMonst){
+        if(inventory.get(0).getImageView().getBoundsInParent().intersects(nMonst.getImageView().getBoundsInParent())){
+            nMonst.getDamagedBy(this);
+            nMonst.bounce(checkDir(), getSpeed() * 10.0);
+        }
     }
     
     @Override
@@ -150,6 +274,10 @@ public class Player extends Actor {
         } // else do nothing
         
         super.checkBounds();
+        
+        if(checkDir() != Direction.NONE){
+            lastDir = checkDir();
+        }
     }
     
     @Override
@@ -214,7 +342,7 @@ public class Player extends Actor {
    
     @Override
     public void getDamagedBy(Actor monster) {
-        setHp(getHp() - monster.getAttack());
+        super.getDamagedBy(monster);
         updateHpBar(getHp()/getMaxHp());
     }
     
@@ -225,7 +353,7 @@ public class Player extends Actor {
         minDef = 1.0;
         maxDef = 10.0;
         minAtt = 1.0;
-        maxAtt = 10.0; // Attack will be based on weapon
+        maxAtt = 1.0; // Attack will be based on weapon
         minExp = 0.0;
         maxExp = 10.0;
         

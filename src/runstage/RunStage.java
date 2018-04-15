@@ -13,6 +13,7 @@
  * 30Mar18    Kevin          Updated to work more naturally - fixed dropping
  *                              font & allowing esc key to work
  * 03Apr18    Kevin          Updated for new Arena Architecture
+ * 15Apr18    Kevin          Updated to use arena css
 */
 
 package runstage;
@@ -39,7 +40,7 @@ public class RunStage extends Application {
         primaryStage.setFullScreenExitHint(null);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         
-        scene.getStylesheets().add(RunStage.class.getResource("run.css").toExternalForm());
+        scene.getStylesheets().add(RunStage.class.getResource("../arena/arenaOne.css").toExternalForm());
         
         primaryStage.setTitle("Spork");
         primaryStage.setScene(scene);
