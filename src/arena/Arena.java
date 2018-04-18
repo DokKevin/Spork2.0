@@ -13,7 +13,8 @@
  *                              game handler to its own class
  *                           Fixed Monster Bounce Error
  * 10Apr18    Glenn          Put alot of redundant code into the superclass to
-                                help future expansions
+ *                              help future expansions
+ * 15Apr18    Kevin          Added Combat Functionality
 */
 
 package arena;
@@ -79,6 +80,7 @@ public abstract class Arena {
     protected static Pane root;
     protected static Media mp3MusicFile;
     protected static MediaPlayer musicPlayer;
+    protected static ImageView attackButtonView;
     
     public void checkPlayerCollisions(){
         if(!obsList.isEmpty()){
@@ -144,11 +146,16 @@ public abstract class Arena {
     public void setObjects(Pane pane){
         healthBar = player.getHpBar();
         xpBar = player.getExpBar();
+        attackButtonView = player.getAttackView();
+        attackButtonView.setX(attackButtonView.getImage().getWidth());
+        attackButtonView.setY(Toolkit.getDefaultToolkit().getScreenSize().getHeight()
+                              - attackButtonView.getImage().getHeight());
         pane.getChildren().clear();
         pane.getChildren().add(healthBar);
         pane.getChildren().add(xpBar);
         pane.getChildren().add(HPLabel);
         pane.getChildren().add(XPLabel);
+        pane.getChildren().add(attackButtonView);
         addDoors();
         
         healthBar.setPrefSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.2, 
@@ -250,9 +257,22 @@ public abstract class Arena {
                     if(player.getImageView().getBoundsInParent().intersects(item.getImageView().getBoundsInParent())){
                         player.addItem(item);
                         itemList.remove(item);
+                        player.setCanAttack(true);
                     } // else do nothing
                 }
             });
+        }
+    }
+    
+    public void checkAttack(){
+        if(!player.getInventory().isEmpty()){
+            if(player.getCheckAttack()){
+                if(!monsList.isEmpty()){
+                    monsList.forEach((monster) -> {
+                        player.checkHit(monster);
+                    });
+                }
+            }
         }
     }
     

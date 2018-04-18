@@ -62,7 +62,7 @@ public class BossRoom extends Arena{
         itemList.clear();
         
         // Add Monsters - this will be changed to random in later iterations
-        Actor Boss = new MalinerKren((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.15));
+        Actor Boss = new MalinerKren((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.10));
         monsList.add(Boss);
         // Add Obstacles - this will be changed to random in later iterations
         Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.15), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.15));
@@ -70,7 +70,7 @@ public class BossRoom extends Arena{
         obsList.add(cinRoll);
         obsList.add(cinRoll2);
         
-        mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("../Level1.mp3").toExternalForm()); 
-        musicPlayer = new MediaPlayer(mp3MusicFile);
+//        mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("../Level1.mp3").toExternalForm()); 
+//        musicPlayer = new MediaPlayer(mp3MusicFile);
     }
 }
