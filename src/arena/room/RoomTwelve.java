@@ -63,10 +63,14 @@ public class RoomTwelve extends Arena{
         itemList.clear();
         
         // Add Monsters - this will be changed to random in later iterations
-        Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
-        monsList.add(gummiWorm);
-        Actor donut = new Donut((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.50), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.70));
-        monsList.add(donut);
+        Actor lollipop = new Lollipop((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.12), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.20));
+        monsList.add(lollipop);
+        Actor lollipop2 = new Lollipop((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.42), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.32));
+        monsList.add(lollipop2);
+        Actor lollipop3 = new Lollipop((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.66), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
+        monsList.add(lollipop3);
+        Actor lollipop4 = new Lollipop((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.81), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.25));
+        monsList.add(lollipop4);
         
         // Add Obstacles - this will be changed to random in later iterations
         Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));

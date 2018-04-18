@@ -21,7 +21,6 @@ package arena;
 import Items.Item;
 import actors.Actor;
 import actors.Player;
-import arena.room.LevelOneRoomOne;
 import arena.room.NoRoom;
 import gameHandler.GameHandler;
 import input.Input;
@@ -132,7 +131,6 @@ public abstract class Arena {
         //Adding scene to the stage
         currStage.setScene(scene);
         // May change ArenaOne.css to LevelOne.css
-        //currScene.getStylesheets().add(LevelOneRoomOne.class.getResource("../ArenaOne.css").toExternalForm());
         root.getStyleClass().add("arena");
         currStage.setFullScreen(true);
         

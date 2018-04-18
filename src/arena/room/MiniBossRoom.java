@@ -72,7 +72,7 @@ public class MiniBossRoom extends Arena{
         Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
         obsList.add(gumDrops);
         
-        mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("../Level1.mp3").toExternalForm()); 
+        mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("../MiniBoss.mp3").toExternalForm()); 
         musicPlayer = new MediaPlayer(mp3MusicFile);
     }
 }
