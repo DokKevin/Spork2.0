@@ -62,18 +62,15 @@ public class BossRoom extends Arena{
         itemList.clear();
         
         // Add Monsters - this will be changed to random in later iterations
-        Actor gummiWorm = new GummiWorm((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.30), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
-        monsList.add(gummiWorm);
-        Actor donut = new Donut((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.50), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.70));
-        monsList.add(donut);
-        
+        Actor Boss = new MalinerKren((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.10));
+        monsList.add(Boss);
         // Add Obstacles - this will be changed to random in later iterations
-        Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.35), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.50));
+        Obstacle cinRoll = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.15), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.15));
+        Obstacle cinRoll2 = new CinnamonRoll((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.85), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.15));
         obsList.add(cinRoll);
-        Obstacle gumDrops = new GumDrops((Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.70), (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.30));
-        obsList.add(gumDrops);
+        obsList.add(cinRoll2);
         
-        mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("../Level1.mp3").toExternalForm()); 
-        musicPlayer = new MediaPlayer(mp3MusicFile);
+//        mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("../Level1.mp3").toExternalForm()); 
+//        musicPlayer = new MediaPlayer(mp3MusicFile);
     }
 }

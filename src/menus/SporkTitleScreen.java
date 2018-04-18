@@ -26,6 +26,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 public class SporkTitleScreen extends Application {
@@ -41,6 +43,8 @@ public class SporkTitleScreen extends Application {
     Button Exit = new Button("Exit Game");
     Image SporkTitleImage = new Image("file:src/menus/SporkLogo-01.png");
     ImageView TitleImageView = new ImageView(SporkTitleImage);
+    Media mp3MusicFile;
+    MediaPlayer musicPlayer;
 
     @Override
     public void start(Stage primaryStage) {
@@ -56,10 +60,15 @@ public class SporkTitleScreen extends Application {
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
         scene.getStylesheets().add(SporkTitleScreen.class.getResource("Title.css").toExternalForm());
+        
+        mp3MusicFile = new Media(SporkTitleScreen.class.getResource("MainMenu.mp3").toExternalForm());
+        musicPlayer = new MediaPlayer(mp3MusicFile);
+        musicPlayer.setAutoPlay(true);
+        
         primaryStage.show();
 
         newGame.setOnAction(e -> {
-            CharacterGUI.setSceneCharacter(primaryStage, scene, root); //This will run the GUI-layer method
+            CharacterGUI.setSceneCharacter(primaryStage, scene, root, musicPlayer); //This will run the GUI-layer method
         });
 
         loadGame.setOnAction(e -> {

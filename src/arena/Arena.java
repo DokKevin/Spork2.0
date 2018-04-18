@@ -133,7 +133,6 @@ public abstract class Arena {
         //Adding scene to the stage
         currStage.setScene(scene);
         // May change ArenaOne.css to LevelOne.css
-        //currScene.getStylesheets().add(LevelOneRoomOne.class.getResource("../ArenaOne.css").toExternalForm());
         root.getStyleClass().add("arena");
         currStage.setFullScreen(true);
         

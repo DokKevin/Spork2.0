@@ -15,7 +15,7 @@
 
 @font-face {
    -fx-font-family: 'VT323';
-   src: url('..title/Fonts/VT323-Regular.ttf');
+   src: url('../title/Fonts/VT323-Regular.ttf');
 }
 
 .arena{
@@ -62,13 +62,13 @@
 }
 
 .HPLabel{
-    -fx-text-fill: #fff;
     -fx-font-family: 'VT323';
+    -fx-text-fill: #fff;
     -fx-font-size: 35;
 }
 
 .XPLabel{
-    -fx-text-fill: #fff;
     -fx-font-family: 'VT323';
+    -fx-text-fill: #fff;
     -fx-font-size: 35;
 }

@@ -36,6 +36,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 public class CharacterGUI {
@@ -52,7 +53,7 @@ public class CharacterGUI {
     static Button btBack = new Button("Back");
 
     //sets the UI up for Creating character and game
-    public static void setSceneCharacter(Stage stage, Scene scene, GridPane pane){
+    public static void setSceneCharacter(Stage stage, Scene scene, GridPane pane, MediaPlayer media){
         stage.setFullScreenExitHint(null);
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         setStyles();
@@ -99,7 +100,7 @@ public class CharacterGUI {
             }
             else{
                 Player initChar = Player.getInstance();
-                
+                media.stop();
                 initChar.setUsername(tfUsername.getText());
                 initChar.setDefense(1);
 
