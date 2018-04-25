@@ -6,6 +6,7 @@
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
  * 30Mar18    Kevin          Initial GameOver Menu Created
+ * 25Apr18    Kevin          Added Main Menu Logic
 */
 package menus;
 
@@ -32,6 +33,10 @@ public class GameOver {
         
         Exit.setOnAction(e -> {
             stage.close();
+        });
+        
+        MainMenu.setOnAction(e -> {
+            StaticTitle.startTitle(stage);
         });
     }
     

@@ -7,6 +7,7 @@
  * Date       Contributer    Change
  * 03Apr18    Kevin          Initial BossRoom Created - initially is almost clone
  *                              of LevelOneRoomOne
+ * 25Apr18    Kevin          Added Winning Menu for defeating boss
  */
 
 package arena.room;
@@ -20,8 +21,7 @@ import actors.*;
 import actors.monsters.*;
 import arena.Arena;
 import gameHandler.GameHandler;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import menus.YouWin;
 
 // May change this to simply "Room" when creating maps randomly and having a level subclass (i.e. there is one room class and it is filled randomly with stuff based on the level instead of having multiple room classes.
 public class BossRoom extends Arena{
@@ -72,5 +72,15 @@ public class BossRoom extends Arena{
         
 //        mp3MusicFile = new Media(LevelOneRoomOne.class.getResource("../Level1.mp3").toExternalForm()); 
 //        musicPlayer = new MediaPlayer(mp3MusicFile);
+    }
+    
+    @Override
+    public void checkDeaths(){
+        super.checkDeaths();
+        
+        if(monsList.isEmpty()){
+            GameHandler.stopGame();
+            YouWin.setStage(root, currStage);
+        }
     }
 }

@@ -1,25 +1,16 @@
 /*
  * SE Project: SPORK
  * Authors: Kevin Kauffman, Glenn Sweithelm
- * Character - Handles GUI for Title Screen and Handles Main Class
+ * StaticTitle - Handles GUI for Title Screen in a Static Way
  * Change Log
  * ////////////////////////////////////////////////////////////////////////////
  * Date       Contributer    Change
- * 17Sept17   Glenn          First draft completed and ready to be verified
- * 18Jan18    Kevin          Updated Header
- * 23Jan18    Glenn          Created a design theme for the whole game
- * 30Jan18    Kevin          Made Stage FullScreen
- * 06Feb18    Glenn          Made Fields dynamic to resolution
- * 06Mar18    Glenn          Eliminated Jitters of Scene transition
- * 06Mar18    Glenn          Added Exit Button
- * 30Mar18    Kevin          Updated Package
- * 03Apr18    Kevin          Updated spacing
+ * 25Apr18   Kevin          First StaticTitle Created
  */
 
 package menus;
 
 import java.awt.Toolkit;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -30,24 +21,19 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
-public class SporkTitleScreen extends Application {
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class StaticTitle{
+    private static GridPane root = new GridPane();
+    private static Scene scene = new Scene(root, 1440, 700);
+    private static Button newGame = new Button("New Game");
+    private static Button loadGame = new Button("Load Game");
+    private static Button options = new Button("Options");
+    private static Button Exit = new Button("Exit Game");
+    private static Image SporkTitleImage = new Image("file:src/menus/SporkLogo-01.png");
+    private static ImageView TitleImageView = new ImageView(SporkTitleImage);
+    private static Media mp3MusicFile;
+    private static MediaPlayer musicPlayer;
    
-    GridPane root = new GridPane();
-    Scene scene = new Scene(root, 1440, 700);
-    Button newGame = new Button("New Game");
-    Button loadGame = new Button("Load Game");
-    Button options = new Button("Options");
-    Button Exit = new Button("Exit Game");
-    Image SporkTitleImage = new Image("file:src/menus/SporkLogo-01.png");
-    ImageView TitleImageView = new ImageView(SporkTitleImage);
-    Media mp3MusicFile;
-    MediaPlayer musicPlayer;
-    
-    @Override
-    public void start(Stage primaryStage) {
+    public static void startTitle(Stage primaryStage) {
         primaryStage.setFullScreenExitHint(null);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         setStyles();
@@ -85,7 +71,7 @@ public class SporkTitleScreen extends Application {
         });
     }
     
-    public void setStyles(){
+    public static void setStyles(){
         TitleImageView.setFitWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.4);
         TitleImageView.setFitHeight(Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.25);
         newGame.setPrefWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.25);
